@@ -1,0 +1,45 @@
+name: deal-radar
+
+on:
+  schedule:
+    - cron: '0 7 * * *'    # 10:00 МСК — утренний дайджест
+    - cron: '0 12 * * *'   # 15:00 МСК — горячая находка
+    - cron: '0 15 * * *'   # 18:00 МСК — статистика владельцу
+    - cron: '0 18 * * *'   # 21:00 МСК — вечерняя подборка
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'morning | noon | evening | stats'
+        required: true
+        default: 'noon'
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Publish
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+          OWNER_CHAT_ID: ${{ secrets.OWNER_CHAT_ID }}
+          SCHEDULE: ${{ github.event.schedule }}
+          INPUT_MODE: ${{ github.event.inputs.mode }}
+        run: node tools/run.js
+      - name: Save state
+        run: |
+          git config user.name "deal-radar-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state || true
+          if ! git diff --cached --quiet; then
+            git commit -m "state: $(date -u +%FT%TZ)"
+            git push
+          else
+            echo "no state changes"
+          fi
