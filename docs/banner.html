@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Баннер для BotFather — 640×360</title>
+<style>
+  body { margin:0; background:#0a0d13; color:#eef1f7; font-family:-apple-system,Roboto,system-ui,sans-serif;
+         display:flex; flex-direction:column; align-items:center; padding:18px; }
+  h1 { font-size:16px; margin:6px 0 12px; font-weight:600; }
+  canvas { width:320px; height:180px; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+  .hint { color:#8b93a7; font-size:13px; margin:12px 0; text-align:center; line-height:1.4; }
+  a.dl { display:block; width:100%; max-width:320px; text-align:center; text-decoration:none; padding:14px;
+         border-radius:14px; font-weight:700; font-size:15px; color:#221a00;
+         background:linear-gradient(180deg,#ffd977,#f5c451); margin-top:6px; }
+</style>
+</head>
+<body>
+<h1>Готово: 640×360</h1>
+<canvas id="c" width="640" height="360"></canvas>
+<p class="hint">Нажми кнопку — картинка скачается в файлы телефона.<br>Потом отправь её в BotFather как фото.</p>
+<a class="dl" id="dl" download="case-banner-640x360.png">Скачать PNG</a>
+
+<script>
+const c = document.getElementById('c');
+const x = c.getContext('2d');
+const W = 640, H = 360;
+
+// фон
+const g = x.createLinearGradient(0, 0, W, H);
+g.addColorStop(0, '#141b28');
+g.addColorStop(0.55, '#0d1119');
+g.addColorStop(1, '#1a1408');
+x.fillStyle = g; x.fillRect(0, 0, W, H);
+
+// золотое свечение сверху
+const glow = x.createRadialGradient(W * 0.5, -60, 20, W * 0.5, -60, 420);
+glow.addColorStop(0, 'rgba(245,196,81,0.30)');
+glow.addColorStop(1, 'rgba(245,196,81,0)');
+x.fillStyle = glow; x.fillRect(0, 0, W, H);
+
+// рамка
+x.strokeStyle = 'rgba(245,196,81,0.35)';
+x.lineWidth = 2;
+x.strokeRect(12, 12, W - 24, H - 24);
+
+// кейс
+x.font = '64px sans-serif';
+x.textAlign = 'center';
+x.textBaseline = 'middle';
+x.fillText('🎁', W / 2, 92);
+
+// заголовок
+x.fillStyle = '#ffffff';
+x.font = 'bold 44px sans-serif';
+x.fillText('КЕЙС ДНЯ', W / 2, 168);
+
+// подзаголовок
+x.fillStyle = '#9aa3b8';
+x.font = '20px sans-serif';
+x.fillText('бесплатное открытие · скидки на игры', W / 2, 214);
+
+// плашка со скидкой
+const bw = 132, bh = 44, bx = W / 2 - bw / 2, by = 246;
+const r = 22;
+x.beginPath();
+x.moveTo(bx + r, by);
+x.arcTo(bx + bw, by, bx + bw, by + bh, r);
+x.arcTo(bx + bw, by + bh, bx, by + bh, r);
+x.arcTo(bx, by + bh, bx, by, r);
+x.arcTo(bx, by, bx + bw, by, r);
+x.closePath();
+x.fillStyle = 'rgba(245,196,81,0.14)';
+x.fill();
+x.strokeStyle = 'rgba(245,196,81,0.55)';
+x.lineWidth = 1.5;
+x.stroke();
+
+x.fillStyle = '#f5c451';
+x.font = 'bold 26px sans-serif';
+x.fillText('до −93%', W / 2, by + bh / 2 + 1);
+
+// подпись канала
+x.fillStyle = '#6f7a91';
+x.font = '16px sans-serif';
+x.fillText('@deal_radar1', W / 2, 320);
+
+// ссылка на скачивание
+const url = c.toDataURL('image/png');
+const a = document.getElementById('dl');
+a.href = url;
+a.addEventListener('click', () => { document.title = 'Скачивание началось'; });
+</script>
+</body>
+</html>
