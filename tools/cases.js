@@ -62,7 +62,7 @@ async function main() {
   fs.writeFileSync(OUT, JSON.stringify({ updated: new Date().toISOString(), items }, null, 1));
   console.log('cases: ' + items.length + ' игр в кейсе');
 
-  if (!TOKEN) { console.log('без токена: только файл'); return; }
+  if (!TOKEN || process.argv.includes('--no-post')) { console.log('только файл, без поста'); return; }
   const text = '🎁 <b>Кейс дня</b>\n\n' +
     'Запусти кейс и узнай, какая игра сегодня просит лучшую цену. Внутри ' + items.length + ' скидок — ' +
     'выпадет одна, проверять честно, всё бесплатно.\n\n' +
