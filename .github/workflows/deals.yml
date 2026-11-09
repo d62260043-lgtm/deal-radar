@@ -3,19 +3,29 @@ name: deal-radar
 on:
   schedule:
     - cron: '0 7 * * *'    # 10:00 МСК — утренний дайджест
+    - cron: '0 9 * * *'    # 12:00 МСК — кейс дня
     - cron: '0 12 * * *'   # 15:00 МСК — горячая находка
     - cron: '0 15 * * *'   # 18:00 МСК — статистика владельцу
     - cron: '0 18 * * *'   # 21:00 МСК — вечерняя подборка
-    - cron: '0 9 * * *'    # 12:00 МСК — кейс дня
   workflow_dispatch:
     inputs:
       mode:
-        description: 'morning | noon | evening | case | stats'
+        description: 'morning | noon | evening | case | stats | build'
         required: true
-        default: 'noon'
+        default: 'case'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   post:
@@ -33,7 +43,9 @@ jobs:
           SCHEDULE: ${{ github.event.schedule }}
           INPUT_MODE: ${{ github.event.inputs.mode }}
           CASE_URL: https://d62260043-lgtm.github.io/deal-radar/
-        run: node tools/run.js
+        run: |
+          MODE="${{ github.event.inputs.mode }}"
+          if [ "$MODE" = "build" ]; then node tools/cases.js --no-post; else node tools/run.js; fi
       - name: Save state
         run: |
           git config user.name "deal-radar-bot"
@@ -45,3 +57,18 @@ jobs:
           else
             echo "no state changes"
           fi
+
+  deploy:
+    needs: post
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - id: deployment
+        uses: actions/deploy-pages@v4
