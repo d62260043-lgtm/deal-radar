@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Кейс дня — Радар Скидок</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root { --gold:#f5c451; --bg:#10131a; --card:#1a1f2b; --text:#eef1f7; --dim:#8b93a7; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; min-height:100vh; background:radial-gradient(120% 80% at 50% 0%,#1c2434 0%,var(--bg) 60%);
+         color:var(--text); font-family:-apple-system,Roboto,system-ui,sans-serif; display:flex; flex-direction:column;
+         align-items:center; justify-content:center; padding:24px 18px 40px; text-align:center; }
+  h1 { font-size:22px; margin:0 0 6px; }
+  .sub { color:var(--dim); font-size:14px; margin:0 0 28px; line-height:1.45; }
+  .case { width:170px; height:170px; border-radius:28px; display:grid; place-items:center; font-size:74px;
+          background:linear-gradient(160deg,#2a3244,#171c26); border:1px solid #313b50;
+          box-shadow:0 18px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06); transition:transform .2s; }
+  .case.shake { animation:shake .5s infinite; }
+  @keyframes shake { 0%,100%{transform:rotate(-3deg) translateY(0)} 50%{transform:rotate(3deg) translateY(-6px)} }
+  .btn { margin-top:28px; border:0; border-radius:16px; padding:16px 34px; font-size:17px; font-weight:700;
+         color:#1a1400; background:linear-gradient(180deg,#ffd977,var(--gold)); box-shadow:0 10px 24px rgba(245,196,81,.25); }
+  .btn:active { transform:scale(.97); }
+  .card { display:none; width:100%; max-width:340px; background:var(--card); border:1px solid #2b3344; border-radius:22px; overflow:hidden; animation:pop .35s ease-out; }
+  @keyframes pop { from{opacity:0; transform:scale(.92)} to{opacity:1; transform:scale(1)} }
+  .card img { width:100%; display:block; background:#0c0f15; }
+  .card .body { padding:16px 18px 20px; }
+  .card .name { font-size:17px; font-weight:700; margin:0 0 10px; line-height:1.3; }
+  .price { font-size:26px; font-weight:800; color:var(--gold); }
+  .old { color:var(--dim); text-decoration:line-through; font-size:15px; margin-left:8px; }
+  .badge { display:inline-block; margin-left:8px; padding:3px 9px; border-radius:999px; font-size:13px; font-weight:800;
+           background:#2a1d0f; color:var(--gold); vertical-align:middle; }
+  .rating { color:var(--dim); font-size:13px; margin-top:10px; }
+  a.steam { display:block; margin-top:16px; padding:14px; border-radius:14px; background:#2b7fff; color:#fff;
+            text-decoration:none; font-weight:700; font-size:15px; }
+  .again { margin-top:14px; background:none; border:1px solid #39435a; color:var(--text); border-radius:14px;
+           padding:13px; width:100%; font-size:15px; }
+  .footer { margin-top:26px; color:#5d6579; font-size:12px; }
+</style>
+</head>
+<body>
+  <h1>🎁 Кейс дня</h1>
+  <p class="sub">Внутри — игра, которая сегодня просит лучшую цену.<br>Открытие бесплатное, без подвоха.</p>
+
+  <div class="case" id="case">🎁</div>
+  <button class="btn" id="open">Открыть кейс</button>
+
+  <div class="card" id="card">
+    <img id="img" alt="">
+    <div class="body">
+      <p class="name" id="name"></p>
+      <span class="price" id="price"></span><span class="old" id="old"></span><span class="badge" id="disc"></span>
+      <div class="rating" id="rating"></div>
+      <a class="steam" id="link" target="_blank" rel="noopener">Открыть в Steam</a>
+      <button class="again" id="again">Ещё раз</button>
+    </div>
+  </div>
+
+  <div class="footer">Радар Скидок · @deal_radar1</div>
+
+<script>
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+let pool = [];
+
+const $ = id => document.getElementById(id);
+const api = 'https://' + location.host + location.pathname + 'cases.json';
+
+async function load() {
+  const r = await fetch('cases.json?_=' + Date.now(), { cache: 'no-store' });
+  const j = await r.json();
+  pool = (j.items || []).filter(x => x && x.title);
+}
+
+function roll() {
+  const box = $('case'), card = $('card');
+  $('open').style.display = 'none';
+  card.style.display = 'none';
+  box.style.display = 'grid';
+  box.classList.add('shake');
+  box.textContent = '📦';
+
+  let ticks = 0;
+  const spin = setInterval(() => {
+    const items = ['🎮','💥','🔥','📦','🎁'];
+    box.textContent = items[ticks++ % items.length];
+  }, 90);
+
+  setTimeout(() => {
+    clearInterval(spin);
+    box.classList.remove('shake');
+    box.style.display = 'none';
+    if (!pool.length) { card.style.display = 'block'; $('name').textContent = 'Кейс пуст — заходи позже, обновляем раздачу каждый день.'; return; }
+    const it = pool[Math.floor(Math.random() * pool.length)];
+    $('img').src = it.photo;
+    $('name').textContent = it.title;
+    $('price').textContent = it.final;
+    $('old').textContent = it.initial;
+    $('disc').textContent = '−' + it.discount + '%';
+    $('rating').textContent = it.rating ? it.rating + '% положительных отзывов' : '';
+    $('link').href = it.url;
+    card.style.display = 'block';
+  }, 1400);
+}
+
+$('open').addEventListener('click', roll);
+$('again').addEventListener('click', roll);
+load().catch(() => { $('open').textContent = 'Кейс обновляется, попробуй чуть позже'; });
+</script>
+</body>
+</html>
