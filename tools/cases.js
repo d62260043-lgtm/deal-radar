@@ -8,7 +8,7 @@ const CHAT = (process.env.CHANNEL_ID || '-1004418793414').trim();
 const CASE_URL = (process.env.CASE_URL || 'https://d62260043-lgtm.github.io/deal-radar/').trim();
 const OUT = path.join(__dirname, '..', 'docs', 'cases.json');
 
-const photo = id => 'https://cdn.akamai.steamstatic.com/steam/apps/' + id + '/header.jpg';
+const photo = id => 'https://cdn.akamai.steamstatic.com/steam/apps/' + id + '/capsule_616x353.jpg';
 const rub = (f, kop) => (f || (kop / 100).toFixed(2) + ' ₽').replace(/\s+/g, ' ').trim();
 
 const getJson = url => new Promise((resolve, reject) => {
