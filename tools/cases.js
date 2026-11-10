@@ -75,7 +75,7 @@ async function main() {
   if (!TOKEN || process.argv.includes('--no-post')) { console.log('только файл, без поста'); return; }
   const text = '🎁 <b>Кейс дня</b>\n\n' +
     'Запусти кейс и узнай, какая игра сегодня просит лучшую цену. Внутри ' + items.length + ' скидок — ' +
-    'выпадет одна, проверять честно, всё бесплатно.\n\n' +
+    'выпадет одна. Открывать можно один раз в 2 дня — без подвохов и без оплаты.\n\n' +
     '<i>#кейсдня #скидки</i>';
   const ans = JSON.parse(await api('sendMessage', {
     chat_id: CHAT,
