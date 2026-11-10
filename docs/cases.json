@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09T18:07:47.705Z",
+ "updated": "2026-11-10T00:04:29.277Z",
  "items": [
   {
    "title": "Quern - Undying Thoughts",
@@ -22,6 +22,16 @@
    "url": "https://store.steampowered.com/app/4560/"
   },
   {
+   "title": "Beholder",
+   "appid": "475550",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/475550/capsule_616x353.jpg",
+   "final": "52 руб.",
+   "initial": "520 руб.",
+   "discount": 90,
+   "rating": "81",
+   "url": "https://store.steampowered.com/app/475550/"
+  },
+  {
    "title": "Severed Steel",
    "appid": "1227690",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1227690/capsule_616x353.jpg",
@@ -32,6 +42,16 @@
    "url": "https://store.steampowered.com/app/1227690/"
   },
   {
+   "title": "Huntdown",
+   "appid": "598550",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/598550/capsule_616x353.jpg",
+   "final": "219 руб.",
+   "initial": "1099 руб.",
+   "discount": 80,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/598550/"
+  },
+  {
    "title": "The Wanderer: Frankensteins Creature",
    "appid": "966670",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/966670/capsule_616x353.jpg",
@@ -40,6 +60,16 @@
    "discount": 90,
    "rating": "84",
    "url": "https://store.steampowered.com/app/966670/"
+  },
+  {
+   "title": "SpeedRunners",
+   "appid": "207140",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/207140/capsule_616x353.jpg",
+   "final": "110 руб.",
+   "initial": "550 руб.",
+   "discount": 80,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/207140/"
   },
   {
    "title": "Cross Blitz",
@@ -90,36 +120,6 @@
    "discount": 95,
    "rating": "59",
    "url": "https://store.steampowered.com/app/1553000/"
-  },
-  {
-   "title": "Werewolf: the Apocalypse - Heart of the Forest",
-   "appid": "1342620",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1342620/capsule_616x353.jpg",
-   "final": "36 руб.",
-   "initial": "360 руб.",
-   "discount": 90,
-   "rating": "82",
-   "url": "https://store.steampowered.com/app/1342620/"
-  },
-  {
-   "title": "SteamWorld Heist II",
-   "appid": "2396240",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/2396240/capsule_616x353.jpg",
-   "final": "220 руб.",
-   "initial": "1100 руб.",
-   "discount": 80,
-   "rating": "92",
-   "url": "https://store.steampowered.com/app/2396240/"
-  },
-  {
-   "title": "Warhammer: Chaosbane",
-   "appid": "774241",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/774241/capsule_616x353.jpg",
-   "final": "56 руб.",
-   "initial": "1135 руб.",
-   "discount": 95,
-   "rating": "61",
-   "url": "https://store.steampowered.com/app/774241/"
   }
  ]
 }
