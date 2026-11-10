@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'morning | noon | evening | case | stats | build'
+        description: 'morning | noon | evening | case (раз в 2 дня) | case-force | stats | build'
         required: true
         default: 'case'
   push:
