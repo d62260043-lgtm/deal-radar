@@ -21,6 +21,7 @@
   .btn { margin-top:28px; border:0; border-radius:16px; padding:16px 34px; font-size:17px; font-weight:700;
          color:#1a1400; background:linear-gradient(180deg,#ffd977,var(--gold)); box-shadow:0 10px 24px rgba(245,196,81,.25); }
   .btn:active { transform:scale(.97); }
+  .btn[disabled] { opacity:.45; box-shadow:none; }
   .card { display:none; width:100%; max-width:340px; background:var(--card); border:1px solid #2b3344; border-radius:22px; overflow:hidden; animation:pop .35s ease-out; }
   @keyframes pop { from{opacity:0; transform:scale(.92)} to{opacity:1; transform:scale(1)} }
   .card img { width:100%; display:block; background:#0c0f15; aspect-ratio:16 / 9; object-fit:cover; }
@@ -33,17 +34,18 @@
   .rating { color:var(--dim); font-size:13px; margin-top:10px; }
   a.steam { display:block; margin-top:16px; padding:14px; border-radius:14px; background:#2b7fff; color:#fff;
             text-decoration:none; font-weight:700; font-size:15px; }
-  .again { margin-top:14px; background:none; border:1px solid #39435a; color:var(--text); border-radius:14px;
-           padding:13px; width:100%; font-size:15px; }
+  .timer { margin-top:22px; color:var(--dim); font-size:14px; line-height:1.5; }
+  .timer b { color:var(--gold); font-size:17px; }
   .footer { margin-top:26px; color:#5d6579; font-size:12px; }
 </style>
 </head>
 <body>
   <h1>🎁 Кейс дня</h1>
-  <p class="sub">Внутри — игра, которая сегодня просит лучшую цену.<br>Открытие бесплатное, без подвоха.</p>
+  <p class="sub">Внутри — игра, которая сегодня просит лучшую цену.<br>Открытие бесплатное, один раз в 2 дня.</p>
 
   <div class="case" id="case">🎁</div>
   <button class="btn" id="open">Открыть кейс</button>
+  <div class="timer" id="timer" style="display:none"></div>
 
   <div class="card" id="card">
     <img id="img" width="640" height="360" alt="" loading="eager">
@@ -52,7 +54,6 @@
       <span class="price" id="price"></span><span class="old" id="old"></span><span class="badge" id="disc"></span>
       <div class="rating" id="rating"></div>
       <a class="steam" id="link" target="_blank" rel="noopener">Открыть в Steam</a>
-      <button class="again" id="again">Ещё раз</button>
     </div>
   </div>
 
@@ -61,18 +62,74 @@
 <script>
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
-let pool = [];
 
+const COOLDOWN = 48 * 3600 * 1000;   // один прокрут в 2 дня
+const KEY = 'case_last_open';
 const $ = id => document.getElementById(id);
-const api = 'https://' + location.host + location.pathname + 'cases.json';
+let pool = [], lockedUntil = 0, ticker = null;
 
+/* --- хранилище: Telegram CloudStorage, иначе localStorage --- */
+function storeGet() {
+  return new Promise(resolve => {
+    const local = () => { try { resolve(Number(localStorage.getItem(KEY)) || 0); } catch (e) { resolve(0); } };
+    if (tg && tg.CloudStorage && tg.initData) {
+      try {
+        tg.CloudStorage.getItem(KEY, (err, val) => {
+          if (err || !val) return local();
+          resolve(Number(val) || 0);
+        });
+        setTimeout(local, 1500);
+        return;
+      } catch (e) { return local(); }
+    }
+    local();
+  });
+}
+
+function storeSet(ts) {
+  try { localStorage.setItem(KEY, String(ts)); } catch (e) {}
+  if (tg && tg.CloudStorage && tg.initData) {
+    try { tg.CloudStorage.setItem(KEY, String(ts), () => {}); } catch (e) {}
+  }
+}
+
+/* --- состояние кнопки --- */
+function fmt(ms) {
+  const h = Math.floor(ms / 3600000), m = Math.floor((ms % 3600000) / 60000);
+  if (h >= 1) return h + ' ч ' + m + ' мин';
+  return m + ' мин';
+}
+
+function paintState() {
+  const left = lockedUntil - Date.now();
+  if (left > 0) {
+    $('open').disabled = true;
+    $('open').textContent = 'Кейс уже открыт';
+    $('timer').style.display = 'block';
+    $('timer').innerHTML = 'Следующий кейс через <b>' + fmt(left) + '</b><br>заходи позже — внутри будет другая игра';
+  } else {
+    $('open').disabled = false;
+    $('open').textContent = 'Открыть кейс';
+    $('timer').style.display = 'none';
+  }
+}
+
+function startTicker() {
+  if (ticker) clearInterval(ticker);
+  ticker = setInterval(() => {
+    paintState();
+    if (Date.now() >= lockedUntil) { clearInterval(ticker); ticker = null; }
+  }, 30000);
+}
+
+/* --- сам кейс --- */
 async function load() {
   const r = await fetch('cases.json?_=' + Date.now(), { cache: 'no-store' });
-  const j = await r.json();
-  pool = (j.items || []).filter(x => x && x.title);
+  pool = ((await r.json()).items || []).filter(x => x && x.title);
 }
 
 function roll() {
+  if (Date.now() < lockedUntil) return;
   const box = $('case'), card = $('card');
   $('open').style.display = 'none';
   card.style.display = 'none';
@@ -82,7 +139,7 @@ function roll() {
 
   let ticks = 0;
   const spin = setInterval(() => {
-    const items = ['🎮','💥','🔥','📦','🎁'];
+    const items = ['🎮', '💥', '🔥', '📦', '🎁'];
     box.textContent = items[ticks++ % items.length];
   }, 90);
 
@@ -90,7 +147,11 @@ function roll() {
     clearInterval(spin);
     box.classList.remove('shake');
     box.style.display = 'none';
-    if (!pool.length) { card.style.display = 'block'; $('name').textContent = 'Кейс пуст — заходи позже, обновляем раздачу каждый день.'; return; }
+    if (!pool.length) {
+      card.style.display = 'block';
+      $('name').textContent = 'Кейс пуст — заходи позже, обновляем раздачу каждый день.';
+      return;
+    }
     const it = pool[Math.floor(Math.random() * pool.length)];
     $('img').src = it.photo;
     $('name').textContent = it.title;
@@ -100,12 +161,23 @@ function roll() {
     $('rating').textContent = it.rating ? it.rating + '% положительных отзывов' : '';
     $('link').href = it.url;
     card.style.display = 'block';
+
+    lockedUntil = Date.now() + COOLDOWN;
+    storeSet(Date.now());
+    paintState();
+    startTicker();
   }, 1400);
 }
 
 $('open').addEventListener('click', roll);
-$('again').addEventListener('click', roll);
-load().catch(() => { $('open').textContent = 'Кейс обновляется, попробуй чуть позже'; });
+
+(async () => {
+  const last = await storeGet();
+  if (last) lockedUntil = last + COOLDOWN;
+  paintState();
+  if (lockedUntil > Date.now()) startTicker();
+  try { await load(); } catch (e) { $('open').textContent = 'Кейс обновляется, попробуй чуть позже'; }
+})();
 </script>
 </body>
 </html>
