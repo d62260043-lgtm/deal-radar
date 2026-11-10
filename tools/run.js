@@ -13,7 +13,10 @@ const BY_CRON = {
 (async () => {
   const mode = (process.env.INPUT_MODE || '').trim() || BY_CRON[(process.env.SCHEDULE || '').trim()] || '';
   console.log('mode=' + (mode || 'не определён'));
-  if (mode === 'case') await require('./cases').run();
+  if (mode === 'case' || mode === 'case-force') {
+    if (mode === 'case-force') process.argv.push('--force');
+    await require('./cases').run();
+  }
   else if (mode === 'stats') await stats();
   else if (mode) await digest(mode);
   else { console.error('Неизвестный режим: SCHEDULE=' + process.env.SCHEDULE); process.exit(1); }
