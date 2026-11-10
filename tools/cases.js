@@ -7,6 +7,8 @@ const TOKEN = (process.env.TELEGRAM_TOKEN || '').trim();
 const CHAT = (process.env.CHANNEL_ID || '-1004418793414').trim();
 const CASE_URL = (process.env.CASE_URL || 'https://d62260043-lgtm.github.io/deal-radar/').trim();
 const OUT = path.join(__dirname, '..', 'docs', 'cases.json');
+const STATE = path.join(__dirname, '..', 'state', 'case.json');
+const MIN_GAP_MS = 46 * 3600 * 1000; // раз в 2 дня (24ч шаг крона + запас)
 
 const photo = id => 'https://cdn.akamai.steamstatic.com/steam/apps/' + id + '/capsule_616x353.jpg';
 const rub = (f, kop) => (f || (kop / 100).toFixed(2) + ' ₽').replace(/\s+/g, ' ').trim();
@@ -62,6 +64,14 @@ async function main() {
   fs.writeFileSync(OUT, JSON.stringify({ updated: new Date().toISOString(), items }, null, 1));
   console.log('cases: ' + items.length + ' игр в кейсе');
 
+  const force = process.argv.includes('--force');
+  let last = null;
+  try { last = JSON.parse(fs.readFileSync(STATE, 'utf8')).lastPost; } catch (e) {}
+  if (!force && last && Date.now() - Date.parse(last) < MIN_GAP_MS) {
+    console.log('кейс уже был ' + last + ' — сегодня пропуск, пул обновлён');
+    return;
+  }
+
   if (!TOKEN || process.argv.includes('--no-post')) { console.log('только файл, без поста'); return; }
   const text = '🎁 <b>Кейс дня</b>\n\n' +
     'Запусти кейс и узнай, какая игра сегодня просит лучшую цену. Внутри ' + items.length + ' скидок — ' +
@@ -75,6 +85,8 @@ async function main() {
     reply_markup: { inline_keyboard: [[{ text: '🎁 Открыть кейс', url: CASE_URL }]] },
   }));
   if (!ans.ok) { console.error('send FAIL ' + JSON.stringify(ans).slice(0, 200)); process.exitCode = 1; return; }
+  fs.mkdirSync(path.dirname(STATE), { recursive: true });
+  fs.writeFileSync(STATE, JSON.stringify({ lastPost: new Date().toISOString(), messageId: ans.result.message_id }));
   console.log('case post sent, message_id=' + ans.result.message_id);
 }
 
