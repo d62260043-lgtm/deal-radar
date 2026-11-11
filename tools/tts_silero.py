@@ -1,4 +1,5 @@
-import os, sys
+import os, sys, wave
+import numpy as np
 import torch
 
 text_file, out_wav = sys.argv[1], sys.argv[2]
@@ -12,7 +13,17 @@ if not os.path.exists(model_file):
 
 model = torch.package.PackageImporter(model_file).load_pickle('tts_models', 'model')
 model.to(torch.device('cpu'))
-audio = model.apply_tts(text=text, speaker=speaker, sample_rate=48000)
-import torchaudio
-torchaudio.save(out_wav, audio.unsqueeze(0), 48000)
-print('silero ok: %d сэмплов' % audio.shape[0])
+
+rate = 48000
+audio = model.apply_tts(text=text, speaker=speaker, sample_rate=rate)
+arr = audio.detach().cpu().numpy()
+arr = np.clip(arr, -1.0, 1.0)
+pcm = (arr * 32767.0).astype(np.int16)
+
+with wave.open(out_wav, 'wb') as w:
+    w.setnchannels(1)
+    w.setsampwidth(2)
+    w.setframerate(rate)
+    w.writeframes(pcm.tobytes())
+
+print('silero ok: %.1f с, спикер %s' % (len(pcm) / rate, speaker))
