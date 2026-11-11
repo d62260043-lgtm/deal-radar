@@ -45,7 +45,14 @@ jobs:
           CASE_URL: https://d62260043-lgtm.github.io/deal-radar/
         run: |
           MODE="${{ github.event.inputs.mode }}"
-          if [ "$MODE" = "build" ]; then node tools/cases.js --no-post; else node tools/run.js; fi
+          SCHED="${{ github.event.schedule }}"
+          if [ -n "$MODE" ] && [ "$MODE" = "build" ]; then
+            node tools/cases.js --no-post
+          elif [ -n "$MODE" ] || [ -n "$SCHED" ]; then
+            node tools/run.js
+          else
+            echo "push без режима: только деплой сайта"
+          fi
       - name: Save state
         run: |
           git config user.name "deal-radar-bot"
