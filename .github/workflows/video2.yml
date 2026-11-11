@@ -1,0 +1,43 @@
+name: deal-radar-video2
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  video:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install ffmpeg (static)
+        timeout-minutes: 6
+        run: |
+          curl -sL https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linux64-gpl.tar.xz -o /tmp/ff.tar.xz
+          mkdir -p /tmp/ff && tar xf /tmp/ff.tar.xz -C /tmp/ff --strip-components=1
+          sudo cp "$(find /tmp/ff -name ffmpeg -type f | head -1)" /usr/local/bin/ffmpeg
+          sudo cp "$(find /tmp/ff -name ffprobe -type f | head -1)" /usr/local/bin/ffprobe
+          ffmpeg -version | head -1
+      - name: Install resvg and TTS
+        run: |
+          npm i --no-audit --no-fund @resvg/resvg-js@2
+          python3 -m pip install --quiet edge-tts
+          python3 -c "import edge_tts; print('edge_tts ok')"
+      - name: Build voice video and send
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          OWNER_CHAT_ID: ${{ secrets.OWNER_CHAT_ID }}
+        run: node tools/make_video2.js
+      - name: Save video
+        if: always()
+        run: cp /tmp/v2/final.mp4 ./deals-v2.mp4 || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deals-video2
+          path: deals-v2.mp4
+          if-no-files-found: ignore
