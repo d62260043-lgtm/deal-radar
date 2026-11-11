@@ -4,6 +4,7 @@ const https = require('https');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const { Resvg } = require('@resvg/resvg-js');
+const { tts } = require('./tts');
 
 const TOKEN = (process.env.TELEGRAM_TOKEN || '').trim();
 const OWNER = (process.env.OWNER_CHAT_ID || '').trim();
@@ -36,15 +37,7 @@ function ensureFile(url, dest, minSize) {
   return dest;
 }
 
-function tts(text, outWav) {
-  const model = ensureFile(PIPER_BASE + '.onnx', TMP + '/dmitri.onnx');
-  ensureFile(PIPER_BASE + '.onnx.json', TMP + '/dmitri.onnx.json', 200);
-  fs.writeFileSync(TMP + '/say.txt', text);
-  // length_scale 1.13 — медленнее и внятнее
-  run('piper', ['--model', model, '--length_scale', '1.13', '--output_file', TMP + '/raw.wav'], { input: fs.readFileSync(TMP + '/say.txt') });
-  if (!fs.existsSync(TMP + '/raw.wav')) throw new Error('piper не выдал звук');
-  ff(['-y', '-i', TMP + '/raw.wav', '-af', 'asetrate=22050*0.94,aresample=22050,atempo=1.064', '-ar', '22050', '-ac', '1', outWav]);
-}
+
 
 function envelope(wav, frameDur, total) {
   const buf = fs.readFileSync(wav);
@@ -146,7 +139,7 @@ const SLIDES = [
     'Ещё кейсы можно заработать: за подписку на канал, за друзей, за достижения, мини-игру и дуэли. А пять дополнительных открытий — за пятнадцать звёзд. ' +
     'Подписывайся на Радар Скидок и открывай кейс. Это бесплатно.';
   log('длина сценария: ' + voiceText.length + ' символов');
-  tts(voiceText, TMP + '/voice.wav');
+  tts(voiceText, TMP, TMP + '/voice.wav');
   const dur = ffprobe(TMP + '/voice.wav');
   log('голос: ' + dur.toFixed(1) + ' с');
 
