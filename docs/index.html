@@ -415,7 +415,7 @@ function roll() {
 $('duel').addEventListener('click', () => {
   const d = Number((($('disc').textContent || '').match(/\d+/) || [0])[0]);
   const name = $('name').textContent;
-  const url = BOT_START + S.ref + '&duel=' + d + '&n=' + encodeURIComponent(name.slice(0, 40));
+  const url = APP_URL + '?ref=' + S.ref + '&duel=' + d + '&n=' + encodeURIComponent(name.slice(0, 40));
   const text = 'Вызываю на дуэль! Мне выпало −' + d + '%. Слабо лучше? Открой кейс:';
   if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text));
   else if (navigator.share) navigator.share({ title: 'Дуэль', text, url });
