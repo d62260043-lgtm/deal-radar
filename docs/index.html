@@ -4,7 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Кейс дня — Радар Скидок</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js">
+/* ---------- сервер: подписка, звёзды, общий топ ---------- */
+function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+function renderGlobalTop(top) {
+  if (!top || !top.length) { $('globalTop').innerHTML = '<div class="empty">Сегодня ещё никто не открывал кейс — будь первым</div>'; return; }
+  $('globalTop').innerHTML = top.slice(0, 10).map((x, i) =>
+    '<div class="item"><div class="num">' + (i + 1) + '</div><div><div class="t">' + esc(x.name) +
+    '</div><div class="p">−' + x.discount + '% · ' + esc((x.title || '').slice(0, 38)) + '</div></div></div>').join('');
+}
+
+function showGate() {
+  $('gateBanner').style.display = 'block';
+  $('gateBanner').innerHTML = '🔥 Подпишись на канал <b>@deal_radar1</b> — и получи <b>+1 кейс</b>.<br>' +
+    '<a href="https://t.me/deal_radar1" target="_blank" style="color:#f5c451;font-weight:700">Подписаться</a> · ' +
+    '<a href="#" id="gateCheck" style="color:#f5c451;font-weight:700">Я подписался</a>';
+  const el = $('gateCheck');
+  if (el) el.onclick = e => { e.preventDefault(); serverMe(); };
+}
+function hideGate() { $('gateBanner').style.display = 'none'; }
+
+async function serverMe() {
+  if (!(tg && tg.initData)) { $('globalTop').innerHTML = '<div class="empty">Открой приложение внутри Telegram — увидишь общий топ</div>'; return; }
+  try {
+    const r = await fetch(API + '/api/me', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initData: tg.initData }) });
+    const j = await r.json();
+    if (!j.ok) { $('globalTop').innerHTML = '<div class="empty">Сервер не ответил</div>'; return; }
+
+    if (j.gateBonus > 0) { S.extra += j.gateBonus; save(); paint(); toast('Спасибо за подписку!', 'Награда: <b>+1 кейс</b>'); }
+    if (j.sub) hideGate(); else showGate();
+
+    if (j.paid > 0) {
+      const t = await fetch(API + '/api/take-paid', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initData: tg.initData }) }).then(x => x.json()).catch(() => ({ taken: 0 }));
+      if (t.taken > 0) { S.extra += t.taken; save(); paint(); toast('Звёзды зачислены', 'Начислено <b>+' + t.taken + '</b> кейсов за оплату.'); }
+    }
+
+    if (typeof j.refs === 'number' && j.refs > (S.serverRefs || 0)) {
+      const d = j.refs - (S.serverRefs || 0);
+      S.serverRefs = j.refs; S.extra += d; save(); paint();
+      toast('Пришёл друг!', 'Начислено кейсов: <b>+' + d + '</b>');
+    }
+
+    renderGlobalTop(j.top || []);
+  } catch (e) { $('globalTop').innerHTML = '<div class="empty">Сервер недоступен</div>'; }
+}
+
+async function serverScore(discount, title) {
+  if (!(tg && tg.initData)) return;
+  try {
+    const r = await fetch(API + '/api/score', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initData: tg.initData, discount, title }) });
+    const j = await r.json();
+    if (j.ok) renderGlobalTop(j.top);
+  } catch (e) {}
+}
+
+</script>
 <style>
   :root { --gold:#f5c451; --bg:#0e121a; --card:#1a1f2b; --line:#2b3344; --text:#eef1f7; --dim:#8b93a7; --green:#4ade80; --red:#f87171; }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -92,6 +147,7 @@
   </div>
 
   <section class="tab on" id="tab-case">
+    <div class="banner" id="gateBanner" style="display:none"></div>
     <div class="banner" id="duelBanner" style="display:none"></div>
     <p class="sub">3 бесплатных открытия в день.<br>Бонусные кейсы — за друзей, достижения, мини-игру и звёзды.</p>
     <div class="case" id="case">🎁</div>
@@ -139,6 +195,8 @@
       <div><span>🎁 совсем бесплатная игра</span><b>2%</b></div>
     </div>
     <p class="sub" style="margin-top:12px; font-size:11.5px">Каждый 16-й открытый кейс гарантированно даёт скидку −85% и больше.</p>
+    <p class="sub" style="margin-top:16px">🏆 Топ игроков дня</p>
+    <div id="globalTop"><div class="empty">Загружаю...</div></div>
     <p class="sub" style="margin-top:16px">Топ по дуэлям</p>
     <div id="duelBoard"></div>
   </section>
@@ -188,6 +246,7 @@
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
+const API = 'https://deal-radar.dealradar-xolbur.workers.dev';
 const DAILY = 3, STAR_URL = 'https://t.me/$iZfkicLWoUuBHAAAGqOGokJcW30', COUNTER_NS = 'dealradar';
 const APP_URL = location.origin + location.pathname;
 const $ = id => document.getElementById(id);
@@ -341,6 +400,7 @@ function roll() {
     if ((S.streak || 1) >= 3) unlock('streak3');
     if (new Set(S.collection.map(c => c.appid)).size >= 10) unlock('collect10');
     if (Number(it.discount) >= 90) unlock('best90');
+    serverScore(Number(it.discount) || 0, it.title);
 
     $('open').style.display = 'inline-block';
     paint();
@@ -468,7 +528,7 @@ $('again').addEventListener('click', () => { $('card').style.display = 'none'; r
 
 (async () => {
   load(); paint(); readDuel();
-  countRef(); syncInvited();
+  countRef(); syncInvited(); serverMe();
   try {
     const r = await fetch('cases.json?_=' + Date.now(), { cache: 'no-store' });
     const j = await r.json();
