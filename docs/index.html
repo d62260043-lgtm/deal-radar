@@ -6,102 +6,100 @@
 <title>Кейс дня — Радар Скидок</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-  :root { --gold:#f5c451; --bg:#0e121a; --card:#1a1f2b; --line:#2b3344; --text:#eef1f7; --dim:#8b93a7; }
+  :root { --gold:#f5c451; --bg:#0e121a; --card:#1a1f2b; --line:#2b3344; --text:#eef1f7; --dim:#8b93a7; --green:#4ade80; --red:#f87171; }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { margin:0; background:radial-gradient(110% 60% at 50% 0%,#1b2331 0%,var(--bg) 55%);
-         color:var(--text); font-family:-apple-system,Roboto,system-ui,sans-serif; padding-bottom:76px; }
-  .wrap { max-width:430px; margin:0 auto; padding:18px 16px 8px; }
-  .head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-  h1 { font-size:20px; margin:0; }
-  .chip { font-size:12px; color:var(--gold); background:rgba(245,196,81,.12); border:1px solid rgba(245,196,81,.35);
-          padding:5px 10px; border-radius:999px; font-weight:700; }
-  .sub { color:var(--dim); font-size:13px; margin:0 0 16px; line-height:1.45; }
-  .tab { display:none; }
-  .tab.on { display:block; animation:fade .2s ease-out; }
-  @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
-
-  /* кейс */
-  .casebox { display:grid; place-items:center; }
-  .case { width:168px; height:168px; border-radius:28px; display:grid; place-items:center; font-size:72px;
+  body { margin:0; background:radial-gradient(110% 60% at 50% 0%,#1b2331 0%,var(--bg) 55%); color:var(--text);
+         font-family:-apple-system,Roboto,system-ui,sans-serif; padding-bottom:74px; }
+  .wrap { max-width:430px; margin:0 auto; padding:16px 15px 8px; }
+  .head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  h1 { font-size:19px; margin:0; }
+  .chip { font-size:11px; color:var(--gold); background:rgba(245,196,81,.12); border:1px solid rgba(245,196,81,.35);
+          padding:4px 9px; border-radius:999px; font-weight:700; }
+  .sub { color:var(--dim); font-size:12.5px; margin:0 0 14px; line-height:1.45; }
+  .tab { display:none; } .tab.on { display:block; animation:fade .18s ease-out; }
+  @keyframes fade { from{opacity:0; transform:translateY(5px)} to{opacity:1; transform:none} }
+  .case { width:150px; height:150px; border-radius:26px; display:grid; place-items:center; font-size:64px; margin:0 auto;
           background:linear-gradient(160deg,#2a3244,#171c26); border:1px solid var(--line);
-          box-shadow:0 18px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06); }
+          box-shadow:0 16px 36px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06); }
   .case.shake { animation:shake .45s infinite; }
-  @keyframes shake { 0%,100%{transform:rotate(-3deg) translateY(0)} 50%{transform:rotate(3deg) translateY(-6px)} }
-  .btn { border:0; border-radius:16px; padding:15px 28px; font-size:16px; font-weight:800; color:#1a1400;
-         background:linear-gradient(180deg,#ffd977,var(--gold)); box-shadow:0 10px 24px rgba(245,196,81,.22); }
+  @keyframes shake { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg) translateY(-6px)} }
+  .btn { border:0; border-radius:15px; padding:14px 24px; font-size:15px; font-weight:800; color:#1a1400;
+         background:linear-gradient(180deg,#ffd977,var(--gold)); box-shadow:0 9px 22px rgba(245,196,81,.2); }
   .btn:active { transform:scale(.98); }
   .btn.ghost { background:none; border:1px solid #39435a; color:var(--text); box-shadow:none; }
   .btn[disabled] { opacity:.45; box-shadow:none; }
-  .counter { color:var(--dim); font-size:13px; margin:12px 0 0; }
+  .counter { color:var(--dim); font-size:12px; margin:10px 0 0; text-align:center; }
   .counter b { color:var(--text); }
-
-  /* карточка */
-  .card { background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden; margin-top:16px; display:none; }
-  .card img { width:100%; display:block; background:#0c0f15; aspect-ratio:16 / 9; object-fit:cover; }
-  .card .body { padding:14px 16px 16px; }
-  .card .name { font-size:16px; font-weight:800; margin:0 0 8px; line-height:1.3; }
-  .price { font-size:25px; font-weight:800; color:var(--gold); }
-  .old { color:var(--dim); text-decoration:line-through; font-size:14px; margin-left:8px; }
-  .badge { display:inline-block; margin-left:8px; padding:3px 9px; border-radius:999px; font-size:12px; font-weight:800;
+  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; margin-top:14px; display:none; }
+  .card img { width:100%; display:block; aspect-ratio:16 / 9; object-fit:cover; background:#0c0f15; }
+  .card .body { padding:13px 15px 15px; }
+  .card .name { font-size:15.5px; font-weight:800; margin:0 0 7px; }
+  .price { font-size:23px; font-weight:800; color:var(--gold); }
+  .old { color:var(--dim); text-decoration:line-through; font-size:13px; margin-left:7px; }
+  .badge { display:inline-block; margin-left:7px; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:800;
            background:#2a1d0f; color:var(--gold); }
-  .rating { color:var(--dim); font-size:12px; margin-top:8px; }
-  .row { display:flex; gap:8px; margin-top:12px; }
-  .row .btn { flex:1; padding:13px 10px; font-size:14px; }
-  a.steam { display:block; text-align:center; margin-top:12px; padding:13px; border-radius:14px; background:#2b7fff;
-            color:#fff; text-decoration:none; font-weight:800; font-size:14px; }
-
-  /* список */
-  .item { display:flex; gap:10px; align-items:center; padding:9px; border:1px solid var(--line); border-radius:14px;
-          margin-bottom:9px; background:#151a24; text-decoration:none; color:inherit; }
-  .item img { width:74px; height:42px; object-fit:cover; border-radius:8px; flex:0 0 auto; background:#0c0f15; }
-  .item .t { font-size:13px; font-weight:700; line-height:1.25; }
-  .item .p { font-size:12px; color:var(--gold); margin-top:3px; font-weight:700; }
-  .item .d { font-size:12px; color:var(--dim); }
-  .empty { color:var(--dim); font-size:13px; text-align:center; padding:24px 0; }
-  .ach { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-  .ach span { font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid var(--line); color:var(--dim); }
+  .rating { color:var(--dim); font-size:11.5px; margin-top:7px; }
+  .row2 { display:flex; gap:7px; margin-top:11px; }
+  .row2 .btn { flex:1; padding:12px 8px; font-size:13px; }
+  a.steam { display:block; text-align:center; margin-top:10px; padding:12px; border-radius:13px; background:#2b7fff;
+            color:#fff; text-decoration:none; font-weight:800; font-size:13.5px; }
+  .item { display:flex; gap:9px; align-items:center; padding:8px; border:1px solid var(--line); border-radius:13px;
+          margin-bottom:8px; background:#151a24; text-decoration:none; color:inherit; }
+  .item img { width:66px; height:37px; object-fit:cover; border-radius:7px; flex:0 0 auto; background:#0c0f15; }
+  .item .t { font-size:12.5px; font-weight:700; line-height:1.25; }
+  .item .p { font-size:11.5px; color:var(--gold); margin-top:2px; font-weight:700; }
+  .item .d { font-size:11px; color:var(--dim); }
+  .item .num { width:20px; text-align:center; color:var(--dim); font-size:12px; font-weight:800; }
+  .empty { color:var(--dim); font-size:12.5px; text-align:center; padding:20px 0; }
+  .ach { display:flex; flex-wrap:wrap; gap:7px; margin-top:8px; }
+  .ach span { font-size:11.5px; padding:5px 9px; border-radius:999px; border:1px solid var(--line); color:var(--dim); }
   .ach span.got { color:var(--gold); border-color:rgba(245,196,81,.45); background:rgba(245,196,81,.08); }
-  .reflink { display:flex; gap:8px; margin:10px 0 6px; }
+  .odds { border:1px solid var(--line); border-radius:13px; overflow:hidden; margin-top:6px; }
+  .odds div { display:flex; justify-content:space-between; padding:9px 12px; font-size:12.5px; border-bottom:1px solid var(--line); }
+  .odds div:last-child { border-bottom:0; }
+  .odds b { color:var(--gold); }
+  .reflink { display:flex; gap:7px; margin:8px 0 6px; }
   .reflink input { flex:1; min-width:0; background:#141924; border:1px solid var(--line); color:var(--text);
-                   border-radius:12px; padding:11px; font-size:12px; }
-  .stat { display:flex; gap:10px; margin:14px 0; }
-  .stat div { flex:1; background:#151a24; border:1px solid var(--line); border-radius:14px; padding:12px; text-align:center; }
-  .stat b { display:block; font-size:20px; color:var(--gold); }
-  .stat small { color:var(--dim); font-size:11px; }
-
-  /* навигация */
+                   border-radius:11px; padding:10px; font-size:11.5px; }
+  .stat { display:flex; gap:8px; margin:12px 0; }
+  .stat div { flex:1; background:#151a24; border:1px solid var(--line); border-radius:13px; padding:11px 6px; text-align:center; }
+  .stat b { display:block; font-size:18px; color:var(--gold); }
+  .stat small { color:var(--dim); font-size:10.5px; }
   nav { position:fixed; left:0; right:0; bottom:0; display:flex; background:#11161f; border-top:1px solid var(--line);
-        padding:6px 4px calc(6px + env(safe-area-inset-bottom)); }
-  nav button { flex:1; background:none; border:0; color:var(--dim); font-size:11px; padding:8px 0 6px; font-weight:600; }
-  nav button .ico { display:block; font-size:19px; margin-bottom:2px; }
+        padding:5px 3px calc(5px + env(safe-area-inset-bottom)); }
+  nav button { flex:1; background:none; border:0; color:var(--dim); font-size:10.5px; padding:7px 0 5px; font-weight:600; }
+  nav button .ico { display:block; font-size:18px; margin-bottom:1px; }
   nav button.on { color:var(--gold); }
-
-  .modal { position:fixed; inset:0; background:rgba(4,6,10,.8); display:none; align-items:center; justify-content:center; padding:20px; z-index:10; }
+  .modal { position:fixed; inset:0; background:rgba(4,6,10,.82); display:none; align-items:center; justify-content:center; padding:18px; z-index:20; }
   .modal.on { display:flex; }
-  .modal .box { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px; max-width:340px; }
-  .modal h3 { margin:0 0 8px; font-size:16px; }
-  .modal p { margin:0 0 14px; color:var(--dim); font-size:13px; line-height:1.5; }
+  .modal .box { background:var(--card); border:1px solid var(--line); border-radius:17px; padding:18px; max-width:340px; width:100%; max-height:86vh; overflow:auto; }
+  .modal h3 { margin:0 0 8px; font-size:15.5px; }
+  .modal p { margin:0 0 13px; color:var(--dim); font-size:12.5px; line-height:1.5; }
+  .quiz img { width:100%; border-radius:12px; aspect-ratio:16/9; object-fit:cover; margin-bottom:10px; }
+  .quiz button { display:block; width:100%; text-align:left; margin-bottom:7px; padding:11px 12px; border-radius:11px;
+                 border:1px solid var(--line); background:#141924; color:var(--text); font-size:13px; font-weight:600; }
+  .quiz button.ok { border-color:var(--green); color:var(--green); }
+  .quiz button.no { border-color:var(--red); color:var(--red); }
+  .banner { background:linear-gradient(135deg,#3a2a10,#241a0b); border:1px solid rgba(245,196,81,.4);
+            border-radius:13px; padding:11px 13px; font-size:12.5px; margin-bottom:12px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="head">
     <h1>🎁 Кейс дня</h1>
-    <span class="chip" id="streakChip">серия: 1 день</span>
+    <span class="chip" id="streakChip">серия: 1</span>
   </div>
 
-  <!-- КЕЙС -->
   <section class="tab on" id="tab-case">
-    <p class="sub">Открытие бесплатное: <b>3 кейса в день</b>.<br>Внутри — игра с лучшей ценой на сегодня.</p>
-    <div class="casebox">
-      <div class="case" id="case">🎁</div>
-    </div>
+    <div class="banner" id="duelBanner" style="display:none"></div>
+    <p class="sub">3 бесплатных открытия в день.<br>Бонусные кейсы — за друзей, достижения, мини-игру и звёзды.</p>
+    <div class="case" id="case">🎁</div>
     <div style="text-align:center">
-      <button class="btn" id="open" style="margin-top:20px">Открыть кейс</button>
-      <p class="counter">Открыто сегодня: <b id="opensLeft">0 / 3</b></p>
-      <button class="btn ghost" id="buyBtn" style="font-size:13px; padding:11px 16px; margin-top:8px">+5 кейсов за 15 ⭐</button>
+      <button class="btn" id="open" style="margin-top:16px">Открыть кейс</button>
+      <p class="counter">Открыто сегодня: <b id="opensLeft">0 / 3</b> · всего: <b id="totalOpens">0</b></p>
+      <button class="btn ghost" id="buyBtn" style="font-size:12.5px; padding:10px 14px; margin-top:6px">+5 кейсов за 15 ⭐</button>
     </div>
-
     <div class="card" id="card">
       <img id="img" width="640" height="360" alt="">
       <div class="body">
@@ -109,99 +107,116 @@
         <span class="price" id="price"></span><span class="old" id="old"></span><span class="badge" id="disc"></span>
         <div class="rating" id="rating"></div>
         <a class="steam" id="link" target="_blank" rel="noopener">Открыть в Steam</a>
-        <div class="row">
-          <button class="btn ghost" id="share" style="font-size:14px">Поделиться</button>
-          <button class="btn" id="again" style="font-size:14px">Ещё кейс</button>
+        <div class="row2">
+          <button class="btn ghost" id="share">Поделиться</button>
+          <button class="btn ghost" id="duel">Дуэль</button>
+          <button class="btn" id="again">Ещё</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ТОП -->
   <section class="tab" id="tab-top">
-    <p class="sub">Все скидки, которые сейчас в кейсе — открой любую.</p>
+    <p class="sub"><b>Топ дня</b> — максимальные скидки в кейсе прямо сейчас.</p>
+    <div id="dayTop"></div>
+    <p class="sub" style="margin-top:16px"><b>Все скидки дня</b></p>
     <div id="topList"></div>
   </section>
 
-  <!-- КОЛЛЕКЦИЯ -->
+  <section class="tab" id="tab-play">
+    <p class="sub">Бонусные кейсы за активность: мини-игра и дуэли.</p>
+    <div class="stat">
+      <div><b id="quizLeft">3</b><small>вопросов осталось</small></div>
+      <div><b id="duelLeft">3</b><small>побед в дуэлях</small></div>
+    </div>
+    <button class="btn" id="startQuiz" style="width:100%">🎯 Угадай игру по обложке (+1 кейс)</button>
+    <p class="sub" style="margin-top:16px">Шансы выпадения</p>
+    <div class="odds">
+      <div><span>🟢 обычная скидка (20–49%)</span><b>33%</b></div>
+      <div><span>🔵 хорошая (50–74%)</span><b>33%</b></div>
+      <div><span>🟣 отличная (75–89%)</span><b>22%</b></div>
+      <div><span>🟡 эпическая (90%+)</span><b>10%</b></div>
+      <div><span>🎁 совсем бесплатная игра</span><b>2%</b></div>
+    </div>
+    <p class="sub" style="margin-top:12px; font-size:11.5px">Каждый 16-й открытый кейс гарантированно даёт скидку −85% и больше.</p>
+    <p class="sub" style="margin-top:16px">Топ по дуэлям</p>
+    <div id="duelBoard"></div>
+  </section>
+
   <section class="tab" id="tab-collect">
     <div class="stat">
-      <div><b id="cTotal">0</b><small>кейсов открыто</small></div>
-      <div><b id="cUnique">0</b><small>игр собрано</small></div>
-      <div><b id="cBest">—</b><small>лучшая скидка</small></div>
+      <div><b id="cTotal">0</b><small>кейсов</small></div>
+      <div><b id="cUnique">0</b><small>игр</small></div>
+      <div><b id="cBest">—</b><small>рекорд</small></div>
     </div>
-    <p class="sub">Достижения</p>
+    <p class="sub">Достижения и награды</p>
     <div class="ach" id="achList"></div>
-    <p class="sub" style="margin-top:18px">Моя коллекция</p>
+    <p class="sub" style="margin-top:16px">Моя коллекция</p>
     <div id="collectList"></div>
   </section>
 
-  <!-- ДРУЗЬЯ -->
   <section class="tab" id="tab-friends">
-    <p class="sub">Позови друга — и у вас одного будет больше шансов поймать хорошую скидку.</p>
+    <p class="sub">За каждого друга, зашедшего по твоей ссылке, — <b>+1 кейс</b>.</p>
     <div class="reflink">
       <input id="refInput" readonly>
-      <button class="btn ghost" id="copyRef" style="padding:11px 14px; font-size:13px">Копировать</button>
+      <button class="btn ghost" id="copyRef" style="padding:10px 12px; font-size:12px">Копировать</button>
     </div>
-    <button class="btn" id="shareRef" style="width:100%; margin-top:6px">Пригласить друга</button>
+    <button class="btn" id="shareRef" style="width:100%; margin-top:4px">Пригласить друга</button>
     <div class="stat">
-      <div><b id="invited">—</b><small>переходов по ссылке</small></div>
-      <div><b id="myOpens">0</b><small>моих открытий</small></div>
+      <div><b id="invited">—</b><small>переходов</small></div>
+      <div><b id="credited">0</b><small>бонусов получено</small></div>
     </div>
-    <p class="sub" id="refNote" style="font-size:12px"></p>
+    <p class="sub" style="font-size:11.5px" id="refNote"></p>
   </section>
 </div>
 
 <nav>
   <button class="on" data-tab="case"><span class="ico">🎁</span>Кейс</button>
   <button data-tab="top"><span class="ico">🔥</span>Топ</button>
+  <button data-tab="play"><span class="ico">🎯</span>Игры</button>
   <button data-tab="collect"><span class="ico">🏆</span>Коллекция</button>
   <button data-tab="friends"><span class="ico">👥</span>Друзья</button>
 </nav>
 
-<div class="modal" id="modal">
-  <div class="box">
-    <h3 id="mTitle">Заголовок</h3>
-    <p id="mText">Текст</p>
-    <button class="btn" id="mOk" style="width:100%">Понятно</button>
-  </div>
-</div>
+<div class="modal" id="modal"><div class="box">
+  <h3 id="mTitle"></h3><p id="mText"></p>
+  <div id="mExtra"></div>
+  <button class="btn" id="mOk" style="width:100%">Понятно</button>
+</div></div>
 
 <script>
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
-const DAILY = 3, BUY_PACK = 5, COUNTER_NS = 'dealradar';
+const DAILY = 3, STAR_URL = 'https://t.me/$iZfkicLWoUuBHAAAGqOGokJcW30', COUNTER_NS = 'dealradar';
 const APP_URL = location.origin + location.pathname;
 const $ = id => document.getElementById(id);
 const today = () => new Date().toISOString().slice(0, 10);
 const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
 
-let pool = [];
-let S = {
-  day: today(), opens: 0, extra: 0, total: 0,
-  streak: 1, lastDay: null,
-  collection: [], ach: [],
-  ref: '', invited: 0,
-};
+let pool = [], freePool = [];
+let S = { day: today(), opens: 0, extra: 0, total: 0, streak: 1, collection: [], ach: [], claimed: [],
+          ref: '', invited: 0, creditedRefs: 0, quizDay: '', quizCorrect: 0, duelDay: '', duelWins: 0,
+          duelHistory: [], best: 0 };
+let pendingDuel = null;
 
-const ACHIEVEMENTS = [
-  { id: 'first', name: '🎉 Первый кейс' },
-  { id: 'daily3', name: '🔥 3 за день' },
-  { id: 'streak3', name: '📅 3 дня подряд' },
-  { id: 'collect10', name: '🏆 10 игр' },
-  { id: 'invite1', name: '👥 Привёл друга' },
-  { id: 'best90', name: '💎 Скидка −90% и выше' },
+const ACH = [
+  { id: 'first', name: '🎉 Первый кейс', reward: 1 },
+  { id: 'daily3', name: '🔥 3 за день', reward: 1 },
+  { id: 'streak3', name: '📅 3 дня подряд', reward: 2 },
+  { id: 'collect10', name: '🏆 10 игр', reward: 2 },
+  { id: 'invite1', name: '👥 Привёл друга', reward: 1 },
+  { id: 'best90', name: '💎 Скидка −90%+', reward: 1 },
+  { id: 'quiz3', name: '🎯 Три вопроса сходу', reward: 2 },
+  { id: 'duel1', name: '⚔️ Победа в дуэли', reward: 1 },
 ];
 
-/* ---------- хранилище ---------- */
+/* ---------- состояние ---------- */
 function load() {
-  try { const raw = ls.get('case_state_v3'); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
+  try { const raw = ls.get('case_state_v4'); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
   if (S.day !== today()) {
     const prev = S.day;
-    S.day = today();
-    S.opens = 0;
-    S.extra = 0;
+    S.day = today(); S.opens = 0; S.extra = 0; S.quizCorrect = 0; S.duelWins = 0;
     const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
     S.streak = (prev === y) ? (S.streak || 1) + 1 : 1;
   }
@@ -211,86 +226,114 @@ function load() {
   }
   save();
 }
-function save() { ls.set('case_state_v3', JSON.stringify(S)); }
+function save() { ls.set('case_state_v4', JSON.stringify(S)); }
+function addCases(n, why) {
+  S.extra += n; save(); paint();
+  if (why) toast('+' + n + ' кейс' + (n > 1 ? 'а' : ''), why);
+}
+function toast(title, text, extraHtml) {
+  $('mTitle').textContent = title; $('mText').innerHTML = text || '';
+  $('mExtra').innerHTML = extraHtml || '';
+  $('modal').classList.add('on');
+}
+$('mOk').onclick = () => { $('modal').classList.remove('on'); $('mExtra').innerHTML = ''; };
 
-/* ---------- утилиты ---------- */
-function toast(title, text) { $('mTitle').textContent = title; $('mText').innerHTML = text; $('modal').classList.add('on'); }
-$('mOk').onclick = () => $('modal').classList.remove('on');
+function unlock(id) {
+  if (S.ach.includes(id) || S.claimed.includes(id)) return false;
+  const a = ACH.find(x => x.id === id);
+  S.ach.push(id); save();
+  if (a) { S.claimed.push(id); S.extra += a.reward; save(); setTimeout(() => toast('Достижение: ' + a.name, 'Награда: <b>+' + a.reward + ' кейс' + (a.reward > 1 ? 'а' : '') + '</b>'), 400); }
+  return true;
+}
 
-function fmtLeft() { const l = DAILY + S.extra - S.opens; return Math.max(0, l); }
+/* ---------- рендер ---------- */
+function left() { return Math.max(0, DAILY + S.extra - S.opens); }
 
 function paint() {
   $('opensLeft').textContent = S.opens + ' / ' + (DAILY + S.extra);
-  const left = fmtLeft();
-  $('open').disabled = left <= 0;
-  $('open').textContent = left > 0 ? 'Открыть кейс' : 'Кейсы на сегодня кончились';
-  $('buyBtn').style.display = left > 0 && S.extra === 0 ? 'none' : 'inline-block';
-  $('streakChip').textContent = 'серия: ' + (S.streak || 1) + ' ' + ((S.streak || 1) === 1 ? 'день' : 'дня');
-  $('myOpens').textContent = S.total || 0;
+  $('totalOpens').textContent = S.total || 0;
+  const l = left();
+  $('open').disabled = l <= 0;
+  $('open').textContent = l > 0 ? 'Открыть кейс' : 'Кейсы на сегодня кончились';
+  $('buyBtn').style.display = 'inline-block';
+  $('streakChip').textContent = 'серия: ' + (S.streak || 1);
   $('cTotal').textContent = S.total || 0;
-  const uniq = new Set(S.collection.map(c => c.appid)).size;
-  $('cUnique').textContent = uniq;
-  const best = S.collection.reduce((m, c) => Math.max(m, Number(c.discount) || 0), 0);
-  $('cBest').textContent = best ? '−' + best + '%' : '—';
-  $('achList').innerHTML = ACHIEVEMENTS.map(a =>
-    '<span class="' + (S.ach.includes(a.id) ? 'got' : '') + '">' + a.name + '</span>').join('');
+  $('cUnique').textContent = new Set(S.collection.map(c => c.appid)).size;
+  $('cBest').textContent = S.best ? '−' + S.best + '%' : '—';
+  $('quizLeft').textContent = Math.max(0, 3 - (S.quizCorrect || 0));
+  $('duelLeft').textContent = Math.max(0, 3 - (S.duelWins || 0));
+  $('achList').innerHTML = ACH.map(a => '<span class="' + (S.claimed.includes(a.id) ? 'got' : '') + '">' + a.name + '</span>').join('');
   $('collectList').innerHTML = S.collection.length
-    ? S.collection.slice(-30).reverse().map(c =>
-        '<a class="item" href="' + c.url + '" target="_blank"><img src="' + c.photo + '"><div>' +
-        '<div class="t">' + c.title + '</div><div class="p">' + c.final + ' · −' + c.discount + '%</div>' +
-        '</div></a>').join('')
+    ? S.collection.slice(-40).reverse().map(c => '<a class="item" href="' + c.url + '" target="_blank"><img src="' + c.photo + '"><div>' +
+      '<div class="t">' + c.title + '</div><div class="p">' + c.final + ' · −' + c.discount + '%</div></div></a>').join('')
     : '<div class="empty">Пока пусто — открой первый кейс</div>';
   $('refInput').value = APP_URL + '?ref=' + S.ref;
   $('invited').textContent = S.invited > 0 ? S.invited : '—';
+  $('credited').textContent = S.creditedRefs || 0;
+  const board = [{ n: 'Ты', d: S.best || 0 }].concat(S.duelHistory.slice(-8).map(x => ({ n: x.name || 'Друг', d: x.discount || 0 })));
+  board.sort((a, b) => b.d - a.d);
+  $('duelBoard').innerHTML = board.map((x, i) => '<div class="item"><div class="num">' + (i + 1) + '</div><div>' +
+    '<div class="t">' + x.n + '</div><div class="p">−' + x.d + '%</div></div></div>').join('');
 }
 
-function unlock(id) {
-  if (S.ach.includes(id)) return;
-  S.ach.push(id);
-  save();
-  const a = ACHIEVEMENTS.find(x => x.id === id);
-  if (a) setTimeout(() => toast('Новое достижение', a.name), 600);
+function renderPool() {
+  const all = pool.slice().sort((a, b) => b.discount - a.discount);
+  $('dayTop').innerHTML = all.slice(0, 3).map((p, i) => '<a class="item" href="' + p.url + '" target="_blank">' +
+    '<div class="num">' + (i + 1) + '</div><img src="' + p.photo + '"><div><div class="t">' + p.title + '</div>' +
+    '<div class="p">' + p.final + ' · −' + p.discount + '%</div><div class="d">вместо ' + p.initial + '</div></div></a>').join('');
+  $('topList').innerHTML = all.map(p => '<a class="item" href="' + p.url + '" target="_blank"><img src="' + p.photo + '"><div>' +
+    '<div class="t">' + p.title + '</div><div class="p">' + p.final + ' <span class="d">вместо ' + p.initial + '</span></div>' +
+    '<div class="d">−' + p.discount + '% · ' + (p.rating ? p.rating + '% отзывов' : 'без отзывов') + '</div></div></a>').join('');
 }
 
-/* ---------- кейс ---------- */
-async function loadPool() {
-  const r = await fetch('cases.json?_=' + Date.now(), { cache: 'no-store' });
-  pool = ((await r.json()).items || []).filter(x => x && x.title);
-  $('topList').innerHTML = pool.map(p =>
-    '<a class="item" href="' + p.url + '" target="_blank"><img src="' + p.photo + '"><div>' +
-    '<div class="t">' + p.title + '</div><div class="p">' + p.final + ' <span class="d">вместо ' + p.initial + '</span>' +
-    '</div><div class="d">скидка ' + p.discount + '% · ' + (p.rating ? p.rating + '% отзывов' : '') + '</div></div></a>').join('');
+/* ---------- выпадение ---------- */
+function band(d) { if (d >= 90) return 'epic'; if (d >= 75) return 'great'; if (d >= 50) return 'good'; return 'base'; }
+
+function pick(forceHigh) {
+  if (forceHigh) {
+    const hi = pool.filter(p => Number(p.discount) >= 85);
+    const src = hi.length ? hi : pool.slice().sort((a, b) => b.discount - a.discount).slice(0, 3);
+    return src[Math.floor(Math.random() * src.length)];
+  }
+  if (freePool.length && Math.random() < 0.02) return freePool[Math.floor(Math.random() * freePool.length)];
+  const groups = { base: [], good: [], great: [], epic: [] };
+  pool.forEach(p => groups[band(Number(p.discount))].push(p));
+  let w = { base: 33, good: 33, great: 22, epic: 10 };
+  const avail = Object.keys(w).filter(k => groups[k].length);
+  if (!avail.length) return pool[Math.floor(Math.random() * pool.length)];
+  const total = avail.reduce((s, k) => s + w[k], 0);
+  let r = Math.random() * total;
+  for (const k of avail) { if ((r -= w[k]) <= 0) return groups[k][Math.floor(Math.random() * groups[k].length)]; }
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
 function roll() {
-  if (fmtLeft() <= 0) return;
+  if (left() <= 0) return;
   const box = $('case'), card = $('card');
-  $('open').style.display = 'none';
-  $('buyBtn').style.display = 'none';
-  card.style.display = 'none';
-  box.style.display = 'grid';
+  $('open').style.display = 'none'; $('buyBtn').style.display = 'none';
+  card.style.display = 'none'; box.style.display = 'grid';
   box.classList.add('shake');
   let t = 0;
-  const spin = setInterval(() => { box.textContent = ['🎮','💥','🔥','📦','🎁'][t++ % 5]; }, 85);
+  const spin = setInterval(() => { box.textContent = ['🎮', '💥', '🔥', '📦', '🎁'][t++ % 5]; }, 85);
 
   setTimeout(() => {
-    clearInterval(spin);
-    box.classList.remove('shake');
-    box.style.display = 'none';
-    if (!pool.length) { toast('Кейс пуст', 'Обновляем раздачу — заходи через пару минут.'); $('open').style.display='inline-block'; paint(); return; }
-    const it = pool[Math.floor(Math.random() * pool.length)];
-    $('img').src = it.photo;
-    $('name').textContent = it.title;
-    $('price').textContent = it.final;
-    $('old').textContent = it.initial;
-    $('disc').textContent = '−' + it.discount + '%';
-    $('rating').textContent = it.rating ? it.rating + '% положительных отзывов' : '';
+    clearInterval(spin); box.classList.remove('shake'); box.style.display = 'none';
+    if (!pool.length) { toast('Кейс пуст', 'Обновляем раздачу, заходи через пару минут.'); $('open').style.display = 'inline-block'; paint(); return; }
+
+    const num = (S.total || 0) + 1;
+    const forced = num % 16 === 0;
+    const it = pick(forced);
+    $('img').src = it.photo; $('name').textContent = it.title;
+    $('price').textContent = it.final; $('old').textContent = it.initial || '';
+    $('disc').textContent = it.free ? 'бесплатно' : '−' + it.discount + '%';
+    $('rating').textContent = it.rating ? it.rating + '% положительных отзывов' : (it.free ? 'совсем бесплатная игра' : '');
     $('link').href = it.url;
     card.style.display = 'block';
 
-    S.opens++; S.total = (S.total || 0) + 1;
-    S.collection.push({ appid: it.appid, title: it.title, final: it.final, discount: it.discount, photo: it.photo, url: it.url, ts: Date.now() });
-    if (S.collection.length > 200) S.collection = S.collection.slice(-200);
+    S.opens++; S.total = num;
+    S.best = Math.max(S.best || 0, Number(it.discount) || 0);
+    S.collection.push({ appid: it.appid, title: it.title, final: it.final, discount: it.discount, photo: it.photo, url: it.url });
+    if (S.collection.length > 300) S.collection = S.collection.slice(-300);
     save();
 
     if (S.total === 1) unlock('first');
@@ -301,69 +344,138 @@ function roll() {
 
     $('open').style.display = 'inline-block';
     paint();
+    if (forced) toast('Гарантия сработала', 'Каждый 16-й кейс — со скидкой −85% и выше. Вот твоя: <b>' + it.title + '</b>');
+
+    if (pendingDuel) resolveDuel(Number(it.discount) || 0);
   }, 1350);
 }
 
-$('open').addEventListener('click', roll);
-$('again').addEventListener('click', () => { $('card').style.display = 'none'; roll(); });
-
-$('buyBtn').addEventListener('click', () => {
-  toast('Дополнительные кейсы', 'Пакет «+5 кейсов за 15 ⭐» заработает, как только бот научится принимать звёзды — для этого нужен маленький серверный обработчик. Сейчас он в работе: бесплатная норма — <b>3 кейса в день</b>, она уже работает.<br><br>Пока можно приглашать друзей — за это кейсы не даём, но вместе веселее 🙂');
+/* ---------- дуэли ---------- */
+$('duel').addEventListener('click', () => {
+  const d = Number((($('disc').textContent || '').match(/\d+/) || [0])[0]);
+  const name = $('name').textContent;
+  const url = APP_URL + '?ref=' + S.ref + '&duel=' + d + '&n=' + encodeURIComponent(name.slice(0, 40));
+  const text = 'Вызываю на дуэль! Мне выпало −' + d + '%. Слабо лучше? Открой кейс:';
+  if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text));
+  else if (navigator.share) navigator.share({ title: 'Дуэль', text, url });
+  else window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text), '_blank');
 });
 
+function readDuel() {
+  const p = new URLSearchParams(location.search);
+  const d = Number(p.get('duel'));
+  if (!d) return;
+  pendingDuel = { discount: d, name: (p.get('n') || 'Друг').slice(0, 40) };
+  $('duelBanner').style.display = 'block';
+  $('duelBanner').innerHTML = '⚔️ <b>' + pendingDuel.name + '</b> вызвал тебя на дуэль: <b>−' + d + '%</b>.<br>Открой кейс и побей его результат — за победу +1 кейс.';
+}
+
+function resolveDuel(my) {
+  const op = pendingDuel; pendingDuel = null;
+  $('duelBanner').style.display = 'none';
+  const win = my > op.discount;
+  S.duelHistory.push({ name: op.name, discount: Math.max(my, op.discount) });
+  if (S.duelHistory.length > 20) S.duelHistory = S.duelHistory.slice(-20);
+  if (win && (S.duelWins || 0) < 3) { S.duelWins = (S.duelWins || 0) + 1; S.extra += 1; save(); paint(); unlock('duel1'); }
+  save(); paint();
+  toast(win ? '🏆 Победа в дуэли' : '😔 Дуэль проиграна',
+    'Ты: <b>−' + my + '%</b> · ' + op.name + ': <b>−' + op.discount + '%</b>' + (win ? '<br><br>Награда: <b>+1 кейс</b>' : '<br><br>Ничего, в следующий раз повезёт.'));
+}
+
+/* ---------- мини-игра ---------- */
+function startQuiz() {
+  if ((S.quizCorrect || 0) >= 3) return toast('На сегодня хватит', 'Ты уже заработал 3 кейса за вопросы. Возвращайся завтра.');
+  const all = pool.slice();
+  if (all.length < 4) return toast('Недостаточно игр', 'Обновим пул — попробуй позже.');
+  const correct = all[Math.floor(Math.random() * all.length)];
+  const others = all.filter(x => x.appid !== correct.appid).sort(() => Math.random() - 0.5).slice(0, 3);
+  const opts = [correct].concat(others).sort(() => Math.random() - 0.5);
+  const html = '<div class="quiz"><img src="' + correct.photo + '">' +
+    opts.map((o, i) => '<button data-i="' + i + '" data-ok="' + (o.appid === correct.appid ? 1 : 0) + '">' + o.title + '</button>').join('') + '</div>';
+  toast('🎯 Что за игра?', 'Угадай по обложке — за правильный ответ дадим <b>+1 кейс</b>.', html);
+  $('mExtra').querySelectorAll('button').forEach(b => {
+    b.onclick = () => {
+      const ok = b.dataset.ok === '1';
+      $('mExtra').querySelectorAll('button').forEach(x => { if (x.dataset.ok === '1') x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
+      if (ok) { S.quizCorrect = (S.quizCorrect || 0) + 1; S.extra += 1; save(); if (S.quizCorrect >= 3) unlock('quiz3'); paint(); toast('Верно! +1 кейс', 'Правильный ответ: <b>' + correct.title + '</b>'); }
+      else setTimeout(() => toast('Мимо', 'Правильный ответ: <b>' + correct.title + '</b>'), 700);
+    };
+  });
+}
+$('startQuiz').addEventListener('click', startQuiz);
+
+/* ---------- звёзды ---------- */
+$('buyBtn').addEventListener('click', () => {
+  const grant = () => { addCases(5, 'Оплата прошла — держи 5 кейсов.'); };
+  if (tg && tg.openInvoice) {
+    tg.openInvoice(STAR_URL, (status) => {
+      if (status === 'paid') grant();
+      else if (status === 'cancelled') toast('Отменено', 'Оплата не прошла, кейсы не списались.');
+      else toast('Оплата не завершена', 'Если звёзды списались, а кейсы не пришли — напиши в бот, добавим вручную.');
+    });
+  } else {
+    toast('Звёзды — внутри Telegram', 'Открой приложение через Telegram: бот в меню «Кейс дня». Тогда пакет «+5 кейсов за 15 ⭐» будет доступен.<br><br>Ссылка: <a href="' + STAR_URL + '" target="_blank" style="color:#f5c451">оплатить звёздами</a>');
+  }
+});
+
+/* ---------- дуэль/шэринг/реф ---------- */
 $('share').addEventListener('click', () => {
-  const t = 'Мне выпало: ' + $('name').textContent + ' за ' + $('price').textContent + ' (скидка ' + $('disc').textContent + '). Открой свой кейс — он бесплатный:';
+  const t = 'Мне выпало: ' + $('name').textContent + ' за ' + $('price').textContent + ' (' + $('disc').textContent + '). Открой свой кейс — бесплатно, 3 раза в день:';
   const url = APP_URL + '?ref=' + S.ref;
   if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(t));
   else if (navigator.share) navigator.share({ title: 'Кейс дня', text: t, url });
   else window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(t), '_blank');
 });
-
 function shareRef() {
-  const t = 'Открывай кейс дня — бесплатно, 3 раза в день. Внутри игры со скидками до −93%:';
+  const t = 'Открывай кейс дня: 3 бесплатных кейса в день, внутри игры со скидками до −95% и шанс на бесплатную.';
   const url = APP_URL + '?ref=' + S.ref;
   if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(t));
   else if (navigator.share) navigator.share({ title: 'Кейс дня', text: t, url });
-  else { $('refInput').select(); document.execCommand('copy'); toast('Скопировано', 'Ссылка скопирована в буфер обмена.'); }
+  else { $('refInput').select(); document.execCommand('copy'); toast('Скопировано', 'Ссылка в буфере обмена.'); }
 }
 $('shareRef').addEventListener('click', shareRef);
-$('copyRef').addEventListener('click', () => {
-  $('refInput').select();
-  try { document.execCommand('copy'); toast('Скопировано', 'Ссылка скопирована.'); } catch (e) {}
-});
+$('copyRef').addEventListener('click', () => { $('refInput').select(); try { document.execCommand('copy'); toast('Скопировано', 'Ссылка в буфере обмена.'); } catch (e) {} });
 
-/* ---------- рефералка через внешний счётчик ---------- */
-async function hitRef() {
+async function countRef() {
   const ref = new URLSearchParams(location.search).get('ref');
   if (!ref || ref === S.ref) return;
   try { await fetch('https://abacus.jasoncameron.dev/hit/' + COUNTER_NS + '/ref_' + ref); } catch (e) {}
 }
-async function readInvited() {
+async function syncInvited() {
   try {
     const r = await fetch('https://abacus.jasoncameron.dev/get/' + COUNTER_NS + '/ref_' + S.ref);
-    if (r.ok) { const j = await r.json(); S.invited = j.value || 0; save(); if (S.invited >= 1) unlock('invite1'); }
+    if (r.ok) S.invited = (await r.json()).value || 0;
   } catch (e) {}
+  if ((S.invited || 0) > (S.creditedRefs || 0)) {
+    const diff = S.invited - (S.creditedRefs || 0);
+    S.creditedRefs = S.invited; S.extra += diff; save();
+    unlock('invite1');
+    toast('Друг пришёл! +' + diff + ' кейс' + (diff > 1 ? 'а' : ''), 'Спасибо, что зовёшь людей — это лучшая реклама.');
+  }
+  save(); paint();
 }
 
-/* ---------- навигация ---------- */
 document.querySelectorAll('nav button').forEach(b => {
   b.addEventListener('click', () => {
     document.querySelectorAll('nav button').forEach(x => x.classList.remove('on'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
-    b.classList.add('on');
-    $('tab-' + b.dataset.tab).classList.add('on');
-    if (b.dataset.tab === 'friends') readInvited().then(paint);
+    b.classList.add('on'); $('tab-' + b.dataset.tab).classList.add('on');
+    if (b.dataset.tab === 'friends') syncInvited();
   });
 });
+$('open').addEventListener('click', roll);
+$('again').addEventListener('click', () => { $('card').style.display = 'none'; roll(); });
 
-/* ---------- старт ---------- */
 (async () => {
-  load();
-  paint();
-  paint();
-  hitRef();
-  readInvited().then(paint);
-  try { await loadPool(); } catch (e) { $('topList').innerHTML = '<div class="empty">Не удалось загрузить скидки</div>'; }
+  load(); paint(); readDuel();
+  countRef(); syncInvited();
+  try {
+    const r = await fetch('cases.json?_=' + Date.now(), { cache: 'no-store' });
+    const j = await r.json();
+    pool = (j.items || []).filter(x => x && x.title);
+    freePool = (j.free || []).filter(x => x && x.title);
+    renderPool();
+  } catch (e) { $('topList').innerHTML = '<div class="empty">Не удалось загрузить скидки</div>'; }
 })();
 </script>
 </body>
