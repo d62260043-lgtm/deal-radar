@@ -6,152 +6,278 @@
 <title>Кейс дня — Радар Скидок</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-  :root { --gold:#f5c451; --bg:#10131a; --card:#1a1f2b; --text:#eef1f7; --dim:#8b93a7; }
+  :root { --gold:#f5c451; --bg:#0e121a; --card:#1a1f2b; --line:#2b3344; --text:#eef1f7; --dim:#8b93a7; }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { margin:0; min-height:100vh; background:radial-gradient(120% 80% at 50% 0%,#1c2434 0%,var(--bg) 60%);
-         color:var(--text); font-family:-apple-system,Roboto,system-ui,sans-serif; display:flex; flex-direction:column;
-         align-items:center; justify-content:center; padding:24px 18px 40px; text-align:center; }
-  h1 { font-size:22px; margin:0 0 6px; }
-  .sub { color:var(--dim); font-size:14px; margin:0 0 28px; line-height:1.45; }
-  .case { width:170px; height:170px; border-radius:28px; display:grid; place-items:center; font-size:74px;
-          background:linear-gradient(160deg,#2a3244,#171c26); border:1px solid #313b50;
-          box-shadow:0 18px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06); transition:transform .2s; }
-  .case.shake { animation:shake .5s infinite; }
+  body { margin:0; background:radial-gradient(110% 60% at 50% 0%,#1b2331 0%,var(--bg) 55%);
+         color:var(--text); font-family:-apple-system,Roboto,system-ui,sans-serif; padding-bottom:76px; }
+  .wrap { max-width:430px; margin:0 auto; padding:18px 16px 8px; }
+  .head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  h1 { font-size:20px; margin:0; }
+  .chip { font-size:12px; color:var(--gold); background:rgba(245,196,81,.12); border:1px solid rgba(245,196,81,.35);
+          padding:5px 10px; border-radius:999px; font-weight:700; }
+  .sub { color:var(--dim); font-size:13px; margin:0 0 16px; line-height:1.45; }
+  .tab { display:none; }
+  .tab.on { display:block; animation:fade .2s ease-out; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+
+  /* кейс */
+  .casebox { display:grid; place-items:center; }
+  .case { width:168px; height:168px; border-radius:28px; display:grid; place-items:center; font-size:72px;
+          background:linear-gradient(160deg,#2a3244,#171c26); border:1px solid var(--line);
+          box-shadow:0 18px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06); }
+  .case.shake { animation:shake .45s infinite; }
   @keyframes shake { 0%,100%{transform:rotate(-3deg) translateY(0)} 50%{transform:rotate(3deg) translateY(-6px)} }
-  .btn { margin-top:28px; border:0; border-radius:16px; padding:16px 34px; font-size:17px; font-weight:700;
-         color:#1a1400; background:linear-gradient(180deg,#ffd977,var(--gold)); box-shadow:0 10px 24px rgba(245,196,81,.25); }
-  .btn:active { transform:scale(.97); }
+  .btn { border:0; border-radius:16px; padding:15px 28px; font-size:16px; font-weight:800; color:#1a1400;
+         background:linear-gradient(180deg,#ffd977,var(--gold)); box-shadow:0 10px 24px rgba(245,196,81,.22); }
+  .btn:active { transform:scale(.98); }
+  .btn.ghost { background:none; border:1px solid #39435a; color:var(--text); box-shadow:none; }
   .btn[disabled] { opacity:.45; box-shadow:none; }
-  .card { display:none; width:100%; max-width:340px; background:var(--card); border:1px solid #2b3344; border-radius:22px; overflow:hidden; animation:pop .35s ease-out; }
-  @keyframes pop { from{opacity:0; transform:scale(.92)} to{opacity:1; transform:scale(1)} }
+  .counter { color:var(--dim); font-size:13px; margin:12px 0 0; }
+  .counter b { color:var(--text); }
+
+  /* карточка */
+  .card { background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden; margin-top:16px; display:none; }
   .card img { width:100%; display:block; background:#0c0f15; aspect-ratio:16 / 9; object-fit:cover; }
-  .card .body { padding:16px 18px 20px; }
-  .card .name { font-size:17px; font-weight:700; margin:0 0 10px; line-height:1.3; }
-  .price { font-size:26px; font-weight:800; color:var(--gold); }
-  .old { color:var(--dim); text-decoration:line-through; font-size:15px; margin-left:8px; }
-  .badge { display:inline-block; margin-left:8px; padding:3px 9px; border-radius:999px; font-size:13px; font-weight:800;
-           background:#2a1d0f; color:var(--gold); vertical-align:middle; }
-  .rating { color:var(--dim); font-size:13px; margin-top:10px; }
-  a.steam { display:block; margin-top:16px; padding:14px; border-radius:14px; background:#2b7fff; color:#fff;
-            text-decoration:none; font-weight:700; font-size:15px; }
-  .timer { margin-top:22px; color:var(--dim); font-size:14px; line-height:1.5; }
-  .timer b { color:var(--gold); font-size:17px; }
-  .footer { margin-top:26px; color:#5d6579; font-size:12px; }
+  .card .body { padding:14px 16px 16px; }
+  .card .name { font-size:16px; font-weight:800; margin:0 0 8px; line-height:1.3; }
+  .price { font-size:25px; font-weight:800; color:var(--gold); }
+  .old { color:var(--dim); text-decoration:line-through; font-size:14px; margin-left:8px; }
+  .badge { display:inline-block; margin-left:8px; padding:3px 9px; border-radius:999px; font-size:12px; font-weight:800;
+           background:#2a1d0f; color:var(--gold); }
+  .rating { color:var(--dim); font-size:12px; margin-top:8px; }
+  .row { display:flex; gap:8px; margin-top:12px; }
+  .row .btn { flex:1; padding:13px 10px; font-size:14px; }
+  a.steam { display:block; text-align:center; margin-top:12px; padding:13px; border-radius:14px; background:#2b7fff;
+            color:#fff; text-decoration:none; font-weight:800; font-size:14px; }
+
+  /* список */
+  .item { display:flex; gap:10px; align-items:center; padding:9px; border:1px solid var(--line); border-radius:14px;
+          margin-bottom:9px; background:#151a24; text-decoration:none; color:inherit; }
+  .item img { width:74px; height:42px; object-fit:cover; border-radius:8px; flex:0 0 auto; background:#0c0f15; }
+  .item .t { font-size:13px; font-weight:700; line-height:1.25; }
+  .item .p { font-size:12px; color:var(--gold); margin-top:3px; font-weight:700; }
+  .item .d { font-size:12px; color:var(--dim); }
+  .empty { color:var(--dim); font-size:13px; text-align:center; padding:24px 0; }
+  .ach { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .ach span { font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid var(--line); color:var(--dim); }
+  .ach span.got { color:var(--gold); border-color:rgba(245,196,81,.45); background:rgba(245,196,81,.08); }
+  .reflink { display:flex; gap:8px; margin:10px 0 6px; }
+  .reflink input { flex:1; min-width:0; background:#141924; border:1px solid var(--line); color:var(--text);
+                   border-radius:12px; padding:11px; font-size:12px; }
+  .stat { display:flex; gap:10px; margin:14px 0; }
+  .stat div { flex:1; background:#151a24; border:1px solid var(--line); border-radius:14px; padding:12px; text-align:center; }
+  .stat b { display:block; font-size:20px; color:var(--gold); }
+  .stat small { color:var(--dim); font-size:11px; }
+
+  /* навигация */
+  nav { position:fixed; left:0; right:0; bottom:0; display:flex; background:#11161f; border-top:1px solid var(--line);
+        padding:6px 4px calc(6px + env(safe-area-inset-bottom)); }
+  nav button { flex:1; background:none; border:0; color:var(--dim); font-size:11px; padding:8px 0 6px; font-weight:600; }
+  nav button .ico { display:block; font-size:19px; margin-bottom:2px; }
+  nav button.on { color:var(--gold); }
+
+  .modal { position:fixed; inset:0; background:rgba(4,6,10,.8); display:none; align-items:center; justify-content:center; padding:20px; z-index:10; }
+  .modal.on { display:flex; }
+  .modal .box { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px; max-width:340px; }
+  .modal h3 { margin:0 0 8px; font-size:16px; }
+  .modal p { margin:0 0 14px; color:var(--dim); font-size:13px; line-height:1.5; }
 </style>
 </head>
 <body>
-  <h1>🎁 Кейс дня</h1>
-  <p class="sub">Внутри — игра, которая сегодня просит лучшую цену.<br>Открытие бесплатное, один раз в 2 дня.</p>
-
-  <div class="case" id="case">🎁</div>
-  <button class="btn" id="open">Открыть кейс</button>
-  <div class="timer" id="timer" style="display:none"></div>
-
-  <div class="card" id="card">
-    <img id="img" width="640" height="360" alt="" loading="eager">
-    <div class="body">
-      <p class="name" id="name"></p>
-      <span class="price" id="price"></span><span class="old" id="old"></span><span class="badge" id="disc"></span>
-      <div class="rating" id="rating"></div>
-      <a class="steam" id="link" target="_blank" rel="noopener">Открыть в Steam</a>
-    </div>
+<div class="wrap">
+  <div class="head">
+    <h1>🎁 Кейс дня</h1>
+    <span class="chip" id="streakChip">серия: 1 день</span>
   </div>
 
-  <div class="footer">Радар Скидок · @deal_radar1</div>
+  <!-- КЕЙС -->
+  <section class="tab on" id="tab-case">
+    <p class="sub">Открытие бесплатное: <b>3 кейса в день</b>.<br>Внутри — игра с лучшей ценой на сегодня.</p>
+    <div class="casebox">
+      <div class="case" id="case">🎁</div>
+    </div>
+    <div style="text-align:center">
+      <button class="btn" id="open" style="margin-top:20px">Открыть кейс</button>
+      <p class="counter">Открыто сегодня: <b id="opensLeft">0 / 3</b></p>
+      <button class="btn ghost" id="buyBtn" style="font-size:13px; padding:11px 16px; margin-top:8px">+5 кейсов за 15 ⭐</button>
+    </div>
+
+    <div class="card" id="card">
+      <img id="img" width="640" height="360" alt="">
+      <div class="body">
+        <p class="name" id="name"></p>
+        <span class="price" id="price"></span><span class="old" id="old"></span><span class="badge" id="disc"></span>
+        <div class="rating" id="rating"></div>
+        <a class="steam" id="link" target="_blank" rel="noopener">Открыть в Steam</a>
+        <div class="row">
+          <button class="btn ghost" id="share" style="font-size:14px">Поделиться</button>
+          <button class="btn" id="again" style="font-size:14px">Ещё кейс</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ТОП -->
+  <section class="tab" id="tab-top">
+    <p class="sub">Все скидки, которые сейчас в кейсе — открой любую.</p>
+    <div id="topList"></div>
+  </section>
+
+  <!-- КОЛЛЕКЦИЯ -->
+  <section class="tab" id="tab-collect">
+    <div class="stat">
+      <div><b id="cTotal">0</b><small>кейсов открыто</small></div>
+      <div><b id="cUnique">0</b><small>игр собрано</small></div>
+      <div><b id="cBest">—</b><small>лучшая скидка</small></div>
+    </div>
+    <p class="sub">Достижения</p>
+    <div class="ach" id="achList"></div>
+    <p class="sub" style="margin-top:18px">Моя коллекция</p>
+    <div id="collectList"></div>
+  </section>
+
+  <!-- ДРУЗЬЯ -->
+  <section class="tab" id="tab-friends">
+    <p class="sub">Позови друга — и у вас одного будет больше шансов поймать хорошую скидку.</p>
+    <div class="reflink">
+      <input id="refInput" readonly>
+      <button class="btn ghost" id="copyRef" style="padding:11px 14px; font-size:13px">Копировать</button>
+    </div>
+    <button class="btn" id="shareRef" style="width:100%; margin-top:6px">Пригласить друга</button>
+    <div class="stat">
+      <div><b id="invited">—</b><small>переходов по ссылке</small></div>
+      <div><b id="myOpens">0</b><small>моих открытий</small></div>
+    </div>
+    <p class="sub" id="refNote" style="font-size:12px"></p>
+  </section>
+</div>
+
+<nav>
+  <button class="on" data-tab="case"><span class="ico">🎁</span>Кейс</button>
+  <button data-tab="top"><span class="ico">🔥</span>Топ</button>
+  <button data-tab="collect"><span class="ico">🏆</span>Коллекция</button>
+  <button data-tab="friends"><span class="ico">👥</span>Друзья</button>
+</nav>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <h3 id="mTitle">Заголовок</h3>
+    <p id="mText">Текст</p>
+    <button class="btn" id="mOk" style="width:100%">Понятно</button>
+  </div>
+</div>
 
 <script>
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
-const COOLDOWN = 48 * 3600 * 1000;   // один прокрут в 2 дня
-const KEY = 'case_last_open';
+const DAILY = 3, BUY_PACK = 5, COUNTER_NS = 'dealradar';
+const APP_URL = location.origin + location.pathname;
 const $ = id => document.getElementById(id);
-let pool = [], lockedUntil = 0, ticker = null;
+const today = () => new Date().toISOString().slice(0, 10);
+const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
 
-/* --- хранилище: Telegram CloudStorage, иначе localStorage --- */
-function storeGet() {
-  return new Promise(resolve => {
-    const local = () => { try { resolve(Number(localStorage.getItem(KEY)) || 0); } catch (e) { resolve(0); } };
-    if (tg && tg.CloudStorage && tg.initData) {
-      try {
-        tg.CloudStorage.getItem(KEY, (err, val) => {
-          if (err || !val) return local();
-          resolve(Number(val) || 0);
-        });
-        setTimeout(local, 1500);
-        return;
-      } catch (e) { return local(); }
-    }
-    local();
-  });
-}
+let pool = [];
+let S = {
+  day: today(), opens: 0, extra: 0, total: 0,
+  streak: 1, lastDay: null,
+  collection: [], ach: [],
+  ref: '', invited: 0,
+};
 
-function storeSet(ts) {
-  try { localStorage.setItem(KEY, String(ts)); } catch (e) {}
-  if (tg && tg.CloudStorage && tg.initData) {
-    try { tg.CloudStorage.setItem(KEY, String(ts), () => {}); } catch (e) {}
+const ACHIEVEMENTS = [
+  { id: 'first', name: '🎉 Первый кейс' },
+  { id: 'daily3', name: '🔥 3 за день' },
+  { id: 'streak3', name: '📅 3 дня подряд' },
+  { id: 'collect10', name: '🏆 10 игр' },
+  { id: 'invite1', name: '👥 Привёл друга' },
+  { id: 'best90', name: '💎 Скидка −90% и выше' },
+];
+
+/* ---------- хранилище ---------- */
+function load() {
+  try { const raw = ls.get('case_state_v3'); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
+  if (S.day !== today()) {
+    const prev = S.day;
+    S.day = today();
+    S.opens = 0;
+    S.extra = 0;
+    const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+    S.streak = (prev === y) ? (S.streak || 1) + 1 : 1;
   }
-}
-
-/* --- состояние кнопки --- */
-function fmt(ms) {
-  const h = Math.floor(ms / 3600000), m = Math.floor((ms % 3600000) / 60000);
-  if (h >= 1) return h + ' ч ' + m + ' мин';
-  return m + ' мин';
-}
-
-function paintState() {
-  const left = lockedUntil - Date.now();
-  if (left > 0) {
-    $('open').disabled = true;
-    $('open').textContent = 'Кейс уже открыт';
-    $('timer').style.display = 'block';
-    $('timer').innerHTML = 'Следующий кейс через <b>' + fmt(left) + '</b><br>заходи позже — внутри будет другая игра';
-  } else {
-    $('open').disabled = false;
-    $('open').textContent = 'Открыть кейс';
-    $('timer').style.display = 'none';
+  if (!S.ref) {
+    const uid = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+    S.ref = String(uid || Math.floor(100000 + Math.random() * 900000));
   }
+  save();
+}
+function save() { ls.set('case_state_v3', JSON.stringify(S)); }
+
+/* ---------- утилиты ---------- */
+function toast(title, text) { $('mTitle').textContent = title; $('mText').innerHTML = text; $('modal').classList.add('on'); }
+$('mOk').onclick = () => $('modal').classList.remove('on');
+
+function fmtLeft() { const l = DAILY + S.extra - S.opens; return Math.max(0, l); }
+
+function paint() {
+  $('opensLeft').textContent = S.opens + ' / ' + (DAILY + S.extra);
+  const left = fmtLeft();
+  $('open').disabled = left <= 0;
+  $('open').textContent = left > 0 ? 'Открыть кейс' : 'Кейсы на сегодня кончились';
+  $('buyBtn').style.display = left > 0 && S.extra === 0 ? 'none' : 'inline-block';
+  $('streakChip').textContent = 'серия: ' + (S.streak || 1) + ' ' + ((S.streak || 1) === 1 ? 'день' : 'дня');
+  $('myOpens').textContent = S.total || 0;
+  $('cTotal').textContent = S.total || 0;
+  const uniq = new Set(S.collection.map(c => c.appid)).size;
+  $('cUnique').textContent = uniq;
+  const best = S.collection.reduce((m, c) => Math.max(m, Number(c.discount) || 0), 0);
+  $('cBest').textContent = best ? '−' + best + '%' : '—';
+  $('achList').innerHTML = ACHIEVEMENTS.map(a =>
+    '<span class="' + (S.ach.includes(a.id) ? 'got' : '') + '">' + a.name + '</span>').join('');
+  $('collectList').innerHTML = S.collection.length
+    ? S.collection.slice(-30).reverse().map(c =>
+        '<a class="item" href="' + c.url + '" target="_blank"><img src="' + c.photo + '"><div>' +
+        '<div class="t">' + c.title + '</div><div class="p">' + c.final + ' · −' + c.discount + '%</div>' +
+        '</div></a>').join('')
+    : '<div class="empty">Пока пусто — открой первый кейс</div>';
+  $('refInput').value = APP_URL + '?ref=' + S.ref;
+  $('invited').textContent = S.invited > 0 ? S.invited : '—';
 }
 
-function startTicker() {
-  if (ticker) clearInterval(ticker);
-  ticker = setInterval(() => {
-    paintState();
-    if (Date.now() >= lockedUntil) { clearInterval(ticker); ticker = null; }
-  }, 30000);
+function unlock(id) {
+  if (S.ach.includes(id)) return;
+  S.ach.push(id);
+  save();
+  const a = ACHIEVEMENTS.find(x => x.id === id);
+  if (a) setTimeout(() => toast('Новое достижение', a.name), 600);
 }
 
-/* --- сам кейс --- */
-async function load() {
+/* ---------- кейс ---------- */
+async function loadPool() {
   const r = await fetch('cases.json?_=' + Date.now(), { cache: 'no-store' });
   pool = ((await r.json()).items || []).filter(x => x && x.title);
+  $('topList').innerHTML = pool.map(p =>
+    '<a class="item" href="' + p.url + '" target="_blank"><img src="' + p.photo + '"><div>' +
+    '<div class="t">' + p.title + '</div><div class="p">' + p.final + ' <span class="d">вместо ' + p.initial + '</span>' +
+    '</div><div class="d">скидка ' + p.discount + '% · ' + (p.rating ? p.rating + '% отзывов' : '') + '</div></div></a>').join('');
 }
 
 function roll() {
-  if (Date.now() < lockedUntil) return;
+  if (fmtLeft() <= 0) return;
   const box = $('case'), card = $('card');
   $('open').style.display = 'none';
+  $('buyBtn').style.display = 'none';
   card.style.display = 'none';
   box.style.display = 'grid';
   box.classList.add('shake');
-  box.textContent = '📦';
-
-  let ticks = 0;
-  const spin = setInterval(() => {
-    const items = ['🎮', '💥', '🔥', '📦', '🎁'];
-    box.textContent = items[ticks++ % items.length];
-  }, 90);
+  let t = 0;
+  const spin = setInterval(() => { box.textContent = ['🎮','💥','🔥','📦','🎁'][t++ % 5]; }, 85);
 
   setTimeout(() => {
     clearInterval(spin);
     box.classList.remove('shake');
     box.style.display = 'none';
-    if (!pool.length) {
-      card.style.display = 'block';
-      $('name').textContent = 'Кейс пуст — заходи позже, обновляем раздачу каждый день.';
-      return;
-    }
+    if (!pool.length) { toast('Кейс пуст', 'Обновляем раздачу — заходи через пару минут.'); $('open').style.display='inline-block'; paint(); return; }
     const it = pool[Math.floor(Math.random() * pool.length)];
     $('img').src = it.photo;
     $('name').textContent = it.title;
@@ -162,21 +288,82 @@ function roll() {
     $('link').href = it.url;
     card.style.display = 'block';
 
-    lockedUntil = Date.now() + COOLDOWN;
-    storeSet(Date.now());
-    paintState();
-    startTicker();
-  }, 1400);
+    S.opens++; S.total = (S.total || 0) + 1;
+    S.collection.push({ appid: it.appid, title: it.title, final: it.final, discount: it.discount, photo: it.photo, url: it.url, ts: Date.now() });
+    if (S.collection.length > 200) S.collection = S.collection.slice(-200);
+    save();
+
+    if (S.total === 1) unlock('first');
+    if (S.opens >= DAILY) unlock('daily3');
+    if ((S.streak || 1) >= 3) unlock('streak3');
+    if (new Set(S.collection.map(c => c.appid)).size >= 10) unlock('collect10');
+    if (Number(it.discount) >= 90) unlock('best90');
+
+    $('open').style.display = 'inline-block';
+    paint();
+  }, 1350);
 }
 
 $('open').addEventListener('click', roll);
+$('again').addEventListener('click', () => { $('card').style.display = 'none'; roll(); });
 
+$('buyBtn').addEventListener('click', () => {
+  toast('Дополнительные кейсы', 'Пакет «+5 кейсов за 15 ⭐» заработает, как только бот научится принимать звёзды — для этого нужен маленький серверный обработчик. Сейчас он в работе: бесплатная норма — <b>3 кейса в день</b>, она уже работает.<br><br>Пока можно приглашать друзей — за это кейсы не даём, но вместе веселее 🙂');
+});
+
+$('share').addEventListener('click', () => {
+  const t = 'Мне выпало: ' + $('name').textContent + ' за ' + $('price').textContent + ' (скидка ' + $('disc').textContent + '). Открой свой кейс — он бесплатный:';
+  const url = APP_URL + '?ref=' + S.ref;
+  if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(t));
+  else if (navigator.share) navigator.share({ title: 'Кейс дня', text: t, url });
+  else window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(t), '_blank');
+});
+
+function shareRef() {
+  const t = 'Открывай кейс дня — бесплатно, 3 раза в день. Внутри игры со скидками до −93%:';
+  const url = APP_URL + '?ref=' + S.ref;
+  if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(t));
+  else if (navigator.share) navigator.share({ title: 'Кейс дня', text: t, url });
+  else { $('refInput').select(); document.execCommand('copy'); toast('Скопировано', 'Ссылка скопирована в буфер обмена.'); }
+}
+$('shareRef').addEventListener('click', shareRef);
+$('copyRef').addEventListener('click', () => {
+  $('refInput').select();
+  try { document.execCommand('copy'); toast('Скопировано', 'Ссылка скопирована.'); } catch (e) {}
+});
+
+/* ---------- рефералка через внешний счётчик ---------- */
+async function hitRef() {
+  const ref = new URLSearchParams(location.search).get('ref');
+  if (!ref || ref === S.ref) return;
+  try { await fetch('https://abacus.jasoncameron.dev/hit/' + COUNTER_NS + '/ref_' + ref); } catch (e) {}
+}
+async function readInvited() {
+  try {
+    const r = await fetch('https://abacus.jasoncameron.dev/get/' + COUNTER_NS + '/ref_' + S.ref);
+    if (r.ok) { const j = await r.json(); S.invited = j.value || 0; save(); if (S.invited >= 1) unlock('invite1'); }
+  } catch (e) {}
+}
+
+/* ---------- навигация ---------- */
+document.querySelectorAll('nav button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(x => x.classList.remove('on'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    b.classList.add('on');
+    $('tab-' + b.dataset.tab).classList.add('on');
+    if (b.dataset.tab === 'friends') readInvited().then(paint);
+  });
+});
+
+/* ---------- старт ---------- */
 (async () => {
-  const last = await storeGet();
-  if (last) lockedUntil = last + COOLDOWN;
-  paintState();
-  if (lockedUntil > Date.now()) startTicker();
-  try { await load(); } catch (e) { $('open').textContent = 'Кейс обновляется, попробуй чуть позже'; }
+  load();
+  paint();
+  paint();
+  hitRef();
+  readInvited().then(paint);
+  try { await loadPool(); } catch (e) { $('topList').innerHTML = '<div class="empty">Не удалось загрузить скидки</div>'; }
 })();
 </script>
 </body>
