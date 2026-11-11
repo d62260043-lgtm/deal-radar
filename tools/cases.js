@@ -8,7 +8,7 @@ const CHAT = (process.env.CHANNEL_ID || '-1004418793414').trim();
 const CASE_URL = (process.env.CASE_URL || 'https://d62260043-lgtm.github.io/deal-radar/').trim();
 const OUT = path.join(__dirname, '..', 'docs', 'cases.json');
 const STATE = path.join(__dirname, '..', 'state', 'case.json');
-const MIN_GAP_MS = 46 * 3600 * 1000; // раз в 2 дня (24ч шаг крона + запас)
+const MIN_GAP_MS = 20 * 3600 * 1000; // пост каждый день, норма прокрутов — у пользователя
 
 const photo = id => 'https://cdn.akamai.steamstatic.com/steam/apps/' + id + '/capsule_616x353.jpg';
 const rub = (f, kop) => (f || (kop / 100).toFixed(2) + ' ₽').replace(/\s+/g, ' ').trim();
@@ -75,7 +75,7 @@ async function main() {
   if (!TOKEN || process.argv.includes('--no-post')) { console.log('только файл, без поста'); return; }
   const text = '🎁 <b>Кейс дня</b>\n\n' +
     'Запусти кейс и узнай, какая игра сегодня просит лучшую цену. Внутри ' + items.length + ' скидок — ' +
-    'выпадет одна. Открывать можно один раз в 2 дня — без подвохов и без оплаты.\n\n' +
+    'выпадет одна. Открывать можно 3 раза в день — бесплатно.\n\n' +
     '<i>#кейсдня #скидки</i>';
   const ans = JSON.parse(await api('sendMessage', {
     chat_id: CHAT,
