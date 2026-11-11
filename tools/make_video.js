@@ -109,8 +109,8 @@ function textFile(name, text) {
   const introTitle = textFile('t_intro.txt', 'Скидки в Steam');
   const introSub = textFile('t_introsub.txt', 'сегодня, в рублях');
   ffmpeg(['-y', '-f', 'lavfi', '-i', 'color=c=0x0e121a:s=' + W + 'x' + H + ':d=3:r=30',
-    '-vf', 'drawtext=fontfile=' + FONT + ':textfile=' + introTitle + ':fontcolor=white:fontsize=96:x=(w-text_w)/2:y=(h-text_h)/2-80,' +
-      'drawtext=fontfile=' + FONT2 + ':textfile=' + introSub + ':fontcolor=0xf5c451:fontsize=56:x=(w-text_w)/2:y=(h-text_h)/2+60',
+    '-vf', 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + introTitle + ':fontcolor=white:fontsize=96:x=(w-text_w)/2:y=(h-text_h)/2-80,' +
+      'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + introSub + ':fontcolor=0xf5c451:fontsize=56:x=(w-text_w)/2:y=(h-text_h)/2+60',
     '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', path.join(TMP, 's0.mp4')]);
   segs.push(path.join(TMP, 's0.mp4'));
 
@@ -126,9 +126,9 @@ function textFile(name, text) {
       '[0:v]scale=' + W + ':' + H + ':force_original_aspect_ratio=increase,crop=' + W + ':' + H + ',boxblur=24:6,eq=brightness=-0.25[bg];' +
       '[0:v]scale=960:-2[fg];' +
       '[bg][fg]overlay=(W-w)/2:(H-h)/2-160,' +
-      'drawtext=fontfile=' + FONT + ':textfile=' + cap + ':fontcolor=white:fontsize=54:box=1:boxcolor=black@0.5:boxborderw=22:x=(w-text_w)/2:y=h-620,' +
-      'drawtext=fontfile=' + FONT + ':textfile=' + price + ':fontcolor=0xf5c451:fontsize=58:x=(w-text_w)/2:y=h-500,' +
-      'drawtext=fontfile=' + FONT2 + ':textfile=' + disc + ':fontcolor=white:fontsize=46:x=(w-text_w)/2:y=h-410',
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + cap + ':fontcolor=white:fontsize=54:box=1:boxcolor=black@0.5:boxborderw=22:x=(w-text_w)/2:y=h-620,' +
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + price + ':fontcolor=0xf5c451:fontsize=58:x=(w-text_w)/2:y=h-500,' +
+      'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + disc + ':fontcolor=white:fontsize=46:x=(w-text_w)/2:y=h-410',
       '-t', '4', '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
     segs.push(out);
     idx++;
@@ -138,8 +138,8 @@ function textFile(name, text) {
   const out1 = textFile('t_out1.txt', 'Всё в канале Радар Скидок');
   const out2 = textFile('t_out2.txt', '@deal_radar1');
   ffmpeg(['-y', '-f', 'lavfi', '-i', 'color=c=0x0e121a:s=' + W + 'x' + H + ':d=3:r=30',
-    '-vf', 'drawtext=fontfile=' + FONT + ':textfile=' + out1 + ':fontcolor=white:fontsize=62:x=(w-text_w)/2:y=(h-text_h)/2-70,' +
-      'drawtext=fontfile=' + FONT + ':textfile=' + out2 + ':fontcolor=0xf5c451:fontsize=82:x=(w-text_w)/2:y=(h-text_h)/2+40',
+    '-vf', 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + out1 + ':fontcolor=white:fontsize=62:x=(w-text_w)/2:y=(h-text_h)/2-70,' +
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + out2 + ':fontcolor=0xf5c451:fontsize=82:x=(w-text_w)/2:y=(h-text_h)/2+40',
     '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', path.join(TMP, 's9.mp4')]);
   segs.push(path.join(TMP, 's9.mp4'));
 
