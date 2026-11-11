@@ -1,4 +1,4 @@
-// Ролик с озвучкой (edge-tts), анимацией карточек и «живым ртом» маскота.
+// Ролик: хук в интро, низкий голос, описания игр, маскот с мимикой и ногами-анимацией.
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
@@ -7,14 +7,13 @@ const { Resvg } = require('@resvg/resvg-js');
 
 const TOKEN = (process.env.TELEGRAM_TOKEN || '').trim();
 const OWNER = (process.env.OWNER_CHAT_ID || '').trim();
-const VOICE = process.env.TTS_VOICE || 'ru-RU-DmitryNeural';
-const TMP = '/tmp/v2';
+const TMP = '/tmp/v3';
 const FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
 const FONT2 = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
-const W = 1080, H = 1920, FPS = 12;   // fps маскота
+const W = 1080, H = 1920, FPS = 12;
+const PIPER_BASE = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium';
 
 const log = s => console.log(s);
-
 const run = (cmd, args, opts) => {
   const r = spawnSync(cmd, args, Object.assign({ encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, opts || {}));
   if (r.status !== 0) {
@@ -24,12 +23,9 @@ const run = (cmd, args, opts) => {
   }
   return r;
 };
-const ff = (args) => run('ffmpeg', args);
-const ffprobe = (file) => {
-  const r = run('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file]);
-  return parseFloat(String(r.stdout).trim());
-};
-const textFile = (name, text) => { const p = path.join(TMP, name); fs.writeFileSync(p, text); return p; };
+const ff = a => run('ffmpeg', a);
+const ffprobe = f => parseFloat(String(run('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).stdout).trim());
+const textFile = (n, t) => { const p = path.join(TMP, n); fs.writeFileSync(p, t); return p; };
 
 const getJson = url => new Promise((resolve, reject) => {
   https.get(url, { headers: { 'User-Agent': 'deal-radar/1.0' }, timeout: 30000 }, s => {
@@ -45,11 +41,14 @@ const download = (url, dest) => new Promise((resolve, reject) => {
   }).on('error', reject);
 });
 const rub = (f, kop) => (f || (kop / 100).toFixed(2) + ' ₽').replace(/\s+/g, ' ').trim();
+const num = s => String(s).replace(/[^\d]/g, '');
 
 /* ---------- маскот ---------- */
-function mascotSvg(open, bob) {
-  const m = Math.round(open * 100);           // 0..100 — насколько открыт рот
-  const mouthH = 6 + m * 0.42;
+function mascotSvg(open, bob, blink) {
+  const m = Math.round(open * 100);
+  const mouthH = 5 + m * 0.40;
+  const eyeH = blink ? 6 : 52;
+  const eyeY = 196;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="460" height="460" viewBox="0 0 460 460">
   <defs>
     <linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#39435c"/><stop offset="100%" stop-color="#1b2130"/></linearGradient>
@@ -62,41 +61,39 @@ function mascotSvg(open, bob) {
     <rect x="34" y="176" width="34" height="80" rx="17" fill="#242c3d" stroke="#4a556f" stroke-width="3"/>
     <rect x="392" y="176" width="34" height="80" rx="17" fill="#242c3d" stroke="#4a556f" stroke-width="3"/>
     <rect x="92" y="118" width="276" height="212" rx="62" fill="#0c1018" stroke="#2c3547" stroke-width="3"/>
-    <circle cx="170" cy="196" r="26" fill="#f5c451"/><circle cx="290" cy="196" r="26" fill="#f5c451"/>
-    <circle cx="178" cy="188" r="8" fill="#0c1018"/><circle cx="298" cy="188" r="8" fill="#0c1018"/>
-    <ellipse cx="230" cy="${272}" rx="${34 + m * 0.10}" ry="${mouthH}" fill="#f5c451"/>
+    <ellipse cx="170" cy="${eyeY}" rx="26" ry="${eyeH / 2}" fill="#f5c451"/>
+    <ellipse cx="290" cy="${eyeY}" rx="26" ry="${eyeH / 2}" fill="#f5c451"/>
+    ${blink ? '' : '<circle cx="178" cy="188" r="8" fill="#0c1018"/><circle cx="298" cy="188" r="8" fill="#0c1018"/>'}
+    <ellipse cx="230" cy="272" rx="${34 + m * 0.10}" ry="${mouthH}" fill="#f5c451"/>
   </g>
 </svg>`;
 }
 
-function renderMascotFrames(count, envelope, dir) {
-  const renders = [];
+function renderFrames(count, env, dir) {
   let prev = null;
+  const blinkEvery = 6 * FPS, blinkLen = 2;
   for (let i = 0; i < count; i++) {
-    const open = envelope[i] || 0;
+    const open = env[i] || 0;
     const bob = Math.round(Math.sin(i / 6) * 5);
-    const svg = mascotSvg(open, bob);
-    if (svg !== prev) {
-      const r = new Resvg(svg, { fitTo: { mode: 'width', value: 460 } });
-      fs.writeFileSync(path.join(dir, 'f' + String(i).padStart(4, '0') + '.png'), r.render().asPng());
-      prev = svg;
+    const blink = (i % blinkEvery) < blinkLen && i > blinkEvery / 2;
+    const svg = mascotSvg(open, bob, blink);
+    const file = path.join(dir, 'f' + String(i).padStart(4, '0') + '.png');
+    if (svg === prev && i > 0) {
+      fs.copyFileSync(path.join(dir, 'f' + String(i - 1).padStart(4, '0') + '.png'), file);
     } else {
-      fs.copyFileSync(path.join(dir, 'f' + String(i - 1).padStart(4, '0') + '.png'), path.join(dir, 'f' + String(i).padStart(4, '0') + '.png'));
+      fs.writeFileSync(file, new Resvg(svg, { fitTo: { mode: 'width', value: 460 } }).render().asPng());
+      prev = svg;
     }
-    renders.push(i);
   }
-  return renders.length;
+  return count;
 }
 
 /* ---------- звук ---------- */
-const PIPER_BASE = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium';
-
 function ensureFile(url, dest, minSize) {
   const min = minSize || 10000;
-  if (fs.existsSync(dest) && fs.statSync(dest).size >= min) { console.log('есть: ' + dest); return dest; }
+  if (fs.existsSync(dest) && fs.statSync(dest).size >= min) return dest;
   run('curl', ['-sL', '--max-time', '240', '-o', dest, url]);
   const size = fs.existsSync(dest) ? fs.statSync(dest).size : 0;
-  console.log('скачано: ' + dest + ' (' + size + ' б)');
   if (size < min) throw new Error('не скачался ' + url);
   return dest;
 }
@@ -106,14 +103,15 @@ function tts(text, outWav) {
   ensureFile(PIPER_BASE + '.onnx.json', TMP + '/dmitri.onnx.json', 200);
   const txt = TMP + '/say.txt';
   fs.writeFileSync(txt, text);
-  run('piper', ['--model', model, '--output_file', outWav], { input: fs.readFileSync(txt) });
-  if (!fs.existsSync(outWav) || fs.statSync(outWav).size < 5000) throw new Error('piper не выдал звук');
+  run('piper', ['--model', model, '--output_file', TMP + '/raw.wav'], { input: fs.readFileSync(txt) });
+  if (!fs.existsSync(TMP + '/raw.wav')) throw new Error('piper не выдал звук');
+  // понижаем голос: pitch -6%, темп сохраняем
+  ff(['-y', '-i', TMP + '/raw.wav', '-af', 'asetrate=22050*0.94,aresample=22050,atempo=1.064', '-ar', '22050', '-ac', '1', outWav]);
 }
 
-function envelopeFromWav(wav, frameDur, total) {
-  // WAV: 16-bit PCM mono, читаем заголовок и сэмплы
+function envelope(wav, frameDur, total) {
   const buf = fs.readFileSync(wav);
-  let off = 12, sampleRate = 8000, bits = 16, ch = 1, dataOff = 44, dataLen = buf.length - 44;
+  let off = 12, sampleRate = 22050, bits = 16, ch = 1, dataOff = 44, dataLen = buf.length - 44;
   while (off < buf.length - 8) {
     const id = buf.toString('ascii', off, off + 4);
     const size = buf.readUInt32LE(off + 4);
@@ -122,25 +120,21 @@ function envelopeFromWav(wav, frameDur, total) {
     off += 8 + size + (size % 2);
   }
   const step = bits === 16 ? 2 : 1;
-  const totalSamples = Math.floor(dataLen / (step * ch));
-  const perFrame = Math.max(1, Math.floor(sampleRate * frameDur));
+  const totalS = Math.floor(dataLen / (step * ch));
+  const per = Math.max(1, Math.floor(sampleRate * frameDur));
   const frames = Math.ceil(total / frameDur);
-  const env = [];
-  let peak = 1;
   const raw = [];
   for (let f = 0; f < frames; f++) {
     let sum = 0, n = 0;
-    for (let i = f * perFrame; i < Math.min(totalSamples, (f + 1) * perFrame); i++) {
+    for (let i = f * per; i < Math.min(totalS, (f + 1) * per); i++) {
       const p = dataOff + i * step * ch;
       const v = bits === 16 ? buf.readInt16LE(p) / 32768 : (buf.readUInt8(p) - 128) / 128;
       sum += v * v; n++;
     }
-    const rms = n ? Math.sqrt(sum / n) : 0;
-    raw.push(rms);
-    if (rms > peak) peak = rms;
+    raw.push(n ? Math.sqrt(sum / n) : 0);
   }
-  for (const v of raw) env.push(Math.min(1, Math.pow(v / peak, 0.6) * 1.25));
-  return env;
+  const peak = raw.reduce((m, v) => Math.max(m, v), 0.0001);
+  return raw.map(v => Math.min(1, Math.pow(v / peak, 0.6) * 1.22));
 }
 
 /* ---------- отправка ---------- */
@@ -162,12 +156,24 @@ function sendVideo(file, caption) {
   });
 }
 
+/* ---------- тексты ---------- */
+function wrap(text, width) {
+  const words = String(text).split(/\s+/);
+  const lines = []; let cur = '';
+  for (const w of words) {
+    if ((cur + ' ' + w).trim().length > width) { if (cur) lines.push(cur); cur = w; }
+    else cur = (cur + ' ' + w).trim();
+    if (lines.length >= 2) break;
+  }
+  if (cur && lines.length < 2) lines.push(cur);
+  return lines.map(l => (l.length > width ? l.slice(0, width - 1) + '…' : l));
+}
+
 /* ---------- сборка ---------- */
 (async () => {
   fs.rmSync(TMP, { recursive: true, force: true });
   fs.mkdirSync(TMP + '/frames', { recursive: true });
 
-  // 1. Скидки
   const feed = await getJson('https://www.cheapshark.com/api/1.0/deals?storeID=1&onSale=1&sortBy=Deal%20Rating&pageSize=40');
   const picks = [];
   for (const d of feed) {
@@ -175,40 +181,51 @@ function sendVideo(file, caption) {
     const appid = d.steamAppID;
     if (!appid || Number(d.savings) < 50) continue;
     try {
-      const j = await getJson('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=ru&l=russian&filters=price_overview');
+      const j = await getJson('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=ru&l=russian');
       const dd = j[String(appid)];
-      const p = dd && dd.success && dd.data && dd.data.price_overview;
+      const data = dd && dd.success && dd.data;
+      const p = data && data.price_overview;
       if (!p || !p.final || !p.discount_percent) continue;
-      picks.push({ title: d.title, appid, final: rub(p.final_formatted, p.final), initial: rub(p.initial_formatted, p.initial), discount: p.discount_percent });
+      const desc = String((data.short_description || '')).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      picks.push({
+        title: d.title, appid,
+        final: rub(p.final_formatted, p.final),
+        initial: rub(p.initial_formatted, p.initial),
+        discount: p.discount_percent,
+        desc: desc.slice(0, 150),
+      });
     } catch (e) {}
   }
   if (picks.length < 3) throw new Error('мало скидок для ролика');
   log('скидки: ' + picks.map(p => p.title + ' −' + p.discount + '%').join(' | '));
 
-  // 2. Голос
-  const speak = (s) => s.replace(/руб\./g, 'рублей').replace(/₽/g, 'рублей').replace(/\s+/g, ' ').trim();
-  const voiceText = 'Скидки в Steam на сегодня. Первая игра: ' + speak(picks[0].final) + ' вместо ' + speak(picks[0].initial) + ', скидка ' + picks[0].discount + ' процентов. ' +
-    'Вторая: ' + speak(picks[1].final) + ' вместо ' + speak(picks[1].initial) + ', минус ' + picks[1].discount + ' процентов. ' +
-    'Третья: ' + speak(picks[2].final) + ' вместо ' + speak(picks[2].initial) + ', тоже минус ' + picks[2].discount + '. ' +
-    'Полный список — в канале Радар Скидок. И бесплатный кейс дня: три попытки каждый день.';
-  log('озвучка: ' + voiceText.slice(0, 80) + '...');
+  // Озвучка: хук + цифры без падежного «вместо»
+  const hook = 'Девяносто процентов скидки — и это не опечатка. Три игры, которые сегодня стоят дешевле кофе.';
+  const mid = picks.map((p, i) => {
+    const idx = ['Первая', 'Вторая', 'Третья'][i];
+    return idx + ': ' + num(p.final) + ' рублей, а было ' + num(p.initial) + '. Это минус ' + p.discount + ' процентов.';
+  }).join(' ');
+  const outro = 'Полный список — в канале Радар Скидок. И бесплатный кейс дня: три попытки каждый день.';
+  const voiceText = hook + ' ' + mid + ' ' + outro;
+  log('озвучка: ' + voiceText.slice(0, 90) + '...');
   tts(voiceText, TMP + '/voice.wav');
   const voiceDur = ffprobe(TMP + '/voice.wav');
-  log('длительность голоса: ' + voiceDur.toFixed(1) + ' с');
+  log('голос: ' + voiceDur.toFixed(1) + ' с');
 
-  // 3. Карточки
   for (const p of picks) await download('https://cdn.akamai.steamstatic.com/steam/apps/' + p.appid + '/capsule_616x353.jpg', TMP + '/img' + p.appid + '.jpg');
 
-  const intro = 2.2, outro = 2.4;
-  const cardDur = Math.max(3.2, (voiceDur - intro - outro) / 3);
-
+  const intro = 3.4, outroDur = 2.6;
+  const cardDur = Math.max(3.4, (voiceDur - intro - outroDur) / 3);
   const segs = [];
-  // интро
-  let t1 = textFile('i1.txt', 'Скидки в Steam');
-  let t2 = textFile('i2.txt', 'сегодня, в рублях');
+
+  // интро с хуком
+  const i1 = textFile('i1.txt', '−90%');
+  const i2 = textFile('i2.txt', 'и это не опечатка');
+  const i3 = textFile('i3.txt', 'три игры дешевле кофе');
   ff(['-y', '-f', 'lavfi', '-i', 'color=c=0x0b0e14:s=' + W + 'x' + H + ':d=' + intro + ':r=30',
-    '-vf', 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + t1 + ':fontcolor=white:fontsize=104:x=(w-text_w)/2:y=(h-text_h)/2-90:alpha=\'min(1,t/0.5)\',' +
-      'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + t2 + ':fontcolor=0xf5c451:fontsize=58:x=(w-text_w)/2:y=(h-text_h)/2+60:alpha=\'min(1,max(0,(t-0.4)/0.5))\'',
+    '-vf', 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + i1 + ':fontcolor=0xff5c5c:fontsize=210:x=(w-text_w)/2:y=(h-text_h)/2-260:alpha=\'min(1,t/0.4)\',' +
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + i2 + ':fontcolor=white:fontsize=76:x=(w-text_w)/2:y=(h-text_h)/2-40:alpha=\'min(1,max(0,(t-0.5)/0.5))\',' +
+      'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + i3 + ':fontcolor=0xf5c451:fontsize=52:x=(w-text_w)/2:y=(h-text_h)/2+70:alpha=\'min(1,max(0,(t-1.1)/0.5))\'',
     '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', TMP + '/s0.mp4']);
   segs.push(TMP + '/s0.mp4');
 
@@ -216,53 +233,51 @@ function sendVideo(file, caption) {
   for (let i = 0; i < 3; i++) {
     const p = picks[i];
     const cap = textFile('c' + i + '.txt', p.title);
-    const pr = textFile('p' + i + '.txt', p.final + ' вместо ' + p.initial);
+    const pr = textFile('p' + i + '.txt', p.final + ' · было ' + p.initial);
     const dc = textFile('d' + i + '.txt', '−' + p.discount + '%');
+    const lines = wrap(p.desc || 'скидка на Steam', 38);
+    const dcs = [textFile('ds' + i + '_0.txt', lines[0] || ''), textFile('ds' + i + '_1.txt', lines[1] || '')];
     ff(['-y', '-loop', '1', '-i', TMP + '/img' + p.appid + '.jpg',
       '-filter_complex',
-      '[0:v]scale=' + W + ':' + H + ':force_original_aspect_ratio=increase,crop=' + W + ':' + H + ',boxblur=26:7,eq=brightness=-0.3[bg];' +
+      '[0:v]scale=' + W + ':' + H + ':force_original_aspect_ratio=increase,crop=' + W + ':' + H + ',boxblur=26:7,eq=brightness=-0.32[bg];' +
       '[0:v]scale=1000:-2[fg];' +
-      '[bg][fg]overlay=(W-w)/2:(H-h)/2-180:format=auto,' +
+      '[bg][fg]overlay=(W-w)/2:(H-h)/2-320:format=auto,' +
       'zoompan=z=\'min(1.06,1+0.0008*on)\':d=1:s=' + W + 'x' + H + ',format=yuv420p,' +
-      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + cap + ':fontcolor=white:fontsize=52:box=1:boxcolor=black@0.55:boxborderw=22:x=(w-text_w)/2:y=h-660:alpha=\'min(1,t/0.4)\',' +
-      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + pr + ':fontcolor=0xf5c451:fontsize=62:x=(w-text_w)/2:y=h-540:alpha=\'min(1,max(0,(t-0.3)/0.4))\',' +
-      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + dc + ':fontcolor=#ff5c5c:fontsize=96:x=(w-text_w)/2:y=h-440:alpha=\'min(1,max(0,(t-0.5)/0.5))\'',
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + cap + ':fontcolor=white:fontsize=50:box=1:boxcolor=black@0.55:boxborderw=20:x=(w-text_w)/2:y=h-780:alpha=\'min(1,t/0.35)\',' +
+      'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + dcs[0] + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-700:alpha=\'min(1,max(0,(t-0.25)/0.35))\',' +
+      'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + dcs[1] + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-650:alpha=\'min(1,max(0,(t-0.35)/0.35))\',' +
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + pr + ':fontcolor=0xf5c451:fontsize=56:x=(w-text_w)/2:y=h-540:alpha=\'min(1,max(0,(t-0.45)/0.4))\',' +
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + dc + ':fontcolor=#ff5c5c:fontsize=104:x=(w-text_w)/2:y=h-440:alpha=\'min(1,max(0,(t-0.6)/0.45))\'',
       '-t', String(cardDur), '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', TMP + '/s' + (i + 1) + '.mp4']);
     segs.push(TMP + '/s' + (i + 1) + '.mp4');
   }
 
-  // аутро
-  let o1 = textFile('o1.txt', 'Всё в канале');
-  let o2 = textFile('o2.txt', '@deal_radar1');
-  ff(['-y', '-f', 'lavfi', '-i', 'color=c=0x0b0e14:s=' + W + 'x' + H + ':d=' + outro + ':r=30',
-    '-vf', 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + o1 + ':fontcolor=white:fontsize=66:x=(w-text_w)/2:y=(h-text_h)/2-80,' +
+  const o1 = textFile('o1.txt', 'Радар Скидок');
+  const o2 = textFile('o2.txt', '@deal_radar1');
+  ff(['-y', '-f', 'lavfi', '-i', 'color=c=0x0b0e14:s=' + W + 'x' + H + ':d=' + outroDur + ':r=30',
+    '-vf', 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + o1 + ':fontcolor=white:fontsize=76:x=(w-text_w)/2:y=(h-text_h)/2-80,' +
       'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + o2 + ':fontcolor=0xf5c451:fontsize=96:x=(w-text_w)/2:y=(h-text_h)/2+40',
     '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', TMP + '/s9.mp4']);
   segs.push(TMP + '/s9.mp4');
 
-  // 4. Склейка
   const list = TMP + '/list.txt';
   fs.writeFileSync(list, segs.map(s => "file '" + s + "'").join('\n') + '\n');
   ff(['-y', '-f', 'concat', '-safe', '0', '-i', list, '-c', 'copy', TMP + '/main.mp4']);
   const mainDur = ffprobe(TMP + '/main.mp4');
   log('картинка: ' + mainDur.toFixed(1) + ' с');
 
-  // 5. Кадры маскота по громкости голоса
-  const env = envelopeFromWav(TMP + '/voice.wav', 1 / FPS, mainDur);
-  const n = renderMascotFrames(env.length, env, TMP + '/frames');
-  log('кадров маскота: ' + n);
+  const env = envelope(TMP + '/voice.wav', 1 / FPS, mainDur);
+  log('кадров маскота: ' + renderFrames(env.length, env, TMP + '/frames'));
 
-  // 6. Финал: маскот поверх + голос
   ff(['-y', '-i', TMP + '/main.mp4', '-framerate', String(FPS), '-start_number', '0', '-i', TMP + '/frames/f%04d.png', '-i', TMP + '/voice.wav',
     '-filter_complex', '[0:v][1:v]overlay=W-w-30:H-h-30:format=auto[v]',
     '-map', '[v]', '-map', '2:a',
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-pix_fmt', 'yuv420p',
     '-c:a', 'aac', '-b:a', '128k', '-shortest', '-movflags', '+faststart', TMP + '/final.mp4']);
-  const size = fs.statSync(TMP + '/final.mp4').size;
-  log('готово: ' + Math.round(size / 1024) + ' КБ, ' + ffprobe(TMP + '/final.mp4').toFixed(1) + ' с');
+  log('готово: ' + Math.round(fs.statSync(TMP + '/final.mp4').size / 1024) + ' КБ, ' + ffprobe(TMP + '/final.mp4').toFixed(1) + ' с');
 
   if (!TOKEN || !OWNER) { log('без токена: файл только на раннере'); return; }
-  const r = await sendVideo(TMP + '/final.mp4', 'Новая версия: голос + живой маскот. Хэштеги: #скидкинаигры #steam #распродажа #игры');
+  const r = await sendVideo(TMP + '/final.mp4', 'Версия 3: хук, низкий голос, описания, маскот моргает. Хэштеги: #скидкинаигры #steam #распродажа');
   log('send: ' + r.code + ' ' + r.body.slice(0, 160));
   if (r.code !== 200) process.exit(1);
 })().catch(async e => {
