@@ -46,13 +46,22 @@ function send(host, p, body, headers, method) {
 function sendVideo(file) {
   return new Promise((resolve, reject) => {
     const boundary = '----vid' + Date.now();
-    const fields = JSON.stringify({ chat_id: OWNER, supports_streaming: true, width: W, height: H, duration: 18,
-      caption: 'Готово. Пости в TikTok / Shorts / Reels. Хэштеги: #скидкинаигры #steam #распродажа #игры #гейминг' });
-    const head = Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="params"\r\nContent-Type: application/json\r\n\r\n' + fields + '\r\n' +
-      '--' + boundary + '\r\nContent-Disposition: form-data; name="video"; filename="deals.mp4"\r\nContent-Type: video/mp4\r\n\r\n');
-    const tail = Buffer.from('\r\n--' + boundary + '--\r\n');
-    const data = fs.readFileSync(file);
-    const body = Buffer.concat([head, data, tail]);
+    const fields = [
+      ['chat_id', OWNER],
+      ['caption', 'Готово. Пости в TikTok / Shorts / Reels. Хэштеги: #скидкинаигры #steam #распродажа #игры #гейминг'],
+      ['supports_streaming', 'true'],
+      ['width', String(W)],
+      ['height', String(H)],
+      ['duration', '18'],
+    ];
+    const parts = [];
+    for (const [k, v] of fields) {
+      parts.push(Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="' + k + '"\r\n\r\n' + v + '\r\n'));
+    }
+    parts.push(Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="video"; filename="deals.mp4"\r\nContent-Type: video/mp4\r\n\r\n'));
+    parts.push(fs.readFileSync(file));
+    parts.push(Buffer.from('\r\n--' + boundary + '--\r\n'));
+    const body = Buffer.concat(parts);
     const q = https.request({ hostname: 'api.telegram.org', path: '/bot' + TOKEN + '/sendVideo', method: 'POST',
       headers: { 'Content-Type': 'multipart/form-data; boundary=' + boundary, 'Content-Length': body.length }, timeout: 180000 },
       s => { let d = ''; s.on('data', c => d += c); s.on('end', () => resolve({ code: s.statusCode, body: d.slice(0, 300) })); });
