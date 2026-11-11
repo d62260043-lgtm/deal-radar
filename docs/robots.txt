@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://d62260043-lgtm.github.io/deal-radar/sitemap.xml
