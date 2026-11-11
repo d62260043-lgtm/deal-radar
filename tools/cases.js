@@ -51,6 +51,52 @@ function api(method, payload) {
   });
 }
 
+
+function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+function buildSeo(data) {
+  const day = new Date(Date.now() + 3 * 3600 * 1000);
+  const dateStr = day.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+  const deals = data.items.slice().sort((a, b) => b.discount - a.discount);
+  const rows = deals.map(p => '<tr>' +
+    '<td><a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.title) + '</a></td>' +
+    '<td class="d">−' + p.discount + '%</td>' +
+    '<td class="p">' + esc(p.final) + '</td>' +
+    '<td class="o">' + esc(p.initial) + '</td>' +
+    '<td class="r">' + (p.rating ? p.rating + '%' : '—') + '</td></tr>').join('');
+  const free = (data.free || []).map(p => '<li><a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.title) + '</a></li>').join('');
+  return '<!DOCTYPE html>\n<html lang="ru"><head><meta charset="utf-8">' +
+'<meta name="viewport" content="width=device-width, initial-scale=1">' +
+'<title>Скидки на игры Steam сегодня — цены в рублях, ' + dateStr + '</title>' +
+'<meta name="description" content="Подборка скидок на игры в Steam на ' + dateStr + ': цены в рублях, размер скидки и рейтинг отзывов. Обновляется каждый день автоматически.">' +
+'<meta name="robots" content="index,follow">' +
+'<style>body{margin:0;background:#0e121a;color:#eef1f7;font-family:-apple-system,Roboto,system-ui,sans-serif;padding:18px 14px 40px}' +
+'.w{max-width:720px;margin:0 auto}h1{font-size:22px;margin:0 0 8px}.sub{color:#8b93a7;font-size:13px;margin:0 0 18px;line-height:1.5}' +
+'table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px 6px;border-bottom:1px solid #2b3344;text-align:left}' +
+'th{color:#8b93a7;font-weight:600;font-size:11.5px;text-transform:uppercase}a{color:#8fd0ff;text-decoration:none}' +
+'td.d{color:#f5c451;font-weight:800;white-space:nowrap}td.p{font-weight:700;white-space:nowrap}td.o{color:#8b93a7;text-decoration:line-through;white-space:nowrap}td.r{color:#8b93a7;white-space:nowrap}' +
+'.cta{display:block;text-align:center;margin:22px 0 10px;padding:14px;border-radius:14px;background:linear-gradient(180deg,#ffd977,#f5c451);color:#1a1400;font-weight:800;text-decoration:none}' +
+'.cta2{display:block;text-align:center;margin:8px 0 24px;padding:12px;border-radius:14px;border:1px solid #39435a;color:#eef1f7;text-decoration:none;font-weight:600}' +
+'h2{font-size:15px;margin:24px 0 10px}ul{padding-left:18px;font-size:13px;line-height:1.7;color:#c9d0de}' +
+'.f{color:#5d6579;font-size:11.5px;margin-top:26px;line-height:1.6}</style></head><body><div class="w">' +
+'<h1>Скидки на игры в Steam — ' + dateStr + '</h1>' +
+'<p class="sub">' + deals.length + ' игр со скидкой от 25%. Цены в рублях, регион РФ, как в самом Steam. Обновляется автоматически каждый день.</p>' +
+'<table><thead><tr><th>Игра</th><th>Скидка</th><th>Цена</th><th>Было</th><th>Отзывы</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+'<a class="cta" href="https://t.me/deal_radar1">🎁 Скидки в Telegram — подписаться</a>' +
+'<a class="cta2" href="./">Открыть кейс дня — бесплатно</a>' +
+'<h2>Бесплатные игры в Steam</h2><ul>' + free + '</ul>' +
+'<p class="f">Канал «Радар Скидок» — подборки скидок на игры с ценами в рублях. ' +
+'Посты выходят несколько раз в день, есть бесплатный кейс с бонусными открытиями. Данные о ценах: Steam API.</p>' +
+'</div></body></html>';
+}
+
+function buildSitemap() {
+  const base = 'https://d62260043-lgtm.github.io/deal-radar/';
+  return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+    '<url><loc>' + base + '</loc><changefreq>daily</changefreq><priority>1.0</priority></url>' +
+    '<url><loc>' + base + 'skidy.html</loc><changefreq>daily</changefreq><priority>0.9</priority></url></urlset>';
+}
+
 async function main() {
   const feed = await getJson('https://www.cheapshark.com/api/1.0/deals?storeID=1&onSale=1&sortBy=Deal%20Rating&pageSize=60');
   const deals = [];
@@ -89,6 +135,12 @@ async function main() {
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify(data, null, 1));
   log('пул: скидок ' + deals.length + ', бесплатных ' + free.length);
+  try {
+    fs.writeFileSync(path.join(path.dirname(OUT), 'skidy.html'), buildSeo({ items: deals, free }));
+    fs.writeFileSync(path.join(path.dirname(OUT), 'sitemap.xml'), buildSitemap());
+    fs.writeFileSync(path.join(path.dirname(OUT), 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: https://d62260043-lgtm.github.io/deal-radar/sitemap.xml\n');
+    log('seo: skidy.html + sitemap.xml + robots.txt');
+  } catch (e) { log('seo ERR ' + e.message); }
 
   const force = process.argv.includes('--force');
   let last = null;
