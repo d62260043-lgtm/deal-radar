@@ -26,8 +26,10 @@ function download(url, dest, min) {
 function silero(text, tmp, outWav) {
   const f = tmp + '/silero_say.txt';
   fs.writeFileSync(f, text);
-  run('python3', [__dirname + '/tts_silero.py', f, outWav]);
-  if (!fs.existsSync(outWav) || fs.statSync(outWav).size < 5000) throw new Error('silero пусто');
+  run('python3', [__dirname + '/tts_silero.py', f, outWav + '.raw.wav']);
+  if (!fs.existsSync(outWav + '.raw.wav') || fs.statSync(outWav + '.raw.wav').size < 5000) throw new Error('silero пусто');
+  // подъём тона на 5%
+  run('ffmpeg', ['-y', '-i', outWav + '.raw.wav', '-af', 'asetrate=48000*1.05,aresample=48000,atempo=0.952', '-ar', '44100', '-ac', '1', outWav]);
 }
 
 function piper(text, tmp, outWav) {
@@ -42,7 +44,7 @@ function piper(text, tmp, outWav) {
 function tts(text, tmp, outWav) {
   try {
     silero(text, tmp, outWav);
-    console.log('голос: Silero (' + (process.env.TTS_SPEAKER || 'aidar') + ')');
+    console.log('голос: Silero (' + (process.env.TTS_SPEAKER || 'eugene') + '), тон +5%');
     return;
   } catch (e) {
     console.log('Silero не получился (' + e.message + '), беру Piper');
