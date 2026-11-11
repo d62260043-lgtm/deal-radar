@@ -25,8 +25,8 @@ jobs:
       - name: Install resvg and TTS
         run: |
           npm i --no-audit --no-fund @resvg/resvg-js@2
-          python3 -m pip install --quiet edge-tts
-          python3 -c "import edge_tts; print('edge_tts ok')"
+          python3 -m pip install --quiet piper-tts
+          piper --help | head -3
       - name: Build voice video and send
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
