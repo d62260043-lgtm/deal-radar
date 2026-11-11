@@ -91,16 +91,19 @@ function renderMascotFrames(count, envelope, dir) {
 /* ---------- звук ---------- */
 const PIPER_BASE = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium';
 
-function ensureFile(url, dest) {
-  if (fs.existsSync(dest) && fs.statSync(dest).size > 10000) return dest;
-  run('curl', ['-sL', '--max-time', '180', '-o', dest, url]);
-  if (!fs.existsSync(dest) || fs.statSync(dest).size < 10000) throw new Error('не скачался ' + url);
+function ensureFile(url, dest, minSize) {
+  const min = minSize || 10000;
+  if (fs.existsSync(dest) && fs.statSync(dest).size >= min) { console.log('есть: ' + dest); return dest; }
+  run('curl', ['-sL', '--max-time', '240', '-o', dest, url]);
+  const size = fs.existsSync(dest) ? fs.statSync(dest).size : 0;
+  console.log('скачано: ' + dest + ' (' + size + ' б)');
+  if (size < min) throw new Error('не скачался ' + url);
   return dest;
 }
 
 function tts(text, outWav) {
   const model = ensureFile(PIPER_BASE + '.onnx', TMP + '/dmitri.onnx');
-  ensureFile(PIPER_BASE + '.onnx.json', TMP + '/dmitri.onnx.json');
+  ensureFile(PIPER_BASE + '.onnx.json', TMP + '/dmitri.onnx.json', 200);
   const txt = TMP + '/say.txt';
   fs.writeFileSync(txt, text);
   run('piper', ['--model', model, '--output_file', outWav], { input: fs.readFileSync(txt) });
