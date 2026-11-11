@@ -89,10 +89,22 @@ function renderMascotFrames(count, envelope, dir) {
 }
 
 /* ---------- звук ---------- */
-function tts(text, out) {
-  const args = ['--voice', VOICE, '--rate=+8%', '--text', text, '--write-media', out];
-  try { run('edge-tts', args); return; } catch (e) { console.log('CLI edge-tts не сработал, пробую python -m'); }
-  run('python3', ['-m', 'edge_tts'].concat(args));
+const PIPER_BASE = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium';
+
+function ensureFile(url, dest) {
+  if (fs.existsSync(dest) && fs.statSync(dest).size > 10000) return dest;
+  run('curl', ['-sL', '--max-time', '180', '-o', dest, url]);
+  if (!fs.existsSync(dest) || fs.statSync(dest).size < 10000) throw new Error('не скачался ' + url);
+  return dest;
+}
+
+function tts(text, outWav) {
+  const model = ensureFile(PIPER_BASE + '.onnx', TMP + '/dmitri.onnx');
+  ensureFile(PIPER_BASE + '.onnx.json', TMP + '/dmitri.onnx.json');
+  const txt = TMP + '/say.txt';
+  fs.writeFileSync(txt, text);
+  run('piper', ['--model', model, '--output_file', outWav], { input: fs.readFileSync(txt) });
+  if (!fs.existsSync(outWav) || fs.statSync(outWav).size < 5000) throw new Error('piper не выдал звук');
 }
 
 function envelopeFromWav(wav, frameDur, total) {
@@ -177,10 +189,9 @@ function sendVideo(file, caption) {
     'Третья: ' + speak(picks[2].final) + ' вместо ' + speak(picks[2].initial) + ', тоже минус ' + picks[2].discount + '. ' +
     'Полный список — в канале Радар Скидок. И бесплатный кейс дня: три попытки каждый день.';
   log('озвучка: ' + voiceText.slice(0, 80) + '...');
-  tts(voiceText, TMP + '/voice.mp3');
-  const voiceDur = ffprobe(TMP + '/voice.mp3');
+  tts(voiceText, TMP + '/voice.wav');
+  const voiceDur = ffprobe(TMP + '/voice.wav');
   log('длительность голоса: ' + voiceDur.toFixed(1) + ' с');
-  ff(['-y', '-i', TMP + '/voice.mp3', '-ar', '8000', '-ac', '1', '-c:a', 'pcm_s16le', TMP + '/voice.wav']);
 
   // 3. Карточки
   for (const p of picks) await download('https://cdn.akamai.steamstatic.com/steam/apps/' + p.appid + '/capsule_616x353.jpg', TMP + '/img' + p.appid + '.jpg');
@@ -239,7 +250,7 @@ function sendVideo(file, caption) {
   log('кадров маскота: ' + n);
 
   // 6. Финал: маскот поверх + голос
-  ff(['-y', '-i', TMP + '/main.mp4', '-framerate', String(FPS), '-start_number', '0', '-i', TMP + '/frames/f%04d.png', '-i', TMP + '/voice.mp3',
+  ff(['-y', '-i', TMP + '/main.mp4', '-framerate', String(FPS), '-start_number', '0', '-i', TMP + '/frames/f%04d.png', '-i', TMP + '/voice.wav',
     '-filter_complex', '[0:v][1:v]overlay=W-w-30:H-h-30:format=auto[v]',
     '-map', '[v]', '-map', '2:a',
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-pix_fmt', 'yuv420p',
