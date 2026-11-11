@@ -32,9 +32,9 @@ jobs:
       - name: Install TTS (Silero + Piper fallback)
         timeout-minutes: 12
         run: |
-          python3 -m pip install --quiet torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          python3 -m pip install --quiet numpy torch --index-url https://download.pytorch.org/whl/cpu
           python3 -m pip install --quiet piper-tts
-          python3 -c "import torch, torchaudio; print('torch', torch.__version__)"
+          python3 -c "import torch, numpy; print('torch', torch.__version__)"
       - name: Build voice video and send
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
