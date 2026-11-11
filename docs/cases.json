@@ -1,9 +1,39 @@
 {
- "updated": "2026-11-10T00:04:29.277Z",
+ "updated": "2026-11-11T11:21:20.878Z",
  "items": [
   {
-   "title": "Quern - Undying Thoughts",
+   "appid": "413410",
+   "title": "Danganronpa: Trigger Happy Havoc",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/413410/capsule_616x353.jpg",
+   "final": "78 руб.",
+   "initial": "782 руб.",
+   "discount": 90,
+   "rating": "95",
+   "url": "https://store.steampowered.com/app/413410/"
+  },
+  {
+   "appid": "1449200",
+   "title": "AI: THE SOMNIUM FILES - nirvanA Initiative",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1449200/capsule_616x353.jpg",
+   "final": "300 руб.",
+   "initial": "2000 руб.",
+   "discount": 85,
+   "rating": "86",
+   "url": "https://store.steampowered.com/app/1449200/"
+  },
+  {
+   "appid": "245450",
+   "title": "Wizardry 8",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/245450/capsule_616x353.jpg",
+   "final": "37 руб.",
+   "initial": "249 руб.",
+   "discount": 85,
+   "rating": "89",
+   "url": "https://store.steampowered.com/app/245450/"
+  },
+  {
    "appid": "512790",
+   "title": "Quern - Undying Thoughts",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/512790/capsule_616x353.jpg",
    "final": "44 руб.",
    "initial": "449 руб.",
@@ -12,8 +42,8 @@
    "url": "https://store.steampowered.com/app/512790/"
   },
   {
-   "title": "Company of Heroes",
    "appid": "4560",
+   "title": "Company of Heroes",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/4560/capsule_616x353.jpg",
    "final": "299 руб.",
    "initial": "1499 руб.",
@@ -22,8 +52,8 @@
    "url": "https://store.steampowered.com/app/4560/"
   },
   {
-   "title": "Beholder",
    "appid": "475550",
+   "title": "Beholder",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/475550/capsule_616x353.jpg",
    "final": "52 руб.",
    "initial": "520 руб.",
@@ -32,8 +62,18 @@
    "url": "https://store.steampowered.com/app/475550/"
   },
   {
-   "title": "Severed Steel",
+   "appid": "269670",
+   "title": "BADLAND: Game of the Year Edition",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/269670/capsule_616x353.jpg",
+   "final": "37 руб.",
+   "initial": "249 руб.",
+   "discount": 85,
+   "rating": "81",
+   "url": "https://store.steampowered.com/app/269670/"
+  },
+  {
    "appid": "1227690",
+   "title": "Severed Steel",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1227690/capsule_616x353.jpg",
    "final": "32 руб.",
    "initial": "465 руб.",
@@ -42,8 +82,38 @@
    "url": "https://store.steampowered.com/app/1227690/"
   },
   {
-   "title": "Huntdown",
+   "appid": "312780",
+   "title": "Way of the Samurai 4",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/312780/capsule_616x353.jpg",
+   "final": "44 руб.",
+   "initial": "449 руб.",
+   "discount": 90,
+   "rating": "76",
+   "url": "https://store.steampowered.com/app/312780/"
+  },
+  {
+   "appid": "252130",
+   "title": "Divide By Sheep",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/252130/capsule_616x353.jpg",
+   "final": "40 руб.",
+   "initial": "200 руб.",
+   "discount": 80,
+   "rating": "93",
+   "url": "https://store.steampowered.com/app/252130/"
+  },
+  {
+   "appid": "477740",
+   "title": "Zero Escape: The Nonary Games",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/477740/capsule_616x353.jpg",
+   "final": "227 руб.",
+   "initial": "1139 руб.",
+   "discount": 80,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/477740/"
+  },
+  {
    "appid": "598550",
+   "title": "Huntdown",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/598550/capsule_616x353.jpg",
    "final": "219 руб.",
    "initial": "1099 руб.",
@@ -52,8 +122,8 @@
    "url": "https://store.steampowered.com/app/598550/"
   },
   {
-   "title": "The Wanderer: Frankensteins Creature",
    "appid": "966670",
+   "title": "The Wanderer: Frankensteins Creature",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/966670/capsule_616x353.jpg",
    "final": "37 руб.",
    "initial": "372 руб.",
@@ -62,8 +132,8 @@
    "url": "https://store.steampowered.com/app/966670/"
   },
   {
-   "title": "SpeedRunners",
    "appid": "207140",
+   "title": "SpeedRunners",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/207140/capsule_616x353.jpg",
    "final": "110 руб.",
    "initial": "550 руб.",
@@ -72,18 +142,18 @@
    "url": "https://store.steampowered.com/app/207140/"
   },
   {
-   "title": "Cross Blitz",
-   "appid": "1619520",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1619520/capsule_616x353.jpg",
-   "final": "201,58 руб.",
-   "initial": "809,58 руб.",
-   "discount": 75,
-   "rating": "74",
-   "url": "https://store.steampowered.com/app/1619520/"
+   "appid": "5130120",
+   "title": "Evenicle - Next Fragment Medica",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/5130120/capsule_616x353.jpg",
+   "final": "1007 руб.",
+   "initial": "1550 руб.",
+   "discount": 35,
+   "rating": "100",
+   "url": "https://store.steampowered.com/app/5130120/"
   },
   {
-   "title": "Owlboy",
    "appid": "115800",
+   "title": "Owlboy",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/115800/capsule_616x353.jpg",
    "final": "69 руб.",
    "initial": "699 руб.",
@@ -92,8 +162,38 @@
    "url": "https://store.steampowered.com/app/115800/"
   },
   {
-   "title": "For The King",
+   "appid": "1619520",
+   "title": "Cross Blitz",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1619520/capsule_616x353.jpg",
+   "final": "201,58 руб.",
+   "initial": "809,58 руб.",
+   "discount": 75,
+   "rating": "74",
+   "url": "https://store.steampowered.com/app/1619520/"
+  },
+  {
+   "appid": "505640",
+   "title": "Antihero",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/505640/capsule_616x353.jpg",
+   "final": "110 руб.",
+   "initial": "550 руб.",
+   "discount": 80,
+   "rating": "86",
+   "url": "https://store.steampowered.com/app/505640/"
+  },
+  {
+   "appid": "523780",
+   "title": "Emily is Away Too",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/523780/capsule_616x353.jpg",
+   "final": "25 руб.",
+   "initial": "129 руб.",
+   "discount": 81,
+   "rating": "93",
+   "url": "https://store.steampowered.com/app/523780/"
+  },
+  {
    "appid": "527230",
+   "title": "For The King",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/527230/capsule_616x353.jpg",
    "final": "43 руб.",
    "initial": "435 руб.",
@@ -102,8 +202,8 @@
    "url": "https://store.steampowered.com/app/527230/"
   },
   {
-   "title": "Transport Fever",
    "appid": "446800",
+   "title": "Transport Fever",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/446800/capsule_616x353.jpg",
    "final": "110 руб.",
    "initial": "1100 руб.",
@@ -112,14 +212,150 @@
    "url": "https://store.steampowered.com/app/446800/"
   },
   {
-   "title": "War Hospital",
    "appid": "1553000",
+   "title": "War Hospital",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1553000/capsule_616x353.jpg",
    "final": "69 руб.",
    "initial": "1399 руб.",
    "discount": 95,
    "rating": "59",
    "url": "https://store.steampowered.com/app/1553000/"
+  },
+  {
+   "appid": "917840",
+   "title": "Wintermoor Tactics Club",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/917840/capsule_616x353.jpg",
+   "final": "110 руб.",
+   "initial": "550 руб.",
+   "discount": 80,
+   "rating": "87",
+   "url": "https://store.steampowered.com/app/917840/"
+  },
+  {
+   "appid": "2247570",
+   "title": "Don Duality",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/2247570/capsule_616x353.jpg",
+   "final": "74 руб.",
+   "initial": "499 руб.",
+   "discount": 85,
+   "rating": "58",
+   "url": "https://store.steampowered.com/app/2247570/"
   }
- ]
+ ],
+ "free": [
+  {
+   "appid": 730,
+   "title": "Counter-Strike 2",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/730/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/730/"
+  },
+  {
+   "appid": 570,
+   "title": "Dota 2",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/570/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/570/"
+  },
+  {
+   "appid": 440,
+   "title": "Team Fortress 2",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/440/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/440/"
+  },
+  {
+   "appid": 1172470,
+   "title": "Apex Legends",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1172470/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/1172470/"
+  },
+  {
+   "appid": 230410,
+   "title": "Warframe",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/230410/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/230410/"
+  },
+  {
+   "appid": 238960,
+   "title": "Path of Exile",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/238960/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/238960/"
+  },
+  {
+   "appid": 304930,
+   "title": "Unturned",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/304930/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/304930/"
+  },
+  {
+   "appid": 1085660,
+   "title": "Destiny 2",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1085660/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/1085660/"
+  },
+  {
+   "appid": 236390,
+   "title": "War Thunder",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/236390/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/236390/"
+  },
+  {
+   "appid": 444090,
+   "title": "Paladins",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/444090/capsule_616x353.jpg",
+   "final": "бесплатно",
+   "initial": "",
+   "discount": 100,
+   "rating": 0,
+   "free": true,
+   "url": "https://store.steampowered.com/app/444090/"
+  }
+ ],
+ "counts": {
+  "deals": 24,
+  "free": 10
+ }
 }
