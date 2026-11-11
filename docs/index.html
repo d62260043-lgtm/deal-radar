@@ -249,6 +249,7 @@ if (tg) { tg.ready(); tg.expand(); }
 const API = 'https://deal-radar.dealradar-xolbur.workers.dev';
 const DAILY = 3, STAR_URL = 'https://t.me/$iZfkicLWoUuBHAAAGqOGokJcW30', COUNTER_NS = 'dealradar';
 const APP_URL = location.origin + location.pathname;
+const BOT_START = 'https://t.me/gamedeals_poster_bot?start=ref_';
 const $ = id => document.getElementById(id);
 const today = () => new Date().toISOString().slice(0, 10);
 const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
@@ -326,7 +327,7 @@ function paint() {
     ? S.collection.slice(-40).reverse().map(c => '<a class="item" href="' + c.url + '" target="_blank"><img src="' + c.photo + '"><div>' +
       '<div class="t">' + c.title + '</div><div class="p">' + c.final + ' · −' + c.discount + '%</div></div></a>').join('')
     : '<div class="empty">Пока пусто — открой первый кейс</div>';
-  $('refInput').value = APP_URL + '?ref=' + S.ref;
+  $('refInput').value = BOT_START + S.ref;
   $('invited').textContent = S.invited || 0;
   $('credited').textContent = S.creditedRefs || 0;
   const board = [{ n: 'Ты', d: S.best || 0 }].concat(S.duelHistory.slice(-8).map(x => ({ n: x.name || 'Друг', d: x.discount || 0 })));
@@ -414,7 +415,7 @@ function roll() {
 $('duel').addEventListener('click', () => {
   const d = Number((($('disc').textContent || '').match(/\d+/) || [0])[0]);
   const name = $('name').textContent;
-  const url = APP_URL + '?ref=' + S.ref + '&duel=' + d + '&n=' + encodeURIComponent(name.slice(0, 40));
+  const url = BOT_START + S.ref + '&duel=' + d + '&n=' + encodeURIComponent(name.slice(0, 40));
   const text = 'Вызываю на дуэль! Мне выпало −' + d + '%. Слабо лучше? Открой кейс:';
   if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text));
   else if (navigator.share) navigator.share({ title: 'Дуэль', text, url });
@@ -481,14 +482,14 @@ $('buyBtn').addEventListener('click', () => {
 /* ---------- дуэль/шэринг/реф ---------- */
 $('share').addEventListener('click', () => {
   const t = 'Мне выпало: ' + $('name').textContent + ' за ' + $('price').textContent + ' (' + $('disc').textContent + '). Открой свой кейс — бесплатно, 3 раза в день:';
-  const url = APP_URL + '?ref=' + S.ref;
+  const url = BOT_START + S.ref;
   if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(t));
   else if (navigator.share) navigator.share({ title: 'Кейс дня', text: t, url });
   else window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(t), '_blank');
 });
 function shareRef() {
   const t = 'Открывай кейс дня: 3 бесплатных кейса в день, внутри игры со скидками до −95% и шанс на бесплатную.';
-  const url = APP_URL + '?ref=' + S.ref;
+  const url = BOT_START + S.ref;
   if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(t));
   else if (navigator.share) navigator.share({ title: 'Кейс дня', text: t, url });
   else { $('refInput').select(); document.execCommand('copy'); toast('Скопировано', 'Ссылка в буфере обмена.'); }
