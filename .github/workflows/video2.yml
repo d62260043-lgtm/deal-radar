@@ -27,11 +27,14 @@ jobs:
           sudo cp "$(find /tmp/ff -name ffmpeg -type f | head -1)" /usr/local/bin/ffmpeg
           sudo cp "$(find /tmp/ff -name ffprobe -type f | head -1)" /usr/local/bin/ffprobe
           ffmpeg -version | head -1
-      - name: Install resvg and TTS
+      - name: Install resvg
+        run: npm i --no-audit --no-fund @resvg/resvg-js@2
+      - name: Install TTS (Silero + Piper fallback)
+        timeout-minutes: 12
         run: |
-          npm i --no-audit --no-fund @resvg/resvg-js@2
+          python3 -m pip install --quiet torch torchaudio --index-url https://download.pytorch.org/whl/cpu
           python3 -m pip install --quiet piper-tts
-          piper --help | head -3
+          python3 -c "import torch, torchaudio; print('torch', torch.__version__)"
       - name: Build voice video and send
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
