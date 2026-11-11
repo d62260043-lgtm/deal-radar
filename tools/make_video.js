@@ -8,6 +8,7 @@ const TOKEN = (process.env.TELEGRAM_TOKEN || '').trim();
 const OWNER = (process.env.OWNER_CHAT_ID || '').trim();
 const TMP = '/tmp/vid';
 const FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
+console.log('font exists:', fs.existsSync(FONT));
 const FONT2 = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
 const W = 1080, H = 1920;
 
@@ -150,4 +151,13 @@ function textFile(name, text) {
   const r = await sendVideo(finalVideo);
   console.log('send: ' + r.code + ' ' + r.body.slice(0, 200));
   if (r.code !== 200) process.exit(1);
-})().catch(e => { console.error('ERR ' + e.message); process.exit(1); });
+  })().catch(async e => {
+  console.error('ERR ' + e.message);
+  try {
+    if (TOKEN && OWNER) {
+      const body = JSON.stringify({ chat_id: OWNER, text: 'Видео не собралось:\n' + String(e.message).slice(0, 900) });
+      await send('api.telegram.org', '/bot' + TOKEN + '/sendMessage', body, {});
+    }
+  } catch (x) {}
+  process.exit(1);
+});
