@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="34%" r="62%">
+      <stop offset="0%" stop-color="#2b3448"/>
+      <stop offset="60%" stop-color="#131822"/>
+      <stop offset="100%" stop-color="#0b0e14"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#39435c"/>
+      <stop offset="100%" stop-color="#1b2130"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd977"/>
+      <stop offset="100%" stop-color="#f0b73c"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#glow)"/>
+
+  <!-- орбиты радара -->
+  <g stroke="#f5c451" stroke-opacity="0.18" fill="none" stroke-width="3">
+    <circle cx="512" cy="470" r="250"/>
+    <circle cx="512" cy="470" r="330"/>
+    <circle cx="512" cy="470" r="410"/>
+  </g>
+
+  <!-- антенна -->
+  <line x1="512" y1="250" x2="512" y2="170" stroke="#3d4864" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="512" cy="158" r="26" fill="url(#gold)"/>
+
+  <!-- корпус -->
+  <rect x="196" y="250" width="632" height="470" rx="150" fill="url(#body)"/>
+  <rect x="196" y="250" width="632" height="470" rx="150" fill="none" stroke="#4a556f" stroke-width="5"/>
+
+  <!-- боковые «уши» -->
+  <rect x="132" y="420" width="70" height="140" rx="34" fill="#242c3d" stroke="#4a556f" stroke-width="4"/>
+  <rect x="822" y="420" width="70" height="140" rx="34" fill="#242c3d" stroke="#4a556f" stroke-width="4"/>
+
+  <!-- экран лица -->
+  <rect x="256" y="310" width="512" height="350" rx="110" fill="#0c1018" stroke="#2c3547" stroke-width="4"/>
+
+  <!-- глаза -->
+  <circle cx="410" cy="450" r="46" fill="#f5c451"/>
+  <circle cx="614" cy="450" r="46" fill="#f5c451"/>
+  <circle cx="424" cy="436" r="14" fill="#0c1018"/>
+  <circle cx="628" cy="436" r="14" fill="#0c1018"/>
+
+  <!-- улыбка -->
+  <path d="M430 546 q82 62 164 0" stroke="#f5c451" stroke-width="18" fill="none" stroke-linecap="round"/>
+
+  <!-- ценник -->
+  <g transform="translate(636 590) rotate(12)">
+    <rect x="0" y="0" width="250" height="150" rx="34" fill="url(#gold)"/>
+    <circle cx="34" cy="34" r="11" fill="#0c1018"/>
+    <text x="125" y="100" font-family="DejaVu Sans, sans-serif" font-size="74" font-weight="bold"
+          fill="#12161f" text-anchor="middle">-90%</text>
+  </g>
+
+  <!-- подпись -->
+  <text x="512" y="866" font-family="DejaVu Sans, sans-serif" font-size="60" font-weight="bold"
+        fill="#eef1f7" text-anchor="middle">РАДАР СКИДОК</text>
+  <text x="512" y="928" font-family="DejaVu Sans, sans-serif" font-size="40"
+        fill="#f5c451" text-anchor="middle">@deal_radar1</text>
+</svg>
