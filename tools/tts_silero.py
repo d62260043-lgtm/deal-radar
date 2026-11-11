@@ -3,7 +3,7 @@ import numpy as np
 import torch
 
 text_file, out_wav = sys.argv[1], sys.argv[2]
-speaker = os.environ.get('TTS_SPEAKER', 'aidar')
+speaker = os.environ.get('TTS_SPEAKER', 'eugene')
 text = open(text_file, encoding='utf-8').read().strip()
 
 torch.set_num_threads(max(1, (os.cpu_count() or 4) - 1))
