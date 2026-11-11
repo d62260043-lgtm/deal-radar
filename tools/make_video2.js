@@ -4,6 +4,7 @@ const https = require('https');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const { Resvg } = require('@resvg/resvg-js');
+const { tts } = require('./tts');
 
 const TOKEN = (process.env.TELEGRAM_TOKEN || '').trim();
 const OWNER = (process.env.OWNER_CHAT_ID || '').trim();
@@ -98,16 +99,7 @@ function ensureFile(url, dest, minSize) {
   return dest;
 }
 
-function tts(text, outWav) {
-  const model = ensureFile(PIPER_BASE + '.onnx', TMP + '/dmitri.onnx');
-  ensureFile(PIPER_BASE + '.onnx.json', TMP + '/dmitri.onnx.json', 200);
-  const txt = TMP + '/say.txt';
-  fs.writeFileSync(txt, text);
-  run('piper', ['--model', model, '--output_file', TMP + '/raw.wav'], { input: fs.readFileSync(txt) });
-  if (!fs.existsSync(TMP + '/raw.wav')) throw new Error('piper не выдал звук');
-  // понижаем голос: pitch -6%, темп сохраняем
-  ff(['-y', '-i', TMP + '/raw.wav', '-af', 'asetrate=22050*0.94,aresample=22050,atempo=1.064', '-ar', '22050', '-ac', '1', outWav]);
-}
+
 
 function envelope(wav, frameDur, total) {
   const buf = fs.readFileSync(wav);
@@ -208,7 +200,7 @@ function wrap(text, width) {
   const outro = 'Полный список — в канале Радар Скидок. И бесплатный кейс дня: три попытки каждый день.';
   const voiceText = hook + ' ' + mid + ' ' + outro;
   log('озвучка: ' + voiceText.slice(0, 90) + '...');
-  tts(voiceText, TMP + '/voice.wav');
+  tts(voiceText, TMP, TMP + '/voice.wav');
   const voiceDur = ffprobe(TMP + '/voice.wav');
   log('голос: ' + voiceDur.toFixed(1) + ' с');
 
