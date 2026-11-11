@@ -268,7 +268,7 @@ function paint() {
       '<div class="t">' + c.title + '</div><div class="p">' + c.final + ' · −' + c.discount + '%</div></div></a>').join('')
     : '<div class="empty">Пока пусто — открой первый кейс</div>';
   $('refInput').value = APP_URL + '?ref=' + S.ref;
-  $('invited').textContent = S.invited > 0 ? S.invited : '—';
+  $('invited').textContent = S.invited || 0;
   $('credited').textContent = S.creditedRefs || 0;
   const board = [{ n: 'Ты', d: S.best || 0 }].concat(S.duelHistory.slice(-8).map(x => ({ n: x.name || 'Друг', d: x.discount || 0 })));
   board.sort((a, b) => b.d - a.d);
@@ -407,7 +407,7 @@ $('startQuiz').addEventListener('click', startQuiz);
 /* ---------- звёзды ---------- */
 $('buyBtn').addEventListener('click', () => {
   const grant = () => { addCases(5, 'Оплата прошла — держи 5 кейсов.'); };
-  if (tg && tg.openInvoice) {
+  if (tg && tg.openInvoice && tg.initData) {
     tg.openInvoice(STAR_URL, (status) => {
       if (status === 'paid') grant();
       else if (status === 'cancelled') toast('Отменено', 'Оплата не прошла, кейсы не списались.');
