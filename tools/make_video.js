@@ -62,8 +62,12 @@ function sendVideo(file) {
 }
 
 function ffmpeg(args) {
-  const r = spawnSync('ffmpeg', args, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 32 });
-  if (r.status !== 0) throw new Error('ffmpeg fail: ' + (r.stderr || '').slice(-600));
+  const r = spawnSync('ffmpeg', args, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 });
+  if (r.status !== 0) {
+    console.log('CMD: ffmpeg ' + args.map(a => (String(a).indexOf(' ') >= 0 ? JSON.stringify(a) : a)).join(' '));
+    console.log('STDERR:\n' + String(r.stderr || '').slice(-4000));
+    throw new Error('ffmpeg fail');
+  }
 }
 
 function textFile(name, text) {
