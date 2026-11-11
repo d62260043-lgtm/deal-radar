@@ -1,6 +1,16 @@
 {
- "updated": "2026-11-11T12:52:46.333Z",
+ "updated": "2026-11-11T16:52:47.492Z",
  "items": [
+  {
+   "appid": "418460",
+   "title": "Rising Storm 2: Vietnam",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/418460/capsule_616x353.jpg",
+   "final": "79 руб.",
+   "initial": "799 руб.",
+   "discount": 90,
+   "rating": "89",
+   "url": "https://store.steampowered.com/app/418460/"
+  },
   {
    "appid": "413410",
    "title": "Danganronpa: Trigger Happy Havoc",
@@ -230,16 +240,6 @@
    "discount": 80,
    "rating": "87",
    "url": "https://store.steampowered.com/app/917840/"
-  },
-  {
-   "appid": "2247570",
-   "title": "Don Duality",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/2247570/capsule_616x353.jpg",
-   "final": "74 руб.",
-   "initial": "499 руб.",
-   "discount": 85,
-   "rating": "58",
-   "url": "https://store.steampowered.com/app/2247570/"
   }
  ],
  "free": [
