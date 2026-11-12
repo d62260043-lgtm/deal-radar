@@ -117,7 +117,7 @@ function sendVideo(file, caption) {
     const fields = [['chat_id', OWNER], ['caption', caption], ['supports_streaming', 'true'], ['width', String(W)], ['height', String(H)]];
     const parts = [];
     for (const [k, v] of fields) parts.push(Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="' + k + '"\r\n\r\n' + v + '\r\n'));
-    parts.push(Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="file"; filename="deals.mp4"\r\nContent-Type: video/mp4\r\n\r\n'));
+    parts.push(Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="video"; filename="deals.mp4"\r\nContent-Type: video/mp4\r\n\r\n'));
     parts.push(fs.readFileSync(file));
     parts.push(Buffer.from('\r\n--' + boundary + '--\r\n'));
     const body = Buffer.concat(parts);
