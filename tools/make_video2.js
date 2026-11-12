@@ -15,6 +15,10 @@ const FONT2 = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
 const W = 1080, H = 1920, FPS = 12, OUT_W = 720, OUT_H = 1280;
 const PICK_COUNT = Math.max(3, Math.min(6, Number(process.env.PICK_COUNT || 5)));
 const PAD = 0.18;
+const EXCLUDE_DAYS = Number(process.env.EXCLUDE_DAYS || 10);
+const USED_FILE = 'state/video_used.json';
+function loadUsed() { try { return JSON.parse(fs.readFileSync(USED_FILE, 'utf8')); } catch (e) { return {}; } }
+function saveUsed(map) { fs.mkdirSync('state', { recursive: true }); fs.writeFileSync(USED_FILE, JSON.stringify(map, null, 1)); }
 
 const log = s => console.log(s);
 const run = (cmd, args, opts) => {
@@ -146,12 +150,17 @@ async function sendVideo(file, caption) {
   fs.mkdirSync(TMP + '/frames', { recursive: true });
 
   // 1. скидки
-  const feed = await getJson('https://www.cheapshark.com/api/1.0/deals?storeID=1&onSale=1&sortBy=Deal%20Rating&pageSize=60');
+  const feed = await getJson('https://www.cheapshark.com/api/1.0/deals?storeID=1&onSale=1&sortBy=Deal%20Rating&pageSize=150');
+  const used = loadUsed();
+  const nowMs = Date.now();
+  const isFresh = id => { const t = used[String(id)]; return !t || (nowMs - t) > EXCLUDE_DAYS * 86400000; };
+  let skippedUsed = 0;
   const picks = [];
   for (const d of feed) {
     if (picks.length >= PICK_COUNT) break;
     const appid = d.steamAppID;
-    if (!appid || Number(d.savings) < 50) continue;
+    if (!appid || Number(d.savings) < 45) continue;
+    if (!isFresh(appid)) { skippedUsed++; continue; }
     try {
       const j = await getJson('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=ru&l=russian');
       const dd = j[String(appid)], data = dd && dd.success && dd.data, p = data && data.price_overview;
@@ -163,7 +172,26 @@ async function sendVideo(file, caption) {
       });
     } catch (e) {}
   }
+  if (picks.length < 3) {
+    // запасной вариант: берём игры, которые были давно (больше 3 дней)
+    log('свежих мало (' + picks.length + '), добираю из старых');
+    for (const d of feed) {
+      if (picks.length >= PICK_COUNT) break;
+      const appid = d.steamAppID;
+      if (!appid || Number(d.savings) < 40) continue;
+      if (picks.some(x => String(x.appid) === String(appid))) continue;
+      const t = used[String(appid)];
+      if (t && (nowMs - t) < 3 * 86400000) continue;
+      try {
+        const j = await getJson('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=ru&l=russian');
+        const dd = j[String(appid)], data = dd && dd.success && dd.data, pr = data && data.price_overview;
+        if (!pr || !pr.final || !pr.discount_percent) continue;
+        picks.push({ title: d.title, appid, final: rub(pr.final_formatted, pr.final), initial: rub(pr.initial_formatted, pr.initial), discount: pr.discount_percent, desc: clean(data.short_description).slice(0, 160) });
+      } catch (e) {}
+    }
+  }
   if (picks.length < 3) throw new Error('мало скидок');
+  log('пропущено уже показанных: ' + skippedUsed);
   log('игр в ролике: ' + picks.length + ' | ' + picks.map(p => p.title + ' −' + p.discount + '%').join(' · '));
 
   // 2. фразы: интро, по игре, аутро — каждая отдельным аудио
@@ -260,6 +288,9 @@ async function sendVideo(file, caption) {
   log('готово: ' + Math.round(fs.statSync(TMP + '/final.mp4').size / 1024) + ' КБ, ' + dur(TMP + '/final.mp4').toFixed(1) + ' с');
 
   if (!TOKEN || !OWNER) { log('без токена: файл только на раннере'); return; }
+  for (const p of picks) used[String(p.appid)] = Date.now();
+  saveUsed(used);
+  log('в память записано игр: ' + Object.keys(used).length);
   const r = await sendVideo(TMP + '/final.mp4', 'Версия 4: голос синхронизирован с кадрами, цены и скидки проговариваются.');
   log('send: ' + r.code + ' ' + r.body.slice(0, 160));
   if (r.code !== 200) process.exit(1);
