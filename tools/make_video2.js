@@ -42,6 +42,7 @@ const download = (url, dest) => new Promise((resolve, reject) => {
     const f = fs.createWriteStream(dest); s.pipe(f); f.on('finish', () => f.close(() => resolve(dest)));
   }).on('error', reject);
 });
+const cleanDesc = d => String(d || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').replace(/[«»"']/g, '').trim();
 const rub = (f, kop) => (f || (kop / 100).toFixed(2) + ' ₽').replace(/\s+/g, ' ').trim();
 const num = s => String(s).replace(/[^\d]/g, '');
 
@@ -185,7 +186,7 @@ function wrap(text, width) {
         final: rub(p.final_formatted, p.final),
         initial: rub(p.initial_formatted, p.initial),
         discount: p.discount_percent,
-        desc: desc.slice(0, 150),
+        desc: cleanDesc(desc).slice(0, 150),
       });
     } catch (e) {}
   }
@@ -197,9 +198,11 @@ function wrap(text, width) {
   const idxWords = ['Первая', 'Вторая', 'Третья', 'Четвёртая', 'Пятая', 'Шестая'];
   const hook = 'Минус девяносто процентов на игры — и это не опечатка. ' +
     picks.length + ' штук, которые сегодня стоят дешевле кофе. Поехали.';
-  const mid = picks.map((p, i) => {
+    const mid = picks.map((p, i) => {
     const w = idxWords[i] || ('Номер ' + (i + 1));
-    return w + ': ' + num(p.final) + ' рублей, а было ' + num(p.initial) + '. Это минус ' + p.discount + ' процентов.';
+    const voiceDesc = String(p.desc || '').split(/(?<=[.!?])\s/)[0].replace(/\.$/, '');
+    const shortDesc = voiceDesc.length > 85 ? voiceDesc.slice(0, 85).replace(/\s+\S*$/, '') : voiceDesc;
+    return w + ': ' + (shortDesc ? shortDesc + '. ' : '') + num(p.final) + ' рублей, а было ' + num(p.initial) + '. Это минус ' + p.discount + ' процентов.';
   }).join(' ');
   const outro = 'Полный список — в канале Радар Скидок. И бесплатный кейс дня: три попытки каждый день.';
   const voiceText = hook + ' ' + mid + ' ' + outro;
