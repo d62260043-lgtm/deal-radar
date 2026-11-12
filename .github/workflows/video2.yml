@@ -9,7 +9,7 @@ on:
         default: "make_video2.js"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   video:
@@ -40,6 +40,16 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           OWNER_CHAT_ID: ${{ secrets.OWNER_CHAT_ID }}
         run: node tools/${{ github.event.inputs.script }}
+      - name: Save used games
+        if: always()
+        run: |
+          git config user.name "deal-radar-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/video_used.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "video state: $(date -u +%FT%TZ)"
+            git push
+          fi
       - name: Save video
         if: always()
         run: cp /tmp/v2/final.mp4 ./deals-v2.mp4 || true
