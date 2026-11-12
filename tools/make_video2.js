@@ -9,6 +9,7 @@ const { tts } = require('./tts');
 const TOKEN = (process.env.TELEGRAM_TOKEN || '').trim();
 const OWNER = (process.env.OWNER_CHAT_ID || '').trim();
 const TMP = '/tmp/v3';
+const PICK_COUNT = Math.max(3, Math.min(6, Number(process.env.PICK_COUNT || 5)));
 const FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
 const FONT2 = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
 const W = 1080, H = 1920, FPS = 12;
@@ -166,10 +167,10 @@ function wrap(text, width) {
   fs.rmSync(TMP, { recursive: true, force: true });
   fs.mkdirSync(TMP + '/frames', { recursive: true });
 
-  const feed = await getJson('https://www.cheapshark.com/api/1.0/deals?storeID=1&onSale=1&sortBy=Deal%20Rating&pageSize=40');
+  const feed = await getJson('https://www.cheapshark.com/api/1.0/deals?storeID=1&onSale=1&sortBy=Deal%20Rating&pageSize=60');
   const picks = [];
   for (const d of feed) {
-    if (picks.length >= 3) break;
+    if (picks.length >= PICK_COUNT) break;
     const appid = d.steamAppID;
     if (!appid || Number(d.savings) < 50) continue;
     try {
@@ -189,13 +190,16 @@ function wrap(text, width) {
     } catch (e) {}
   }
   if (picks.length < 3) throw new Error('мало скидок для ролика');
+  log('игр в ролике: ' + picks.length);
   log('скидки: ' + picks.map(p => p.title + ' −' + p.discount + '%').join(' | '));
 
   // Озвучка: хук + цифры без падежного «вместо»
-  const hook = 'Девяносто процентов скидки — и это не опечатка. Три игры, которые сегодня стоят дешевле кофе.';
+  const idxWords = ['Первая', 'Вторая', 'Третья', 'Четвёртая', 'Пятая', 'Шестая'];
+  const hook = 'Минус девяносто процентов на игры — и это не опечатка. ' +
+    picks.length + ' штук, которые сегодня стоят дешевле кофе. Поехали.';
   const mid = picks.map((p, i) => {
-    const idx = ['Первая', 'Вторая', 'Третья'][i];
-    return idx + ': ' + num(p.final) + ' рублей, а было ' + num(p.initial) + '. Это минус ' + p.discount + ' процентов.';
+    const w = idxWords[i] || ('Номер ' + (i + 1));
+    return w + ': ' + num(p.final) + ' рублей, а было ' + num(p.initial) + '. Это минус ' + p.discount + ' процентов.';
   }).join(' ');
   const outro = 'Полный список — в канале Радар Скидок. И бесплатный кейс дня: три попытки каждый день.';
   const voiceText = hook + ' ' + mid + ' ' + outro;
@@ -207,7 +211,7 @@ function wrap(text, width) {
   for (const p of picks) await download('https://cdn.akamai.steamstatic.com/steam/apps/' + p.appid + '/capsule_616x353.jpg', TMP + '/img' + p.appid + '.jpg');
 
   const intro = 3.4, outroDur = 2.6;
-  const cardDur = Math.max(3.4, (voiceDur - intro - outroDur) / 3);
+  const cardDur = Math.max(3.4, (voiceDur - intro - outroDur) / picks.length);
   const segs = [];
 
   // интро с хуком
@@ -222,7 +226,7 @@ function wrap(text, width) {
   segs.push(TMP + '/s0.mp4');
 
   // карточки
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < picks.length; i++) {
     const p = picks[i];
     const cap = textFile('c' + i + '.txt', p.title);
     const pr = textFile('p' + i + '.txt', p.final + ' · было ' + p.initial);
