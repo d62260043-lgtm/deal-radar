@@ -171,7 +171,7 @@ async function sendVideo(file, caption) {
   const segs = [];
 
   const countWords = numWords(picks.length) + ' ' + plural(picks.length, ['штука', 'штуки', 'штук']);
-  const introText = 'Минус девяносто процентов на игры — и это не опечатка. ' + countWords + ', которые сегодня стоят дешевле кофе. Поехали.';
+  const introText = 'Эти игры стоят дешевле кофе — сейчас покажу. Минус девяносто процентов, и это не опечатка. ' + countWords + '. Поехали.';
   segs.push({ kind: 'intro', text: introText, head: '−90%', sub: 'и это не опечатка', third: picks.length + ' игр дешевле кофе' });
 
   picks.forEach((p, i) => {
@@ -183,7 +183,7 @@ async function sendVideo(file, caption) {
     segs.push({ kind: 'card', pick: p, text });
   });
 
-  segs.push({ kind: 'outro', text: 'Полный список — в канале Радар Скидок. И бесплатный кейс дня: три попытки каждый день.', head: 'Радар Скидок', sub: '@deal_radar1' });
+  segs.push({ kind: 'outro', text: 'Подписывайся — ссылка в профиле. Радар Скидок: скидки каждый день и бесплатный кейс дня, три попытки.', head: 'Канал в профиле', sub: '@deal_radar1', third: 'Радар Скидок' });
 
   // 3. озвучка по частям + пауза в конце каждой
   for (let i = 0; i < segs.length; i++) {
@@ -225,7 +225,7 @@ async function sendVideo(file, caption) {
       const sub = tf('sub' + i + '.txt', s.sub || '');
       const th = s.third ? tf('th' + i + '.txt', s.third) : null;
       const isIntro = s.kind === 'intro';
-      const headSize = isIntro ? 200 : 96;
+      const headSize = isIntro ? 200 : (String(s.head).length > 12 ? 74 : 96);
       const headY = isIntro ? '(h-text_h)/2-260' : '(h-text_h)/2-120';
       const color = isIntro ? '0xff5c5c' : '0xf5c451';
       let vf = 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + h + ':fontcolor=' + color + ':fontsize=' + headSize + ':x=(w-text_w)/2:y=' + headY + ':alpha=\'min(1,t/0.3)\',' +
