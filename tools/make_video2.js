@@ -224,8 +224,12 @@ async function sendVideo(file, caption) {
       const h = tf('h' + i + '.txt', s.head);
       const sub = tf('sub' + i + '.txt', s.sub || '');
       const th = s.third ? tf('th' + i + '.txt', s.third) : null;
-      let vf = 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + h + ':fontcolor=' + (s.kind === 'intro' ? '0xff5c5c' : '0xf5c451') + ':fontsize=200:x=(w-text_w)/2:y=(h-text_h)/2-260:alpha=\'min(1,t/0.3)\',' +
-        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + sub + ':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=(h-text_h)/2-40:alpha=\'min(1,max(0,(t-0.3)/0.3))\'';
+      const isIntro = s.kind === 'intro';
+      const headSize = isIntro ? 200 : 96;
+      const headY = isIntro ? '(h-text_h)/2-260' : '(h-text_h)/2-120';
+      const color = isIntro ? '0xff5c5c' : '0xf5c451';
+      let vf = 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + h + ':fontcolor=' + color + ':fontsize=' + headSize + ':x=(w-text_w)/2:y=' + headY + ':alpha=\'min(1,t/0.3)\',' +
+        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + sub + ':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=' + (isIntro ? '(h-text_h)/2-40' : '(h-text_h)/2+10') + ':alpha=\'min(1,max(0,(t-0.3)/0.3))\'';
       if (th) vf += ',drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + th + ':fontcolor=0xf5c451:fontsize=52:x=(w-text_w)/2:y=(h-text_h)/2+70:alpha=\'min(1,max(0,(t-0.7)/0.3))\'';
       ff(['-y', '-f', 'lavfi', '-i', 'color=c=0x0b0e14:s=' + W + 'x' + H + ':d=' + s.dur.toFixed(2) + ':r=30',
         '-vf', vf, '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
