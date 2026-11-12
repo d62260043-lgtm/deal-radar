@@ -12,7 +12,7 @@ const OWNER = (process.env.OWNER_CHAT_ID || '').trim();
 const TMP = '/tmp/v4';
 const FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
 const FONT2 = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
-const W = 1080, H = 1920, FPS = 12;
+const W = 1080, H = 1920, FPS = 12, OUT_W = 720, OUT_H = 1280;
 const PICK_COUNT = Math.max(3, Math.min(6, Number(process.env.PICK_COUNT || 5)));
 const PAD = 0.18;
 
@@ -112,10 +112,10 @@ function envelope(wav, frameDur, total) {
   return raw.map(v => Math.min(1, Math.pow(v / peak, 0.6) * 1.22));
 }
 
-function sendVideo(file, caption) {
+function sendOnce(file, caption) {
   return new Promise((resolve, reject) => {
     const boundary = '----v' + Date.now();
-    const fields = [['chat_id', OWNER], ['caption', caption], ['supports_streaming', 'true'], ['width', String(W)], ['height', String(H)]];
+    const fields = [['chat_id', OWNER], ['caption', caption], ['supports_streaming', 'true'], ['width', String(OUT_W)], ['height', String(OUT_H)]];
     const parts = [];
     for (const [k, v] of fields) parts.push(Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="' + k + '"\r\n\r\n' + v + '\r\n'));
     parts.push(Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="video"; filename="deals.mp4"\r\nContent-Type: video/mp4\r\n\r\n'));
@@ -123,11 +123,21 @@ function sendVideo(file, caption) {
     parts.push(Buffer.from('\r\n--' + boundary + '--\r\n'));
     const body = Buffer.concat(parts);
     const q = https.request({ hostname: 'api.telegram.org', path: '/bot' + TOKEN + '/sendVideo', method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data; boundary=' + boundary, 'Content-Length': body.length }, timeout: 240000 },
+      headers: { 'Content-Type': 'multipart/form-data; boundary=' + boundary, 'Content-Length': body.length }, timeout: 300000 },
       s => { let d = ''; s.on('data', c => d += c); s.on('end', () => resolve({ code: s.statusCode, body: d.slice(0, 250) })); });
-    q.on('error', reject);
+    q.on('error', e => resolve({ code: 0, body: 'ERR ' + e.message }));
     q.end(body);
   });
+}
+
+async function sendVideo(file, caption) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const r = await sendOnce(file, caption);
+    log('попытка ' + attempt + ': ' + r.code + ' ' + r.body.slice(0, 120));
+    if (r.code === 200) return r;
+    await new Promise(res => setTimeout(res, 15000));
+  }
+  return { code: 0, body: 'все попытки неудачны' };
 }
 
 /* ---------- сборка ---------- */
@@ -240,8 +250,8 @@ function sendVideo(file, caption) {
   log('кадров маскота: ' + renderFrames(env.length, env, TMP + '/frames'));
 
   ff(['-y', '-i', TMP + '/main.mp4', '-framerate', String(FPS), '-start_number', '0', '-i', TMP + '/frames/f%04d.png', '-i', TMP + '/voice.wav',
-    '-filter_complex', '[0:v][1:v]overlay=W-w-30:H-h-30:format=auto[v]',
-    '-map', '[v]', '-map', '2:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-pix_fmt', 'yuv420p',
+    '-filter_complex', '[0:v][1:v]overlay=W-w-30:H-h-30:format=auto,scale=' + OUT_W + ':' + OUT_H + '[v]',
+    '-map', '[v]', '-map', '2:a', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '26', '-pix_fmt', 'yuv420p',
     '-c:a', 'aac', '-b:a', '128k', '-shortest', '-movflags', '+faststart', TMP + '/final.mp4']);
   log('готово: ' + Math.round(fs.statSync(TMP + '/final.mp4').size / 1024) + ' КБ, ' + dur(TMP + '/final.mp4').toFixed(1) + ' с');
 
