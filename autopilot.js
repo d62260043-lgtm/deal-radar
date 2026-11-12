@@ -1,7 +1,36 @@
-// Используем встроенный fetch (в Node.js 18+ он есть)
-const BOT_TOKEN = process.env.TELEGRAM_TOKEN; // Твое название!
-const CHAT_ID = process.env.CHANNEL_ID;       // Твое название!
+const BOT_TOKEN = process.env.TELEGRAM_TOKEN; 
+const CHAT_ID = process.env.CHANNEL_ID;       
 const API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+// Память (какие игры уже постили). В идеале её нужно хранить в файле, но для простоты мы просто берем рандом.
+// В будущем мы научим его сохранять историю в файл state.json.
+
+async function getRandomGame() {
+    // Ищем скидки в Steam через открытый API
+    const url = 'https://store.steampowered.com/api/featuredcategories?cc=ru&l=russian';
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        // Берем список игр со скидками
+        const specials = data.specials.items;
+        if (!specials || specials.length === 0) return null;
+
+        // Выбираем случайную игру из тех, что со скидкой
+        const randomGame = specials[Math.floor(Math.random() * specials.length)];
+        
+        return {
+            name: randomGame.name,
+            discount: randomGame.discount_percent,
+            original_price: randomGame.original_price / 100, // API отдает в копейках
+            final_price: randomGame.final_price / 100,
+            url: `https://store.steampowered.com/app/${randomGame.id}`
+        };
+    } catch (e) {
+        console.log("Ошибка парсинга Steam: ", e);
+        return null;
+    }
+}
 
 async function postToChannel(text) {
     if (!BOT_TOKEN || !CHAT_ID) {
@@ -20,24 +49,15 @@ async function postToChannel(text) {
             })
         });
         const data = await response.json();
-        if (data.ok) {
-            console.log("✅ Пост успешно отправлен!");
-        } else {
-            console.log("❌ Ошибка Telegram: ", data.description);
-        }
+        if (data.ok) console.log("✅ Пост успешно отправлен!");
+        else console.log("❌ Ошибка Telegram: ", data.description);
     } catch (e) {
         console.log("❌ Ошибка сети: ", e);
     }
 }
 
 async function main() {
-    // В GitHub Actions время в UTC! 
-    // МСК = UTC + 3.
-    // Значит, если нам нужно 10:00 МСК, то скрипт запустится в 07:00 UTC.
-    // Но так как мы запускаем скрипт каждый час, он просто проверит текущий час.
-    
     const now = new Date();
-    // Переводим в МСК
     const mskTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
     const hour = mskTime.getHours();
     
@@ -45,22 +65,26 @@ async function main() {
 
     let message = "";
     
-    if (hour === 10) {
-        message = "🔥 <b>Доброе утро!</b>\n\nНачинаем день с отличных скидок в Steam. Загляни в наш мини-кейс — сегодня там бесплатная игра!";
-    } else if (hour === 12) {
-        message = "🎁 <b>Кейс дня уже доступен!</b>\n\nТри бесплатных открытия ждут тебя. Шансы: 33/33/22/10/2%. Забирай свои скидки!";
-    } else if (hour === 15) {
-        message = "🎮 <b>Находка дня</b>\n\nНашел отличную игру за копейки. Проверь закрепленное сообщение, чтобы забрать бесплатный кейс!";
-    } else if (hour === 18) {
-        message = "📊 <b>Статистика дня</b>\n\nКак прошел день? Успел забрать свои скидки? Напоминаю, что каждый 16-й кейс гарантирует скидку от 85%!";
-    } else if (hour === 21) {
-        message = "🌙 <b>Вечерний дайджест</b>\n\nУстал после работы? Самое время зайти в канал и забрать свои 3 бесплатных кейса. Там точно есть что-то стоящее!";
+    // Если это время для поста
+    if ([10, 12, 15, 18, 21].includes(hour)) {
+        console.log("Время для поста! Ищу игру...");
+        const game = await getRandomGame();
+        
+        if (game) {
+            message = `🔥 <b>Скидка дня в Steam!</b>\n\n`;
+            message += `🎮 <b>${game.name}</b>\n`;
+            message += `💰 Цена: <s>${game.original_price} ₽</s> <b>${game.final_price} ₽</b> (-${game.discount}%)\n\n`;
+            message += `👉 <a href="${game.url}">Купить в Steam</a>\n\n`;
+            message += `А еще у нас есть бесплатный кейс дня! Заходи в мини-приложение.`;
+        } else {
+            message = "Не удалось найти скидки. Проверьте логи.";
+        }
+        
+        await postToChannel(message);
     } else {
         console.log("Не время для поста. Ждем следующего часа.");
         return;
     }
-
-    await postToChannel(message);
 }
 
 main();
