@@ -29,7 +29,7 @@ function silero(text, tmp, outWav) {
   run('python3', [__dirname + '/tts_silero.py', f, outWav + '.raw.wav']);
   if (!fs.existsSync(outWav + '.raw.wav') || fs.statSync(outWav + '.raw.wav').size < 5000) throw new Error('silero пусто');
   // подъём тона на 5%
-  run('ffmpeg', ['-y', '-i', outWav + '.raw.wav', '-af', 'asetrate=48000*1.05,aresample=48000,atempo=0.952', '-ar', '44100', '-ac', '1', outWav]);
+  run('ffmpeg', ['-y', '-i', outWav + '.raw.wav', '-af', 'asetrate=48000*1.05,aresample=48000,atempo=0.885', '-ar', '44100', '-ac', '1', outWav]);
 }
 
 function piper(text, tmp, outWav) {
