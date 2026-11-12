@@ -5,6 +5,7 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const { Resvg } = require('@resvg/resvg-js');
 const { tts } = require('./tts');
+const { rubles, percent, numWords, plural } = require('./numru');
 
 const TOKEN = (process.env.TELEGRAM_TOKEN || '').trim();
 const OWNER = (process.env.OWNER_CHAT_ID || '').trim();
@@ -159,7 +160,8 @@ function sendVideo(file, caption) {
   const idxWords = ['Первая', 'Вторая', 'Третья', 'Четвёртая', 'Пятая', 'Шестая'];
   const segs = [];
 
-  const introText = 'Минус девяносто процентов на игры — и это не опечатка. ' + picks.length + ' штук, которые сегодня стоят дешевле кофе. Поехали.';
+  const countWords = numWords(picks.length) + ' ' + plural(picks.length, ['штука', 'штуки', 'штук']);
+  const introText = 'Минус девяносто процентов на игры — и это не опечатка. ' + countWords + ', которые сегодня стоят дешевле кофе. Поехали.';
   segs.push({ kind: 'intro', text: introText, head: '−90%', sub: 'и это не опечатка', third: picks.length + ' игр дешевле кофе' });
 
   picks.forEach((p, i) => {
@@ -167,7 +169,7 @@ function sendVideo(file, caption) {
     const d1 = String(p.desc || '').split(/(?<=[.!?])\s/)[0].replace(/\.$/, '');
     const short = d1.length > 90 ? d1.slice(0, 90).replace(/\s+\S*$/, '') : d1;
     const text = w + '. ' + (short ? short + '. ' : '') +
-      'Сейчас ' + num(p.final) + ' рублей, а было ' + num(p.initial) + '. Скидка ' + p.discount + ' процентов.';
+      'Сейчас ' + rubles(num(p.final)) + ', а было ' + rubles(num(p.initial)) + '. Скидка ' + percent(p.discount) + '.';
     segs.push({ kind: 'card', pick: p, text });
   });
 
