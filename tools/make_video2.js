@@ -153,14 +153,16 @@ async function sendVideo(file, caption) {
   const feed = await getJson('https://www.cheapshark.com/api/1.0/deals?storeID=1&onSale=1&sortBy=Deal%20Rating&pageSize=150');
   const used = loadUsed();
   const nowMs = Date.now();
-  const isFresh = id => { const t = used[String(id)]; return !t || (nowMs - t) > EXCLUDE_DAYS * 86400000; };
+  const norm = t => String(t || '').toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+  const everUsed = (id, title) => !!(used['id:' + id] || used['t:' + norm(title)]);
   let skippedUsed = 0;
+  feed.sort((a, b) => Number(b.lastChange || 0) - Number(a.lastChange || 0));
   const picks = [];
   for (const d of feed) {
     if (picks.length >= PICK_COUNT) break;
     const appid = d.steamAppID;
     if (!appid || Number(d.savings) < 45) continue;
-    if (!isFresh(appid)) { skippedUsed++; continue; }
+    if (everUsed(appid, d.title)) { skippedUsed++; continue; }
     try {
       const j = await getJson('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=ru&l=russian');
       const dd = j[String(appid)], data = dd && dd.success && dd.data, p = data && data.price_overview;
@@ -180,8 +182,7 @@ async function sendVideo(file, caption) {
       const appid = d.steamAppID;
       if (!appid || Number(d.savings) < 40) continue;
       if (picks.some(x => String(x.appid) === String(appid))) continue;
-      const t = used[String(appid)];
-      if (t && (nowMs - t) < 3 * 86400000) continue;
+      if (everUsed(appid, d.title)) continue;
       try {
         const j = await getJson('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=ru&l=russian');
         const dd = j[String(appid)], data = dd && dd.success && dd.data, pr = data && data.price_overview;
@@ -288,7 +289,7 @@ async function sendVideo(file, caption) {
   log('готово: ' + Math.round(fs.statSync(TMP + '/final.mp4').size / 1024) + ' КБ, ' + dur(TMP + '/final.mp4').toFixed(1) + ' с');
 
   if (!TOKEN || !OWNER) { log('без токена: файл только на раннере'); return; }
-  for (const p of picks) used[String(p.appid)] = Date.now();
+  for (const p of picks) { used['id:' + String(p.appid)] = Date.now(); used['t:' + norm(p.title)] = Date.now(); }
   saveUsed(used);
   log('в память записано игр: ' + Object.keys(used).length);
   const r = await sendVideo(TMP + '/final.mp4', 'Версия 4: голос синхронизирован с кадрами, цены и скидки проговариваются.');
