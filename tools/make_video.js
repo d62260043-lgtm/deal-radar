@@ -14,8 +14,10 @@ const TMP = '/tmp/v4';
 const FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
 const FONT2 = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
 const W = 1080, H = 1920, FPS = 12, OUT_W = 720, OUT_H = 1280;
-const PICK_COUNT = Math.max(3, Math.min(6, Number(process.env.PICK_COUNT || 5)));
-const PAD = 0.18;
+// Берем 7 игр, чтобы точно перевалить за минуту
+const PICK_COUNT = Math.max(3, Math.min(8, Number(process.env.PICK_COUNT || 7)));
+// Увеличиваем паузу между фразами до 0.4 секунды
+const PAD = 0.40;
 
 // --- НАСТРОЙКИ ПАМЯТИ ---
 const USED_FILE = 'used_games.json'; // Файл в корне репозитория
