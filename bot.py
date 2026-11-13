@@ -1,24 +1,27 @@
 import os
 import json
 import urllib.request
-import urllib.parse
+import base64
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
+# Переменные окружения (берутся из Render)
 BOT_TOKEN = os.environ.get("ROCKET_BOT_TOKEN")
 ALTROUTER_KEY = os.environ.get("ALTROUTER_KEY")
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") # Нам нужен новый токен
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 REPO = "d62260043-lgtm/deal-radar"
 
 API_URL = "https://api.altrouter.ai/v1/chat/completions"
 
 def ask_ai(text):
     system_prompt = """Ты — ROCKET, продвинутый ИИ-агент и разработчик проекта 'Радар Скидок'. 
-    Ты управляешь GitHub репозиторием. Если пользователь просит что-то сделать, ты можешь выполнить команду, вернув JSON.
-    Доступные команды:
-    1. Читать файл: {"command": "read_file", "path": "autopilot.js"}
-    2. Обновить файл: {"command": "update_file", "path": "autopilot.js", "content": "новый код", "message": "коммит"}
-    3. Запустить Action: {"command": "run_workflow", "workflow_id": "video.yml"}
-    Если команда не нужна, просто отвечай текстом."""
+Ты управляешь GitHub репозиторием. Если пользователь просит что-то сделать (прочитать файл, изменить код, запустить видео), ты ДОЛЖЕН вернуть ТОЛЬКО JSON с командой.
+Доступные команды:
+1. Читать файл: {"command": "read_file", "path": "autopilot.js"}
+2. Обновить файл: {"command": "update_file", "path": "autopilot.js", "content": "новый код", "message": "коммит"}
+3. Запустить Action: {"command": "run_workflow", "workflow_id": "video.yml"}
+
+Если пользователь просто болтает, отвечай обычным текстом без JSON.
+"""
     
     payload = {
         "model": "gemini-3.1-pro",
@@ -62,16 +65,13 @@ def execute_command(cmd_json):
     if cmd == "read_file":
         res = github_api_request(f"contents/{cmd_json['path']}")
         if "content" in res:
-            import base64
             return base64.b64decode(res["content"]).decode('utf-8')
         return "Файл не найден."
         
     elif cmd == "update_file":
-        # Сначала получаем sha файла
         res = github_api_request(f"contents/{cmd_json['path']}")
         sha = res.get("sha") if "sha" in res else None
         
-        import base64
         content_b64 = base64.b64encode(cmd_json["content"].encode('utf-8')).decode('utf-8')
         
         data = {
@@ -85,7 +85,6 @@ def execute_command(cmd_json):
         return f"Файл {cmd_json['path']} успешно обновлен."
         
     elif cmd == "run_workflow":
-        # Запуск воркфлоу
         data = {"ref": "main"}
         github_api_request(f"actions/workflows/{cmd_json['workflow_id']}/dispatches", method="POST", data=data)
         return f"Воркфлоу {cmd_json['workflow_id']} запущен."
