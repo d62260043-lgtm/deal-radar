@@ -1,0 +1,17 @@
+name: Render Keep-Alive
+
+on:
+  schedule:
+    # Запуск каждые 10 минут
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Позволяет запустить вручную для проверки
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render App
+        run: |
+          echo "Отправляю запрос на Render..."
+          curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" https://deal-radar-biau.onrender.com/
+          echo "Запрос выполнен."
