@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '20'
 
-      # --- НОВЫЙ ШАГ: ВОССТАНАВЛИВАЕМ ПАМЯТЬ ---
+      # 1. Восстанавливаем память из кэша
       - name: Restore Game Memory
         uses: actions/cache@v4
         with:
@@ -25,22 +25,35 @@ jobs:
           restore-keys: |
             video-memory-
 
+      # 2. Ставим библиотеку для отрисовки маскота
+      - name: Install resvg
+        run: npm i --no-audit --no-fund @resvg/resvg-js@2
+
+      # 3. Ставим ffmpeg
       - name: Install ffmpeg (static build)
         timeout-minutes: 6
         run: |
           curl -sL https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linux64-gpl.tar.xz -o /tmp/ff.tar.xz
           mkdir -p /tmp/ff && tar xf /tmp/ff.tar.xz -C /tmp/ff --strip-components=1
           sudo cp "$(find /tmp/ff -name ffmpeg -type f | head -1)" /usr/local/bin/ffmpeg
+          sudo cp "$(find /tmp/ff -name ffprobe -type f | head -1)" /usr/local/bin/ffprobe
           ffmpeg -version | head -1
-          ffmpeg -hide_banner -filters 2>/dev/null | grep -c drawtext || echo "drawtext НЕТ"
 
+      # 4. Ставим Python и библиотеки для озвучки (Silero / Piper)
+      - name: Install TTS (Silero + Piper)
+        timeout-minutes: 12
+        run: |
+          python3 -m pip install --quiet numpy torch --index-url https://download.pytorch.org/whl/cpu
+          python3 -m pip install --quiet piper-tts
+
+      # 5. Запускаем сборку видео
       - name: Build and send video
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           OWNER_CHAT_ID: ${{ secrets.OWNER_CHAT_ID }}
         run: node tools/make_video.js
 
-      # --- НОВЫЙ ШАГ: СОХРАНЯЕМ ПАМЯТЬ ---
+      # 6. Сохраняем память в кэш для следующего запуска
       - name: Save Game Memory
         uses: actions/cache/save@v4
         if: always()
@@ -48,9 +61,10 @@ jobs:
           path: used_games.json
           key: video-memory-${{ github.run_id }}
 
-      - name: Save video
+      # 7. Сохраняем готовое видео, чтобы можно было скачать
+      - name: Save video artifact
         if: always()
-        run: cp /tmp/vid/deals.mp4 ./deals.mp4 || true
+        run: cp /tmp/v4/final.mp4 ./deals.mp4 || true
         
       - uses: actions/upload-artifact@v4
         if: always()
