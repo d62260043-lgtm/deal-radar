@@ -11,9 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      # --- НОВЫЙ ШАГ: ВОССТАНАВЛИВАЕМ ПАМЯТЬ ---
+      - name: Restore Game Memory
+        uses: actions/cache@v4
+        with:
+          path: used_games.json
+          key: video-memory-${{ github.run_id }}
+          restore-keys: |
+            video-memory-
+
       - name: Install ffmpeg (static build)
         timeout-minutes: 6
         run: |
@@ -22,14 +33,25 @@ jobs:
           sudo cp "$(find /tmp/ff -name ffmpeg -type f | head -1)" /usr/local/bin/ffmpeg
           ffmpeg -version | head -1
           ffmpeg -hide_banner -filters 2>/dev/null | grep -c drawtext || echo "drawtext НЕТ"
+
       - name: Build and send video
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           OWNER_CHAT_ID: ${{ secrets.OWNER_CHAT_ID }}
         run: node tools/make_video.js
+
+      # --- НОВЫЙ ШАГ: СОХРАНЯЕМ ПАМЯТЬ ---
+      - name: Save Game Memory
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: used_games.json
+          key: video-memory-${{ github.run_id }}
+
       - name: Save video
         if: always()
         run: cp /tmp/vid/deals.mp4 ./deals.mp4 || true
+        
       - uses: actions/upload-artifact@v4
         if: always()
         with:
