@@ -1,6 +1,7 @@
 import os
 import json
 import urllib.request
+import traceback
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 BOT_TOKEN = os.environ.get("ROCKET_BOT_TOKEN")
@@ -14,9 +15,8 @@ def send_message(text):
     req = urllib.request.Request(url, data=data, headers={'Content-Type': 'application/json'})
     try:
         urllib.request.urlopen(req)
-        print(f"Сообщение отправлено: {text}")
     except Exception as e:
-        print(f"Ошибка отправки в ТГ: {e}")
+        print(f"Ошибка отправки ТГ: {e}")
 
 def trigger_action(workflow):
     url = f"https://api.github.com/repos/{REPO}/actions/workflows/{workflow}/dispatches"
@@ -26,38 +26,33 @@ def trigger_action(workflow):
     req.add_header("Accept", "application/vnd.github.v3+json")
     try:
         urllib.request.urlopen(req)
-        print(f"GitHub Action {workflow} успешно запущен!")
         return True
     except Exception as e:
-        print(f"Ошибка запуска GitHub Action: {e}")
-        return False
+        return f"Ошибка GitHub: {e}"
 
 class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
             length = int(self.headers.get('Content-Length', 0))
-            if length == 0:
-                self.send_response(200)
-                self.end_headers()
-                return
-                
             body = json.loads(self.rfile.read(length).decode('utf-8'))
-            print(f"Получен запрос от Telegram: {body}")
             
             if "message" in body and "text" in body["message"]:
                 text = body["message"]["text"].strip().lower()
+                send_message(f"Получил команду: {text}")
                 
                 if text == "/post":
-                    send_message("Запускаю пост в канал...")
-                    trigger_action("autopilot.yml")
+                    res = trigger_action("autopilot.yml")
+                    send_message(f"Результат: {res}" if res is True else str(res))
                 elif text == "/video":
-                    send_message("Запускаю генерацию видео...")
-                    trigger_action("video.yml")
+                    res = trigger_action("video.yml")
+                    send_message(f"Результат: {res}" if res is True else str(res))
                 else:
-                    send_message("Я ROCKET. Доступные команды:\n/post - сделать пост\n/video - сделать видео")
+                    send_message("Я жив! Доступные команды: /post, /video")
         except Exception as e:
-            print(f"Ошибка обработки: {e}")
-        
+            error_text = f"ОШИБКА: {traceback.format_exc()}"
+            print(error_text)
+            send_message(error_text[:4000]) # Отправляем ошибку тебе в ТГ
+            
         self.send_response(200)
         self.end_headers()
 
