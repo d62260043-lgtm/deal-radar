@@ -5,13 +5,16 @@ import traceback
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 BOT_TOKEN = os.environ.get("ROCKET_BOT_TOKEN")
-OWNER_ID = os.environ.get("OWNER_CHAT_ID")
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 REPO = "d62260043-lgtm/deal-radar"
 
-def send_message(text):
+def send_message(chat_id, text, reply_markup=None):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    data = json.dumps({"chat_id": OWNER_ID, "text": text}).encode('utf-8')
+    payload = {"chat_id": chat_id, "text": text, "parse_mode": "HTML"}
+    if reply_markup:
+        payload["reply_markup"] = reply_markup
+    
+    data = json.dumps(payload).encode('utf-8')
     req = urllib.request.Request(url, data=data, headers={'Content-Type': 'application/json'})
     try:
         urllib.request.urlopen(req)
@@ -37,21 +40,48 @@ class Handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length).decode('utf-8'))
             
             if "message" in body and "text" in body["message"]:
+                chat_id = body["message"]["chat"]["id"] # Берем ID из сообщения!
                 text = body["message"]["text"].strip().lower()
-                send_message(f"Получил команду: {text}")
                 
-                if text == "/post":
-                    res = trigger_action("autopilot.yml")
-                    send_message(f"Результат: {res}" if res is True else str(res))
-                elif text == "/video":
+                # Кнопки меню
+                keyboard = {
+                    "keyboard": [
+                        [{"text": "🎬 Сделать видео"}, {"text": "📝 Сделать пост"}]
+                    ],
+                    "resize_keyboard": True
+                }
+
+                if text in ["/start", "привет"]:
+                    send_message(chat_id, "Я ROCKET. Управляю каналом 24/7. Выбери действие:", keyboard)
+                
+                elif text == "/video" or text == "🎬 сделать видео":
+                    send_message(chat_id, "Запускаю генерацию видео...")
                     res = trigger_action("video.yml")
-                    send_message(f"Результат: {res}" if res is True else str(res))
+                    if res is True:
+                        send_message(chat_id, "✅ Сборка видео запущена. Ожидай в личке.")
+                    else:
+                        send_message(chat_id, f"❌ {res}")
+                
+                elif text == "/post" or text == "📝 сделать пост":
+                    send_message(chat_id, "Запускаю пост в канал...")
+                    res = trigger_action("autopilot.yml")
+                    if res is True:
+                        send_message(chat_id, "✅ Пост отправлен в GitHub. Скоро появится.")
+                    else:
+                        send_message(chat_id, f"❌ {res}")
+                
                 else:
-                    send_message("Я жив! Доступные команды: /post, /video")
+                    send_message(chat_id, "Неизвестная команда. Используй кнопки ниже.", keyboard)
+                    
         except Exception as e:
             error_text = f"ОШИБКА: {traceback.format_exc()}"
             print(error_text)
-            send_message(error_text[:4000]) # Отправляем ошибку тебе в ТГ
+            # Если что-то упало, пробуем отправить ошибку в чат
+            try:
+                if "chat_id" in locals():
+                    send_message(chat_id, error_text[:4000])
+            except:
+                pass
             
         self.send_response(200)
         self.end_headers()
