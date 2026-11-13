@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T17:21:37.546Z",
+ "updated": "2026-11-13T16:56:31.944Z",
  "items": [
   {
    "appid": "2132890",
@@ -8,7 +8,7 @@
    "final": "69 руб.",
    "initial": "465 руб.",
    "discount": 85,
-   "rating": "75",
+   "rating": "74",
    "url": "https://store.steampowered.com/app/2132890/"
   },
   {
@@ -52,6 +52,16 @@
    "url": "https://store.steampowered.com/app/245450/"
   },
   {
+   "appid": "594130",
+   "title": "Winds of Change",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/594130/capsule_616x353.jpg",
+   "final": "41 руб.",
+   "initial": "419 руб.",
+   "discount": 90,
+   "rating": "95",
+   "url": "https://store.steampowered.com/app/594130/"
+  },
+  {
    "appid": "1496590",
    "title": "Tchia",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1496590/capsule_616x353.jpg",
@@ -70,6 +80,16 @@
    "discount": 90,
    "rating": "90",
    "url": "https://store.steampowered.com/app/512790/"
+  },
+  {
+   "appid": "206190",
+   "title": "Gunpoint",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/206190/capsule_616x353.jpg",
+   "final": "49 руб.",
+   "initial": "249 руб.",
+   "discount": 80,
+   "rating": "97",
+   "url": "https://store.steampowered.com/app/206190/"
   },
   {
    "appid": "4560",
@@ -142,6 +162,16 @@
    "url": "https://store.steampowered.com/app/477740/"
   },
   {
+   "appid": "268130",
+   "title": "Heat Signature",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/268130/capsule_616x353.jpg",
+   "final": "69 руб.",
+   "initial": "349 руб.",
+   "discount": 80,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/268130/"
+  },
+  {
    "appid": "598550",
    "title": "Huntdown",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/598550/capsule_616x353.jpg",
@@ -178,7 +208,7 @@
    "final": "1007 руб.",
    "initial": "1550 руб.",
    "discount": 35,
-   "rating": "92",
+   "rating": "86",
    "url": "https://store.steampowered.com/app/5130120/"
   },
   {
@@ -210,36 +240,6 @@
    "discount": 80,
    "rating": "86",
    "url": "https://store.steampowered.com/app/505640/"
-  },
-  {
-   "appid": "523780",
-   "title": "Emily is Away Too",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/523780/capsule_616x353.jpg",
-   "final": "25 руб.",
-   "initial": "129 руб.",
-   "discount": 81,
-   "rating": "93",
-   "url": "https://store.steampowered.com/app/523780/"
-  },
-  {
-   "appid": "527230",
-   "title": "For The King",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/527230/capsule_616x353.jpg",
-   "final": "43 руб.",
-   "initial": "435 руб.",
-   "discount": 90,
-   "rating": "88",
-   "url": "https://store.steampowered.com/app/527230/"
-  },
-  {
-   "appid": "446800",
-   "title": "Transport Fever",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/446800/capsule_616x353.jpg",
-   "final": "110 руб.",
-   "initial": "1100 руб.",
-   "discount": 90,
-   "rating": "80",
-   "url": "https://store.steampowered.com/app/446800/"
   }
  ],
  "free": [
