@@ -1,6 +1,16 @@
 {
- "updated": "2026-11-13T16:56:31.944Z",
+ "updated": "2026-11-14T15:33:36.469Z",
  "items": [
+  {
+   "appid": "773370",
+   "title": "Exo One",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/773370/capsule_616x353.jpg",
+   "final": "93 руб.",
+   "initial": "620 руб.",
+   "discount": 85,
+   "rating": "90",
+   "url": "https://store.steampowered.com/app/773370/"
+  },
   {
    "appid": "2132890",
    "title": "Possessor(s)",
@@ -42,6 +52,16 @@
    "url": "https://store.steampowered.com/app/1449200/"
   },
   {
+   "appid": "331480",
+   "title": "Pinstripe",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/331480/capsule_616x353.jpg",
+   "final": "55 руб.",
+   "initial": "550 руб.",
+   "discount": 90,
+   "rating": "89",
+   "url": "https://store.steampowered.com/app/331480/"
+  },
+  {
    "appid": "245450",
    "title": "Wizardry 8",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/245450/capsule_616x353.jpg",
@@ -50,6 +70,16 @@
    "discount": 85,
    "rating": "89",
    "url": "https://store.steampowered.com/app/245450/"
+  },
+  {
+   "appid": "1430680",
+   "title": "Clash - Artifacts of Chaos",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1430680/capsule_616x353.jpg",
+   "final": "119,90 руб.",
+   "initial": "1199 руб.",
+   "discount": 90,
+   "rating": "90",
+   "url": "https://store.steampowered.com/app/1430680/"
   },
   {
    "appid": "594130",
@@ -208,38 +238,8 @@
    "final": "1007 руб.",
    "initial": "1550 руб.",
    "discount": 35,
-   "rating": "86",
+   "rating": "82",
    "url": "https://store.steampowered.com/app/5130120/"
-  },
-  {
-   "appid": "115800",
-   "title": "Owlboy",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/115800/capsule_616x353.jpg",
-   "final": "69 руб.",
-   "initial": "699 руб.",
-   "discount": 90,
-   "rating": "85",
-   "url": "https://store.steampowered.com/app/115800/"
-  },
-  {
-   "appid": "1619520",
-   "title": "Cross Blitz",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1619520/capsule_616x353.jpg",
-   "final": "201,58 руб.",
-   "initial": "809,58 руб.",
-   "discount": 75,
-   "rating": "74",
-   "url": "https://store.steampowered.com/app/1619520/"
-  },
-  {
-   "appid": "505640",
-   "title": "Antihero",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/505640/capsule_616x353.jpg",
-   "final": "110 руб.",
-   "initial": "550 руб.",
-   "discount": 80,
-   "rating": "86",
-   "url": "https://store.steampowered.com/app/505640/"
   }
  ],
  "free": [
