@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-14T15:33:36.469Z",
+ "updated": "2026-11-15T16:04:19.001Z",
  "items": [
   {
    "appid": "773370",
@@ -92,6 +92,26 @@
    "url": "https://store.steampowered.com/app/594130/"
   },
   {
+   "appid": "207690",
+   "title": "Botanicula",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/207690/capsule_616x353.jpg",
+   "final": "109 руб.",
+   "initial": "549 руб.",
+   "discount": 80,
+   "rating": "95",
+   "url": "https://store.steampowered.com/app/207690/"
+  },
+  {
+   "appid": "956030",
+   "title": "Creaks",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/956030/capsule_616x353.jpg",
+   "final": "149 руб.",
+   "initial": "749 руб.",
+   "discount": 80,
+   "rating": "96",
+   "url": "https://store.steampowered.com/app/956030/"
+  },
+  {
    "appid": "1496590",
    "title": "Tchia",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1496590/capsule_616x353.jpg",
@@ -100,6 +120,36 @@
    "discount": 90,
    "rating": "88",
    "url": "https://store.steampowered.com/app/1496590/"
+  },
+  {
+   "appid": "1206060",
+   "title": "Happy Game",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1206060/capsule_616x353.jpg",
+   "final": "109 руб.",
+   "initial": "549 руб.",
+   "discount": 80,
+   "rating": "88",
+   "url": "https://store.steampowered.com/app/1206060/"
+  },
+  {
+   "appid": "717610",
+   "title": "A Case of Distrust",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/717610/capsule_616x353.jpg",
+   "final": "110 руб.",
+   "initial": "550 руб.",
+   "discount": 80,
+   "rating": "86",
+   "url": "https://store.steampowered.com/app/717610/"
+  },
+  {
+   "appid": "1049280",
+   "title": "Pilgrims",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1049280/capsule_616x353.jpg",
+   "final": "55 руб.",
+   "initial": "279 руб.",
+   "discount": 80,
+   "rating": "95",
+   "url": "https://store.steampowered.com/app/1049280/"
   },
   {
    "appid": "512790",
@@ -120,6 +170,16 @@
    "discount": 80,
    "rating": "97",
    "url": "https://store.steampowered.com/app/206190/"
+  },
+  {
+   "appid": "421120",
+   "title": "Samorost 3",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/421120/capsule_616x353.jpg",
+   "final": "149 руб.",
+   "initial": "749 руб.",
+   "discount": 80,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/421120/"
   },
   {
    "appid": "4560",
@@ -180,66 +240,6 @@
    "discount": 80,
    "rating": "93",
    "url": "https://store.steampowered.com/app/252130/"
-  },
-  {
-   "appid": "477740",
-   "title": "Zero Escape: The Nonary Games",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/477740/capsule_616x353.jpg",
-   "final": "227 руб.",
-   "initial": "1139 руб.",
-   "discount": 80,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/477740/"
-  },
-  {
-   "appid": "268130",
-   "title": "Heat Signature",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/268130/capsule_616x353.jpg",
-   "final": "69 руб.",
-   "initial": "349 руб.",
-   "discount": 80,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/268130/"
-  },
-  {
-   "appid": "598550",
-   "title": "Huntdown",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/598550/capsule_616x353.jpg",
-   "final": "219 руб.",
-   "initial": "1099 руб.",
-   "discount": 80,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/598550/"
-  },
-  {
-   "appid": "966670",
-   "title": "The Wanderer: Frankensteins Creature",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/966670/capsule_616x353.jpg",
-   "final": "37 руб.",
-   "initial": "372 руб.",
-   "discount": 90,
-   "rating": "84",
-   "url": "https://store.steampowered.com/app/966670/"
-  },
-  {
-   "appid": "207140",
-   "title": "SpeedRunners",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/207140/capsule_616x353.jpg",
-   "final": "110 руб.",
-   "initial": "550 руб.",
-   "discount": 80,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/207140/"
-  },
-  {
-   "appid": "5130120",
-   "title": "Evenicle - Next Fragment Medica",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/5130120/capsule_616x353.jpg",
-   "final": "1007 руб.",
-   "initial": "1550 руб.",
-   "discount": 35,
-   "rating": "82",
-   "url": "https://store.steampowered.com/app/5130120/"
   }
  ],
  "free": [
