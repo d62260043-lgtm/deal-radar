@@ -1,6 +1,16 @@
 {
- "updated": "2026-11-15T16:04:19.001Z",
+ "updated": "2026-11-16T19:15:52.602Z",
  "items": [
+  {
+   "appid": "40700",
+   "title": "Machinarium",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/40700/capsule_616x353.jpg",
+   "final": "112 руб.",
+   "initial": "749 руб.",
+   "discount": 85,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/40700/"
+  },
   {
    "appid": "773370",
    "title": "Exo One",
@@ -132,6 +142,16 @@
    "url": "https://store.steampowered.com/app/1206060/"
   },
   {
+   "appid": "2933080",
+   "title": "Crime Boss: Rockay City",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/2933080/capsule_616x353.jpg",
+   "final": "101 руб.",
+   "initial": "1019 руб.",
+   "discount": 90,
+   "rating": "73",
+   "url": "https://store.steampowered.com/app/2933080/"
+  },
+  {
    "appid": "717610",
    "title": "A Case of Distrust",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/717610/capsule_616x353.jpg",
@@ -202,26 +222,6 @@
    "url": "https://store.steampowered.com/app/475550/"
   },
   {
-   "appid": "269670",
-   "title": "BADLAND: Game of the Year Edition",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/269670/capsule_616x353.jpg",
-   "final": "37 руб.",
-   "initial": "249 руб.",
-   "discount": 85,
-   "rating": "81",
-   "url": "https://store.steampowered.com/app/269670/"
-  },
-  {
-   "appid": "1227690",
-   "title": "Severed Steel",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1227690/capsule_616x353.jpg",
-   "final": "32 руб.",
-   "initial": "465 руб.",
-   "discount": 93,
-   "rating": "95",
-   "url": "https://store.steampowered.com/app/1227690/"
-  },
-  {
    "appid": "312780",
    "title": "Way of the Samurai 4",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/312780/capsule_616x353.jpg",
@@ -232,14 +232,14 @@
    "url": "https://store.steampowered.com/app/312780/"
   },
   {
-   "appid": "252130",
-   "title": "Divide By Sheep",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/252130/capsule_616x353.jpg",
-   "final": "40 руб.",
-   "initial": "200 руб.",
+   "appid": "1766100",
+   "title": "The Last Hero of Nostalgaia",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1766100/capsule_616x353.jpg",
+   "final": "93 руб.",
+   "initial": "465 руб.",
    "discount": 80,
-   "rating": "93",
-   "url": "https://store.steampowered.com/app/252130/"
+   "rating": "78",
+   "url": "https://store.steampowered.com/app/1766100/"
   }
  ],
  "free": [
