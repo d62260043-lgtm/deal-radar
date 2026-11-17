@@ -1,6 +1,46 @@
 {
- "updated": "2026-11-16T19:15:52.602Z",
+ "updated": "2026-11-17T18:08:42.316Z",
  "items": [
+  {
+   "appid": "1293170",
+   "title": "Bzzzt",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1293170/capsule_616x353.jpg",
+   "final": "92 руб.",
+   "initial": "460 руб.",
+   "discount": 80,
+   "rating": "93",
+   "url": "https://store.steampowered.com/app/1293170/"
+  },
+  {
+   "appid": "261470",
+   "title": "Distant Worlds: Universe",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/261470/capsule_616x353.jpg",
+   "final": "110 руб.",
+   "initial": "1100 руб.",
+   "discount": 90,
+   "rating": "71",
+   "url": "https://store.steampowered.com/app/261470/"
+  },
+  {
+   "appid": "319450",
+   "title": "Chariot",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/319450/capsule_616x353.jpg",
+   "final": "34 руб.",
+   "initial": "349 руб.",
+   "discount": 90,
+   "rating": "81",
+   "url": "https://store.steampowered.com/app/319450/"
+  },
+  {
+   "appid": "676630",
+   "title": "Attentat 1942",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/676630/capsule_616x353.jpg",
+   "final": "26 руб.",
+   "initial": "269 руб.",
+   "discount": 90,
+   "rating": "92",
+   "url": "https://store.steampowered.com/app/676630/"
+  },
   {
    "appid": "40700",
    "title": "Machinarium",
@@ -10,6 +50,36 @@
    "discount": 85,
    "rating": "94",
    "url": "https://store.steampowered.com/app/40700/"
+  },
+  {
+   "appid": "1228500",
+   "title": "1428: Shadows over Silesia",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1228500/capsule_616x353.jpg",
+   "final": "119 руб.",
+   "initial": "799 руб.",
+   "discount": 85,
+   "rating": "72",
+   "url": "https://store.steampowered.com/app/1228500/"
+  },
+  {
+   "appid": "864540",
+   "title": "Fallback",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/864540/capsule_616x353.jpg",
+   "final": "31 руб.",
+   "initial": "259 руб.",
+   "discount": 88,
+   "rating": "87",
+   "url": "https://store.steampowered.com/app/864540/"
+  },
+  {
+   "appid": "1184480",
+   "title": "Inertial Drift",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1184480/capsule_616x353.jpg",
+   "final": "222,50 руб.",
+   "initial": "890 руб.",
+   "discount": 75,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/1184480/"
   },
   {
    "appid": "773370",
@@ -42,6 +112,16 @@
    "url": "https://store.steampowered.com/app/418460/"
   },
   {
+   "appid": "105800",
+   "title": "PixelJunk Eden",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/105800/capsule_616x353.jpg",
+   "final": "49 руб.",
+   "initial": "249 руб.",
+   "discount": 80,
+   "rating": "85",
+   "url": "https://store.steampowered.com/app/105800/"
+  },
+  {
    "appid": "413410",
    "title": "Danganronpa: Trigger Happy Havoc",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/413410/capsule_616x353.jpg",
@@ -52,6 +132,26 @@
    "url": "https://store.steampowered.com/app/413410/"
   },
   {
+   "appid": "269650",
+   "title": "Dex",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/269650/capsule_616x353.jpg",
+   "final": "41 руб.",
+   "initial": "419 руб.",
+   "discount": 90,
+   "rating": "83",
+   "url": "https://store.steampowered.com/app/269650/"
+  },
+  {
+   "appid": "423580",
+   "title": "Project Highrise",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/423580/capsule_616x353.jpg",
+   "final": "106 руб.",
+   "initial": "710 руб.",
+   "discount": 85,
+   "rating": "85",
+   "url": "https://store.steampowered.com/app/423580/"
+  },
+  {
    "appid": "1449200",
    "title": "AI: THE SOMNIUM FILES - nirvanA Initiative",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1449200/capsule_616x353.jpg",
@@ -60,6 +160,56 @@
    "discount": 85,
    "rating": "86",
    "url": "https://store.steampowered.com/app/1449200/"
+  },
+  {
+   "appid": "352550",
+   "title": "Urban Empire",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/352550/capsule_616x353.jpg",
+   "final": "169 руб.",
+   "initial": "1699 руб.",
+   "discount": 90,
+   "rating": "34",
+   "url": "https://store.steampowered.com/app/352550/"
+  },
+  {
+   "appid": "1154790",
+   "title": "XIII",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1154790/capsule_616x353.jpg",
+   "final": "179 руб.",
+   "initial": "1199 руб.",
+   "discount": 85,
+   "rating": "39",
+   "url": "https://store.steampowered.com/app/1154790/"
+  },
+  {
+   "appid": "1730590",
+   "title": "The Entropy Centre",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1730590/capsule_616x353.jpg",
+   "final": "119 руб.",
+   "initial": "599 руб.",
+   "discount": 80,
+   "rating": "87",
+   "url": "https://store.steampowered.com/app/1730590/"
+  },
+  {
+   "appid": "362890",
+   "title": "Black Mesa",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/362890/capsule_616x353.jpg",
+   "final": "177 руб.",
+   "initial": "710 руб.",
+   "discount": 75,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/362890/"
+  },
+  {
+   "appid": "585840",
+   "title": "Leaving Lyndow",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/585840/capsule_616x353.jpg",
+   "final": "33 руб.",
+   "initial": "165 руб.",
+   "discount": 80,
+   "rating": "81",
+   "url": "https://store.steampowered.com/app/585840/"
   },
   {
    "appid": "331480",
@@ -90,156 +240,6 @@
    "discount": 90,
    "rating": "90",
    "url": "https://store.steampowered.com/app/1430680/"
-  },
-  {
-   "appid": "594130",
-   "title": "Winds of Change",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/594130/capsule_616x353.jpg",
-   "final": "41 руб.",
-   "initial": "419 руб.",
-   "discount": 90,
-   "rating": "95",
-   "url": "https://store.steampowered.com/app/594130/"
-  },
-  {
-   "appid": "207690",
-   "title": "Botanicula",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/207690/capsule_616x353.jpg",
-   "final": "109 руб.",
-   "initial": "549 руб.",
-   "discount": 80,
-   "rating": "95",
-   "url": "https://store.steampowered.com/app/207690/"
-  },
-  {
-   "appid": "956030",
-   "title": "Creaks",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/956030/capsule_616x353.jpg",
-   "final": "149 руб.",
-   "initial": "749 руб.",
-   "discount": 80,
-   "rating": "96",
-   "url": "https://store.steampowered.com/app/956030/"
-  },
-  {
-   "appid": "1496590",
-   "title": "Tchia",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1496590/capsule_616x353.jpg",
-   "final": "185 руб.",
-   "initial": "1859 руб.",
-   "discount": 90,
-   "rating": "88",
-   "url": "https://store.steampowered.com/app/1496590/"
-  },
-  {
-   "appid": "1206060",
-   "title": "Happy Game",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1206060/capsule_616x353.jpg",
-   "final": "109 руб.",
-   "initial": "549 руб.",
-   "discount": 80,
-   "rating": "88",
-   "url": "https://store.steampowered.com/app/1206060/"
-  },
-  {
-   "appid": "2933080",
-   "title": "Crime Boss: Rockay City",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/2933080/capsule_616x353.jpg",
-   "final": "101 руб.",
-   "initial": "1019 руб.",
-   "discount": 90,
-   "rating": "73",
-   "url": "https://store.steampowered.com/app/2933080/"
-  },
-  {
-   "appid": "717610",
-   "title": "A Case of Distrust",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/717610/capsule_616x353.jpg",
-   "final": "110 руб.",
-   "initial": "550 руб.",
-   "discount": 80,
-   "rating": "86",
-   "url": "https://store.steampowered.com/app/717610/"
-  },
-  {
-   "appid": "1049280",
-   "title": "Pilgrims",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1049280/capsule_616x353.jpg",
-   "final": "55 руб.",
-   "initial": "279 руб.",
-   "discount": 80,
-   "rating": "95",
-   "url": "https://store.steampowered.com/app/1049280/"
-  },
-  {
-   "appid": "512790",
-   "title": "Quern - Undying Thoughts",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/512790/capsule_616x353.jpg",
-   "final": "44 руб.",
-   "initial": "449 руб.",
-   "discount": 90,
-   "rating": "90",
-   "url": "https://store.steampowered.com/app/512790/"
-  },
-  {
-   "appid": "206190",
-   "title": "Gunpoint",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/206190/capsule_616x353.jpg",
-   "final": "49 руб.",
-   "initial": "249 руб.",
-   "discount": 80,
-   "rating": "97",
-   "url": "https://store.steampowered.com/app/206190/"
-  },
-  {
-   "appid": "421120",
-   "title": "Samorost 3",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/421120/capsule_616x353.jpg",
-   "final": "149 руб.",
-   "initial": "749 руб.",
-   "discount": 80,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/421120/"
-  },
-  {
-   "appid": "4560",
-   "title": "Company of Heroes",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/4560/capsule_616x353.jpg",
-   "final": "299 руб.",
-   "initial": "1499 руб.",
-   "discount": 80,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/4560/"
-  },
-  {
-   "appid": "475550",
-   "title": "Beholder",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/475550/capsule_616x353.jpg",
-   "final": "52 руб.",
-   "initial": "520 руб.",
-   "discount": 90,
-   "rating": "81",
-   "url": "https://store.steampowered.com/app/475550/"
-  },
-  {
-   "appid": "312780",
-   "title": "Way of the Samurai 4",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/312780/capsule_616x353.jpg",
-   "final": "44 руб.",
-   "initial": "449 руб.",
-   "discount": 90,
-   "rating": "76",
-   "url": "https://store.steampowered.com/app/312780/"
-  },
-  {
-   "appid": "1766100",
-   "title": "The Last Hero of Nostalgaia",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1766100/capsule_616x353.jpg",
-   "final": "93 руб.",
-   "initial": "465 руб.",
-   "discount": 80,
-   "rating": "78",
-   "url": "https://store.steampowered.com/app/1766100/"
   }
  ],
  "free": [
