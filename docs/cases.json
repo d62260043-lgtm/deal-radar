@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-18T17:46:54.555Z",
+ "updated": "2026-11-19T17:57:49.141Z",
  "items": [
   {
    "appid": "1293170",
@@ -92,6 +92,16 @@
    "url": "https://store.steampowered.com/app/864540/"
   },
   {
+   "appid": "219990",
+   "title": "Grim Dawn",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/219990/capsule_616x353.jpg",
+   "final": "210 руб.",
+   "initial": "1050 руб.",
+   "discount": 80,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/219990/"
+  },
+  {
    "appid": "1184480",
    "title": "Inertial Drift",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1184480/capsule_616x353.jpg",
@@ -100,6 +110,16 @@
    "discount": 75,
    "rating": "84",
    "url": "https://store.steampowered.com/app/1184480/"
+  },
+  {
+   "appid": "3690030",
+   "title": "The Last Gas Station",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/3690030/capsule_616x353.jpg",
+   "final": "224 руб.",
+   "initial": "560 руб.",
+   "discount": 60,
+   "rating": "88",
+   "url": "https://store.steampowered.com/app/3690030/"
   },
   {
    "appid": "773370",
@@ -122,16 +142,6 @@
    "url": "https://store.steampowered.com/app/334310/"
   },
   {
-   "appid": "2132890",
-   "title": "Possessor(s)",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/2132890/capsule_616x353.jpg",
-   "final": "69 руб.",
-   "initial": "465 руб.",
-   "discount": 85,
-   "rating": "74",
-   "url": "https://store.steampowered.com/app/2132890/"
-  },
-  {
    "appid": "418460",
    "title": "Rising Storm 2: Vietnam",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/418460/capsule_616x353.jpg",
@@ -150,96 +160,6 @@
    "discount": 80,
    "rating": "85",
    "url": "https://store.steampowered.com/app/105800/"
-  },
-  {
-   "appid": "413410",
-   "title": "Danganronpa: Trigger Happy Havoc",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/413410/capsule_616x353.jpg",
-   "final": "78 руб.",
-   "initial": "782 руб.",
-   "discount": 90,
-   "rating": "95",
-   "url": "https://store.steampowered.com/app/413410/"
-  },
-  {
-   "appid": "269650",
-   "title": "Dex",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/269650/capsule_616x353.jpg",
-   "final": "41 руб.",
-   "initial": "419 руб.",
-   "discount": 90,
-   "rating": "83",
-   "url": "https://store.steampowered.com/app/269650/"
-  },
-  {
-   "appid": "423580",
-   "title": "Project Highrise",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/423580/capsule_616x353.jpg",
-   "final": "106 руб.",
-   "initial": "710 руб.",
-   "discount": 85,
-   "rating": "85",
-   "url": "https://store.steampowered.com/app/423580/"
-  },
-  {
-   "appid": "1449200",
-   "title": "AI: THE SOMNIUM FILES - nirvanA Initiative",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1449200/capsule_616x353.jpg",
-   "final": "300 руб.",
-   "initial": "2000 руб.",
-   "discount": 85,
-   "rating": "86",
-   "url": "https://store.steampowered.com/app/1449200/"
-  },
-  {
-   "appid": "352550",
-   "title": "Urban Empire",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/352550/capsule_616x353.jpg",
-   "final": "169 руб.",
-   "initial": "1699 руб.",
-   "discount": 90,
-   "rating": "34",
-   "url": "https://store.steampowered.com/app/352550/"
-  },
-  {
-   "appid": "1154790",
-   "title": "XIII",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1154790/capsule_616x353.jpg",
-   "final": "179 руб.",
-   "initial": "1199 руб.",
-   "discount": 85,
-   "rating": "39",
-   "url": "https://store.steampowered.com/app/1154790/"
-  },
-  {
-   "appid": "1730590",
-   "title": "The Entropy Centre",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1730590/capsule_616x353.jpg",
-   "final": "119 руб.",
-   "initial": "599 руб.",
-   "discount": 80,
-   "rating": "87",
-   "url": "https://store.steampowered.com/app/1730590/"
-  },
-  {
-   "appid": "362890",
-   "title": "Black Mesa",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/362890/capsule_616x353.jpg",
-   "final": "177 руб.",
-   "initial": "710 руб.",
-   "discount": 75,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/362890/"
-  },
-  {
-   "appid": "585840",
-   "title": "Leaving Lyndow",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/585840/capsule_616x353.jpg",
-   "final": "33 руб.",
-   "initial": "165 руб.",
-   "discount": 80,
-   "rating": "81",
-   "url": "https://store.steampowered.com/app/585840/"
   }
  ],
  "free": [
@@ -355,7 +275,7 @@
   }
  ],
  "counts": {
-  "deals": 24,
+  "deals": 16,
   "free": 10
  }
 }
