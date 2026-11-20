@@ -1,6 +1,16 @@
 {
- "updated": "2026-11-19T17:57:49.141Z",
+ "updated": "2026-11-20T17:32:08.515Z",
  "items": [
+  {
+   "appid": "279440",
+   "title": "Joe Dever's Lone Wolf HD Remastered",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/279440/capsule_616x353.jpg",
+   "final": "74 руб.",
+   "initial": "749 руб.",
+   "discount": 90,
+   "rating": "74",
+   "url": "https://store.steampowered.com/app/279440/"
+  },
   {
    "appid": "1293170",
    "title": "Bzzzt",
@@ -22,6 +32,16 @@
    "url": "https://store.steampowered.com/app/261470/"
   },
   {
+   "appid": "265590",
+   "title": "The Red Solstice",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/265590/capsule_616x353.jpg",
+   "final": "25 руб.",
+   "initial": "259 руб.",
+   "discount": 90,
+   "rating": "72",
+   "url": "https://store.steampowered.com/app/265590/"
+  },
+  {
    "appid": "319450",
    "title": "Chariot",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/319450/capsule_616x353.jpg",
@@ -32,134 +52,14 @@
    "url": "https://store.steampowered.com/app/319450/"
   },
   {
-   "appid": "676630",
-   "title": "Attentat 1942",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/676630/capsule_616x353.jpg",
-   "final": "26 руб.",
-   "initial": "269 руб.",
-   "discount": 90,
-   "rating": "92",
-   "url": "https://store.steampowered.com/app/676630/"
-  },
-  {
-   "appid": "40700",
-   "title": "Machinarium",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/40700/capsule_616x353.jpg",
-   "final": "112 руб.",
-   "initial": "749 руб.",
-   "discount": 85,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/40700/"
-  },
-  {
-   "appid": "1228500",
-   "title": "1428: Shadows over Silesia",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1228500/capsule_616x353.jpg",
-   "final": "119 руб.",
-   "initial": "799 руб.",
+   "appid": "421170",
+   "title": "Indivisible",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/421170/capsule_616x353.jpg",
+   "final": "152 руб.",
+   "initial": "1019 руб.",
    "discount": 85,
    "rating": "72",
-   "url": "https://store.steampowered.com/app/1228500/"
-  },
-  {
-   "appid": "217140",
-   "title": "Rise of the Triad",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/217140/capsule_616x353.jpg",
-   "final": "34 руб.",
-   "initial": "349 руб.",
-   "discount": 90,
-   "rating": "66",
-   "url": "https://store.steampowered.com/app/217140/"
-  },
-  {
-   "appid": "1812090",
-   "title": "Escape Academy",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1812090/capsule_616x353.jpg",
-   "final": "65 руб.",
-   "initial": "435 руб.",
-   "discount": 85,
-   "rating": "86",
-   "url": "https://store.steampowered.com/app/1812090/"
-  },
-  {
-   "appid": "864540",
-   "title": "Fallback",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/864540/capsule_616x353.jpg",
-   "final": "31 руб.",
-   "initial": "259 руб.",
-   "discount": 88,
-   "rating": "87",
-   "url": "https://store.steampowered.com/app/864540/"
-  },
-  {
-   "appid": "219990",
-   "title": "Grim Dawn",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/219990/capsule_616x353.jpg",
-   "final": "210 руб.",
-   "initial": "1050 руб.",
-   "discount": 80,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/219990/"
-  },
-  {
-   "appid": "1184480",
-   "title": "Inertial Drift",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1184480/capsule_616x353.jpg",
-   "final": "222,50 руб.",
-   "initial": "890 руб.",
-   "discount": 75,
-   "rating": "84",
-   "url": "https://store.steampowered.com/app/1184480/"
-  },
-  {
-   "appid": "3690030",
-   "title": "The Last Gas Station",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/3690030/capsule_616x353.jpg",
-   "final": "224 руб.",
-   "initial": "560 руб.",
-   "discount": 60,
-   "rating": "88",
-   "url": "https://store.steampowered.com/app/3690030/"
-  },
-  {
-   "appid": "773370",
-   "title": "Exo One",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/773370/capsule_616x353.jpg",
-   "final": "93 руб.",
-   "initial": "620 руб.",
-   "discount": 85,
-   "rating": "90",
-   "url": "https://store.steampowered.com/app/773370/"
-  },
-  {
-   "appid": "334310",
-   "title": "Plebby Quest: The Crusades",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/334310/capsule_616x353.jpg",
-   "final": "142 руб.",
-   "initial": "710 руб.",
-   "discount": 80,
-   "rating": "80",
-   "url": "https://store.steampowered.com/app/334310/"
-  },
-  {
-   "appid": "418460",
-   "title": "Rising Storm 2: Vietnam",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/418460/capsule_616x353.jpg",
-   "final": "79 руб.",
-   "initial": "799 руб.",
-   "discount": 90,
-   "rating": "89",
-   "url": "https://store.steampowered.com/app/418460/"
-  },
-  {
-   "appid": "105800",
-   "title": "PixelJunk Eden",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/105800/capsule_616x353.jpg",
-   "final": "49 руб.",
-   "initial": "249 руб.",
-   "discount": 80,
-   "rating": "85",
-   "url": "https://store.steampowered.com/app/105800/"
+   "url": "https://store.steampowered.com/app/421170/"
   }
  ],
  "free": [
@@ -275,7 +175,7 @@
   }
  ],
  "counts": {
-  "deals": 16,
+  "deals": 6,
   "free": 10
  }
 }
