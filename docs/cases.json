@@ -1,6 +1,16 @@
 {
- "updated": "2026-11-20T17:32:08.515Z",
+ "updated": "2026-11-21T16:36:50.373Z",
  "items": [
+  {
+   "appid": "1108590",
+   "title": "Eldest Souls",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1108590/capsule_616x353.jpg",
+   "final": "54 руб.",
+   "initial": "549 руб.",
+   "discount": 90,
+   "rating": "76",
+   "url": "https://store.steampowered.com/app/1108590/"
+  },
   {
    "appid": "279440",
    "title": "Joe Dever's Lone Wolf HD Remastered",
@@ -12,6 +22,36 @@
    "url": "https://store.steampowered.com/app/279440/"
   },
   {
+   "appid": "1283410",
+   "title": "Tails of Iron",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1283410/capsule_616x353.jpg",
+   "final": "71 руб.",
+   "initial": "599 руб.",
+   "discount": 88,
+   "rating": "88",
+   "url": "https://store.steampowered.com/app/1283410/"
+  },
+  {
+   "appid": "1067540",
+   "title": "Roki",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1067540/capsule_616x353.jpg",
+   "final": "52 руб.",
+   "initial": "529 руб.",
+   "discount": 90,
+   "rating": "92",
+   "url": "https://store.steampowered.com/app/1067540/"
+  },
+  {
+   "appid": "820520",
+   "title": "Deceive Inc.",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/820520/capsule_616x353.jpg",
+   "final": "71 руб.",
+   "initial": "710 руб.",
+   "discount": 90,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/820520/"
+  },
+  {
    "appid": "1293170",
    "title": "Bzzzt",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1293170/capsule_616x353.jpg",
@@ -20,6 +60,16 @@
    "discount": 80,
    "rating": "93",
    "url": "https://store.steampowered.com/app/1293170/"
+  },
+  {
+   "appid": "265300",
+   "title": "Lords Of The Fallen 2014",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/265300/capsule_616x353.jpg",
+   "final": "49 руб.",
+   "initial": "499 руб.",
+   "discount": 90,
+   "rating": "51",
+   "url": "https://store.steampowered.com/app/265300/"
   },
   {
    "appid": "261470",
@@ -42,6 +92,46 @@
    "url": "https://store.steampowered.com/app/265590/"
   },
   {
+   "appid": "1338770",
+   "title": "Sniper Ghost Warrior Contracts 2",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1338770/capsule_616x353.jpg",
+   "final": "99 руб.",
+   "initial": "999 руб.",
+   "discount": 90,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/1338770/"
+  },
+  {
+   "appid": "973580",
+   "title": "Sniper Ghost Warrior Contracts",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/973580/capsule_616x353.jpg",
+   "final": "99 руб.",
+   "initial": "999 руб.",
+   "discount": 90,
+   "rating": "76",
+   "url": "https://store.steampowered.com/app/973580/"
+  },
+  {
+   "appid": "1600",
+   "title": "Dangerous Waters",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1600/capsule_616x353.jpg",
+   "final": "176 руб.",
+   "initial": "880 руб.",
+   "discount": 80,
+   "rating": "79",
+   "url": "https://store.steampowered.com/app/1600/"
+  },
+  {
+   "appid": "2920",
+   "title": "Sub Command",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/2920/capsule_616x353.jpg",
+   "final": "176 руб.",
+   "initial": "880 руб.",
+   "discount": 80,
+   "rating": "74",
+   "url": "https://store.steampowered.com/app/2920/"
+  },
+  {
    "appid": "319450",
    "title": "Chariot",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/319450/capsule_616x353.jpg",
@@ -50,16 +140,6 @@
    "discount": 90,
    "rating": "81",
    "url": "https://store.steampowered.com/app/319450/"
-  },
-  {
-   "appid": "421170",
-   "title": "Indivisible",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/421170/capsule_616x353.jpg",
-   "final": "152 руб.",
-   "initial": "1019 руб.",
-   "discount": 85,
-   "rating": "72",
-   "url": "https://store.steampowered.com/app/421170/"
   }
  ],
  "free": [
@@ -175,7 +255,7 @@
   }
  ],
  "counts": {
-  "deals": 6,
+  "deals": 14,
   "free": 10
  }
 }
