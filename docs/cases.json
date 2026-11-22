@@ -1,6 +1,116 @@
 {
- "updated": "2026-11-21T16:36:50.373Z",
+ "updated": "2026-11-22T16:53:13.570Z",
  "items": [
+  {
+   "appid": "600130",
+   "title": "Valfaris",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/600130/capsule_616x353.jpg",
+   "final": "46 руб.",
+   "initial": "465 руб.",
+   "discount": 90,
+   "rating": "85",
+   "url": "https://store.steampowered.com/app/600130/"
+  },
+  {
+   "appid": "1076200",
+   "title": "Roguebook",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1076200/capsule_616x353.jpg",
+   "final": "34 руб.",
+   "initial": "499 руб.",
+   "discount": 93,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/1076200/"
+  },
+  {
+   "appid": "1676910",
+   "title": "Onde",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1676910/capsule_616x353.jpg",
+   "final": "21 руб.",
+   "initial": "309 руб.",
+   "discount": 93,
+   "rating": "91",
+   "url": "https://store.steampowered.com/app/1676910/"
+  },
+  {
+   "appid": "597180",
+   "title": "Old World",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/597180/capsule_616x353.jpg",
+   "final": "134 руб.",
+   "initial": "1499 руб.",
+   "discount": 91,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/597180/"
+  },
+  {
+   "appid": "274520",
+   "title": "Darkwood",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/274520/capsule_616x353.jpg",
+   "final": "59 руб.",
+   "initial": "599 руб.",
+   "discount": 90,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/274520/"
+  },
+  {
+   "appid": "1336490",
+   "title": "Against the Storm",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1336490/capsule_616x353.jpg",
+   "final": "199 руб.",
+   "initial": "999 руб.",
+   "discount": 80,
+   "rating": "95",
+   "url": "https://store.steampowered.com/app/1336490/"
+  },
+  {
+   "appid": "1051410",
+   "title": "Wanderlust Travel Stories",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1051410/capsule_616x353.jpg",
+   "final": "55 руб.",
+   "initial": "550 руб.",
+   "discount": 90,
+   "rating": "82",
+   "url": "https://store.steampowered.com/app/1051410/"
+  },
+  {
+   "appid": "465200",
+   "title": "Fury Unleashed",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/465200/capsule_616x353.jpg",
+   "final": "71 руб.",
+   "initial": "710 руб.",
+   "discount": 90,
+   "rating": "88",
+   "url": "https://store.steampowered.com/app/465200/"
+  },
+  {
+   "appid": "276810",
+   "title": "Mordheim: City of the Damned",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/276810/capsule_616x353.jpg",
+   "final": "48 руб.",
+   "initial": "699 руб.",
+   "discount": 93,
+   "rating": "71",
+   "url": "https://store.steampowered.com/app/276810/"
+  },
+  {
+   "appid": "699670",
+   "title": "Feudal Alloy",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/699670/capsule_616x353.jpg",
+   "final": "39 руб.",
+   "initial": "392 руб.",
+   "discount": 90,
+   "rating": "69",
+   "url": "https://store.steampowered.com/app/699670/"
+  },
+  {
+   "appid": "1647920",
+   "title": "Valfaris: Mecha Therion",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1647920/capsule_616x353.jpg",
+   "final": "132 руб.",
+   "initial": "880 руб.",
+   "discount": 85,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/1647920/"
+  },
   {
    "appid": "1108590",
    "title": "Eldest Souls",
@@ -22,6 +132,16 @@
    "url": "https://store.steampowered.com/app/279440/"
   },
   {
+   "appid": "933820",
+   "title": "Endzone - A World Apart",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/933820/capsule_616x353.jpg",
+   "final": "67 руб.",
+   "initial": "849 руб.",
+   "discount": 92,
+   "rating": "76",
+   "url": "https://store.steampowered.com/app/933820/"
+  },
+  {
    "appid": "1283410",
    "title": "Tails of Iron",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1283410/capsule_616x353.jpg",
@@ -30,6 +150,46 @@
    "discount": 88,
    "rating": "88",
    "url": "https://store.steampowered.com/app/1283410/"
+  },
+  {
+   "appid": "1252830",
+   "title": "A Jugglers Tale",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1252830/capsule_616x353.jpg",
+   "final": "65 руб.",
+   "initial": "650 руб.",
+   "discount": 90,
+   "rating": "93",
+   "url": "https://store.steampowered.com/app/1252830/"
+  },
+  {
+   "appid": "1231950",
+   "title": "The Innsmouth Case",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1231950/capsule_616x353.jpg",
+   "final": "42 руб.",
+   "initial": "424 руб.",
+   "discount": 90,
+   "rating": "67",
+   "url": "https://store.steampowered.com/app/1231950/"
+  },
+  {
+   "appid": "1681430",
+   "title": "RoboCop: Rogue City",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1681430/capsule_616x353.jpg",
+   "final": "199 руб.",
+   "initial": "1999 руб.",
+   "discount": 90,
+   "rating": "86",
+   "url": "https://store.steampowered.com/app/1681430/"
+  },
+  {
+   "appid": "1049710",
+   "title": "Minute of Islands",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1049710/capsule_616x353.jpg",
+   "final": "71 руб.",
+   "initial": "710 руб.",
+   "discount": 90,
+   "rating": "78",
+   "url": "https://store.steampowered.com/app/1049710/"
   },
   {
    "appid": "1067540",
@@ -42,6 +202,26 @@
    "url": "https://store.steampowered.com/app/1067540/"
   },
   {
+   "appid": "219150",
+   "title": "Hotline Miami",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/219150/capsule_616x353.jpg",
+   "final": "77 руб.",
+   "initial": "385 руб.",
+   "discount": 80,
+   "rating": "96",
+   "url": "https://store.steampowered.com/app/219150/"
+  },
+  {
+   "appid": "1710540",
+   "title": "Fall of Porcupine",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1710540/capsule_616x353.jpg",
+   "final": "71 руб.",
+   "initial": "710 руб.",
+   "discount": 90,
+   "rating": "74",
+   "url": "https://store.steampowered.com/app/1710540/"
+  },
+  {
    "appid": "820520",
    "title": "Deceive Inc.",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/820520/capsule_616x353.jpg",
@@ -52,94 +232,14 @@
    "url": "https://store.steampowered.com/app/820520/"
   },
   {
-   "appid": "1293170",
-   "title": "Bzzzt",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1293170/capsule_616x353.jpg",
-   "final": "92 руб.",
-   "initial": "460 руб.",
-   "discount": 80,
-   "rating": "93",
-   "url": "https://store.steampowered.com/app/1293170/"
-  },
-  {
-   "appid": "265300",
-   "title": "Lords Of The Fallen 2014",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/265300/capsule_616x353.jpg",
-   "final": "49 руб.",
-   "initial": "499 руб.",
+   "appid": "1140890",
+   "title": "Morbid: The Seven Acolytes",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1140890/capsule_616x353.jpg",
+   "final": "46 руб.",
+   "initial": "465 руб.",
    "discount": 90,
-   "rating": "51",
-   "url": "https://store.steampowered.com/app/265300/"
-  },
-  {
-   "appid": "261470",
-   "title": "Distant Worlds: Universe",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/261470/capsule_616x353.jpg",
-   "final": "110 руб.",
-   "initial": "1100 руб.",
-   "discount": 90,
-   "rating": "71",
-   "url": "https://store.steampowered.com/app/261470/"
-  },
-  {
-   "appid": "265590",
-   "title": "The Red Solstice",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/265590/capsule_616x353.jpg",
-   "final": "25 руб.",
-   "initial": "259 руб.",
-   "discount": 90,
-   "rating": "72",
-   "url": "https://store.steampowered.com/app/265590/"
-  },
-  {
-   "appid": "1338770",
-   "title": "Sniper Ghost Warrior Contracts 2",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1338770/capsule_616x353.jpg",
-   "final": "99 руб.",
-   "initial": "999 руб.",
-   "discount": 90,
-   "rating": "84",
-   "url": "https://store.steampowered.com/app/1338770/"
-  },
-  {
-   "appid": "973580",
-   "title": "Sniper Ghost Warrior Contracts",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/973580/capsule_616x353.jpg",
-   "final": "99 руб.",
-   "initial": "999 руб.",
-   "discount": 90,
-   "rating": "76",
-   "url": "https://store.steampowered.com/app/973580/"
-  },
-  {
-   "appid": "1600",
-   "title": "Dangerous Waters",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1600/capsule_616x353.jpg",
-   "final": "176 руб.",
-   "initial": "880 руб.",
-   "discount": 80,
-   "rating": "79",
-   "url": "https://store.steampowered.com/app/1600/"
-  },
-  {
-   "appid": "2920",
-   "title": "Sub Command",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/2920/capsule_616x353.jpg",
-   "final": "176 руб.",
-   "initial": "880 руб.",
-   "discount": 80,
-   "rating": "74",
-   "url": "https://store.steampowered.com/app/2920/"
-  },
-  {
-   "appid": "319450",
-   "title": "Chariot",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/319450/capsule_616x353.jpg",
-   "final": "34 руб.",
-   "initial": "349 руб.",
-   "discount": 90,
-   "rating": "81",
-   "url": "https://store.steampowered.com/app/319450/"
+   "rating": "75",
+   "url": "https://store.steampowered.com/app/1140890/"
   }
  ],
  "free": [
@@ -255,7 +355,7 @@
   }
  ],
  "counts": {
-  "deals": 14,
+  "deals": 24,
   "free": 10
  }
 }
