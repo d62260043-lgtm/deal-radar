@@ -287,7 +287,7 @@ for (let i = 0; i < segs.length; i++) {
     log('фраза ' + i + ': ' + segs[i].dur.toFixed(2) + ' с');
 }
 
-// 3. рендер кадров под каждую фразу
+// 3. рендер кадров под каждую фразy
 const videoSegs = [];
 for (let i = 0; i < segs.length; i++) {
   const s = segs[i];
