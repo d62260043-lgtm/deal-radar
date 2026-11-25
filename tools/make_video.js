@@ -63,12 +63,27 @@ const getJson = url => new Promise((resolve, reject) => {
     s.on('end', () => { try { resolve(JSON.parse(d)); } catch (e) { reject(new Error('bad json')); } });
   }).on('error', reject).on('timeout', function () { this.destroy(new Error('timeout')); });
 });
-const download = (url, dest) => new Promise((resolve, reject) => {
+const downloadOnce = (url, dest) => new Promise((resolve, reject) => {
   https.get(url, { headers: { 'User-Agent': 'deal-radar/1.0' }, timeout: 40000 }, s => {
     if (s.statusCode !== 200) { s.resume(); return reject(new Error('HTTP ' + s.statusCode)); }
     const f = fs.createWriteStream(dest); s.pipe(f); f.on('finish', () => f.close(() => resolve(dest)));
-  }).on('error', reject);
+  }).on('error', reject).on('timeout', function () { this.destroy(new Error('timeout')); });
 });
+
+// качаем капсулу с несколькими фолбэками по разным CDN и размерам
+async function download(url, dest) {
+  const tries = [
+    url,                                                          // capsule_616x353.jpg (как было)
+    url.replace('capsule_616x353.jpg', 'header.jpg'),             // header 460x215
+    url.replace('capsule_616x353.jpg', 'library_600x900.jpg'),    // вертикальная
+    url.replace('cdn.akamai.steamstatic.com', 'cdn.cloudflare.steamstatic.com'),
+  ];
+  for (const u of tries) {
+    try { await downloadOnce(u, dest); return dest; }
+    catch (e) { console.warn('[WARN] download fail ' + u + ' → ' + e.message); }
+  }
+  throw new Error('все CDN отдали 404 для appid=' + url.match(/apps\/(\d+)/)?.[1]);
+}
 const rub = (f, kop) => (f || (kop / 100).toFixed(2) + ' ₽').replace(/\s+/g, ' ').trim();
 const num = s => String(s).replace(/[^\d]/g, '');
 const clean = d => String(d || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').replace(/[«»"']/g, '').trim();
