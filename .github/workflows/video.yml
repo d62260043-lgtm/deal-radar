@@ -39,12 +39,12 @@ jobs:
           sudo cp "$(find /tmp/ff -name ffprobe -type f | head -1)" /usr/local/bin/ffprobe
           ffmpeg -version | head -1
 
-      # 4. Ставим Python и библиотеки для озвучки (Silero / Piper)
-      - name: Install TTS (Silero + Piper)
-        timeout-minutes: 12
+           # 4. Ставим edge-tts (живой голос, без torch/piper)
+      - name: Install TTS (edge-tts)
+        timeout-minutes: 3
         run: |
-          python3 -m pip install --quiet numpy torch --index-url https://download.pytorch.org/whl/cpu
-          python3 -m pip install --quiet piper-tts
+          python3 -m pip install --quiet edge-tts
+          edge-tts --list-voices | grep ru-
 
       # 5. Запускаем сборку видео
       - name: Build and send video
