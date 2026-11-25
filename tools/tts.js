@@ -1,56 +1,30 @@
-// Голос: сначала Silero (живой), при неудаче — Piper (запасной).
+cat > tools/tts.js << 'EOF'
 const fs = require('fs');
+const path = require('path');
 const { spawnSync } = require('child_process');
 
-const PIPER_BASE = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium';
+const VOICE = process.env.TTS_VOICE || 'ru-RU-SvetlanaNeural';
+const RATE = process.env.TTS_RATE || '+5%';
 
-function run(cmd, args, opts) {
-  const r = spawnSync(cmd, args, Object.assign({ encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, opts || {}));
-  if (r.status !== 0) {
-    console.log('CMD: ' + cmd + ' ' + args.join(' '));
-    console.log('STDERR:\n' + String(r.stderr || '').slice(-2000));
-    throw new Error(cmd + ' fail');
-  }
-  return r;
-}
+async function tts(text, tmp, outWav) {
+  const mp3 = path.join(tmp, 'tts_' + Date.now() + '.mp3');
 
-function download(url, dest, min) {
-  const m = min || 10000;
-  if (fs.existsSync(dest) && fs.statSync(dest).size >= m) return dest;
-  run('curl', ['-sL', '--max-time', '300', '-o', dest, url]);
-  const size = fs.existsSync(dest) ? fs.statSync(dest).size : 0;
-  if (size < m) throw new Error('не скачался ' + url);
-  return dest;
-}
+  const r = spawnSync('edge-tts', [
+    '--voice', VOICE,
+    '--rate', RATE,
+    '--text', text,
+    '--write-media', mp3
+  ], { encoding: 'utf8' });
 
-function silero(text, tmp, outWav) {
-  const f = tmp + '/silero_say.txt';
-  fs.writeFileSync(f, text);
-  run('python3', [__dirname + '/tts_silero.py', f, outWav + '.raw.wav']);
-  if (!fs.existsSync(outWav + '.raw.wav') || fs.statSync(outWav + '.raw.wav').size < 5000) throw new Error('silero пусто');
-  // подъём тона на 5%
-  run('ffmpeg', ['-y', '-i', outWav + '.raw.wav', '-af', 'asetrate=48000*1.05,aresample=48000,atempo=0.885', '-ar', '44100', '-ac', '1', outWav]);
-}
+  if (r.status !== 0) throw new Error('edge-tts fail: ' + String(r.stderr || '').slice(-500));
+  if (!fs.existsSync(mp3) || fs.statSync(mp3).size < 1000) throw new Error('edge-tts пусто');
 
-function piper(text, tmp, outWav) {
-  const model = download(PIPER_BASE + '.onnx', tmp + '/dmitri.onnx');
-  download(PIPER_BASE + '.onnx.json', tmp + '/dmitri.onnx.json', 200);
-  fs.writeFileSync(tmp + '/say.txt', text);
-  run('piper', ['--model', model, '--length_scale', '1.1', '--output_file', tmp + '/raw.wav'], { input: fs.readFileSync(tmp + '/say.txt') });
-  run('ffmpeg', ['-y', '-i', tmp + '/raw.wav', '-af', 'asetrate=22050*0.94,aresample=22050,atempo=1.064', '-ar', '22050', '-ac', '1', outWav]);
-}
+  const r2 = spawnSync('ffmpeg', ['-y', '-i', mp3, '-ar', '44100', '-ac', '1', outWav], { encoding: 'utf8' });
+  if (r2.status !== 0) throw new Error('ffmpeg fail: ' + String(r2.stderr || '').slice(-500));
 
-// Единая точка: живой голос, при неудаче — запасной
-function tts(text, tmp, outWav) {
-  try {
-    silero(text, tmp, outWav);
-    console.log('голос: Silero (' + (process.env.TTS_SPEAKER || 'eugene') + '), тон +5%');
-    return;
-  } catch (e) {
-    console.log('Silero не получился (' + e.message + '), беру Piper');
-  }
-  piper(text, tmp, outWav);
-  console.log('голос: Piper dmitri');
+  console.log('голос: Edge-TTS (' + VOICE + ')');
+  return outWav;
 }
 
 module.exports = { tts };
+EOF
