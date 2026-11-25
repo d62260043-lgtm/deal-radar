@@ -258,46 +258,27 @@ async function sendVideo(file, caption) {
     log('фраза ' + i + ': ' + segs[i].dur.toFixed(2) + ' с');
   }
 
-  // 4. картинка под каждую фразу
-  for (const p of picks) await download('https://cdn.akamai.steamstatic.com/steam/apps/' + p.appid + '/capsule_616x353.jpg', TMP + '/img' + p.appid + '.jpg');
-
-  const videoSegs = [];
-  for (let i = 0; i < segs.length; i++) {
-    const s = segs[i];
-    const out = TMP + '/s' + i + '.mp4';
-    if (s.kind === 'card') {
-      const p = s.pick;
-      const cap = tf('c' + i + '.txt', p.title);
-      const pr = tf('p' + i + '.txt', p.final + ' · было ' + p.initial);
-      const dc = tf('d' + i + '.txt', '−' + p.discount + '%');
-      const lines = wrap(p.desc || 'скидка в Steam', 38, 2);
-      const l1 = tf('l' + i + '_1.txt', lines[0] || ''), l2 = tf('l' + i + '_2.txt', lines[1] || '');
-      ff(['-y', '-loop', '1', '-i', TMP + '/img' + p.appid + '.jpg', '-filter_complex',
-        '[0:v]scale=' + W + ':' + H + ':force_original_aspect_ratio=increase,crop=' + W + ':' + H + ',boxblur=26:7,eq=brightness=-0.32[bg];[0:v]scale=1000:-2[fg];' +
-        '[bg][fg]overlay=(W-w)/2:(H-h)/2-320:format=auto,' +
-        'zoompan=z=\'min(1.05,1+0.0006*on)\':d=1:s=' + W + 'x' + H + ',format=yuv420p,' +
-        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + cap + ':fontcolor=white:fontsize=50:box=1:boxcolor=black@0.55:boxborderw=20:x=(w-text_w)/2:y=h-780:alpha=\'min(1,t/0.3)\',' +
-        'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + l1 + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-700:alpha=\'min(1,max(0,(t-0.2)/0.3))\',' +
-        'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + l2 + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-650:alpha=\'min(1,max(0,(t-0.3)/0.3))\',' +
-        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + pr + ':fontcolor=0xf5c451:fontsize=54:x=(w-text_w)/2:y=h-540:alpha=\'min(1,max(0,(t-0.35)/0.35))\',' +
-        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + dc + ':fontcolor=#ff5c5c:fontsize=104:x=(w-text_w)/2:y=h-440:alpha=\'min(1,max(0,(t-0.45)/0.35))\'',
-        '-t', s.dur.toFixed(2), '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
+  // 4. картинка под каждую фразу (с защитой от 404)
+for (const p of picks) {
+  const imgUrl = 'https://cdn.akamai.steamstatic.com/steam/apps/' + p.appid + '/capsule_616x353.jpg';
+  const imgPath = TMP + '/img' + p.appid + '.jpg';
+  try {
+    await download(imgUrl, imgPath);
+    console.log(`Обложка для ${p.title} скачана.`);
+  } catch (err) {
+    console.log(`[WARN] Не удалось скачать обложку для ${p.title} (${p.appid}): ${err.message}`);
+    // Создаем пустой черный файл-заглушку, чтобы ffmpeg не упал
+    // Просто копируем любую существующую картинку или создаем пустой файл (ffmpeg поймет)
+    // Но лучше просто скопировать первую успешную картинку
+    if (picks[0] && fs.existsSync(TMP + '/img' + picks[0].appid + '.jpg')) {
+       fs.copyFileSync(TMP + '/img' + picks[0].appid + '.jpg', imgPath);
     } else {
-      const h = tf('h' + i + '.txt', s.head);
-      const sub = tf('sub' + i + '.txt', s.sub || '');
-      const th = s.third ? tf('th' + i + '.txt', s.third) : null;
-      const isIntro = s.kind === 'intro';
-      const headSize = isIntro ? 200 : (String(s.head).length > 12 ? 74 : 96);
-      const headY = isIntro ? '(h-text_h)/2-260' : '(h-text_h)/2-120';
-      const color = isIntro ? '0xff5c5c' : '0xf5c451';
-      let vf = 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + h + ':fontcolor=' + color + ':fontsize=' + headSize + ':x=(w-text_w)/2:y=' + headY + ':alpha=\'min(1,t/0.3)\',' +
-        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + sub + ':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=' + (isIntro ? '(h-text_h)/2-40' : '(h-text_h)/2+10') + ':alpha=\'min(1,max(0,(t-0.3)/0.3))\'';
-      if (th) vf += ',drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + th + ':fontcolor=0xf5c451:fontsize=52:x=(w-text_w)/2:y=(h-text_h)/2+70:alpha=\'min(1,max(0,(t-0.7)/0.3))\'';
-      ff(['-y', '-f', 'lavfi', '-i', 'color=c=0x0b0e14:s=' + W + 'x' + H + ':d=' + s.dur.toFixed(2) + ':r=30',
-        '-vf', vf, '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
+       // Если вообще ничего не скачалось, создаем 1x1 пиксель (base64)
+       const blackPixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
+       fs.writeFileSync(imgPath, blackPixel);
     }
-    videoSegs.push(out);
   }
+}
 
   // 5. склейка видео и звука (одинаковый порядок и длительности)
   const vlist = TMP + '/vlist.txt';
