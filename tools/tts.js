@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const VOICE = process.env.TTS_VOICE || 'ru-RU-SvetlanaNeural';
+const VOICE = process.env.TTS_VOICE || 'ru-RU-DmitryNeural';
 const RATE = process.env.TTS_RATE || '+5%';
 
 async function tts(text, tmp, outWav) {
