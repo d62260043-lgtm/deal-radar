@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-24T19:56:19.964Z",
+ "updated": "2026-11-25T18:58:18.780Z",
  "items": [
   {
    "appid": "373420",
@@ -10,6 +10,16 @@
    "discount": 90,
    "rating": "86",
    "url": "https://store.steampowered.com/app/373420/"
+  },
+  {
+   "appid": "809230",
+   "title": "Unity of Command II",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/809230/capsule_616x353.jpg",
+   "final": "110 руб.",
+   "initial": "1100 руб.",
+   "discount": 90,
+   "rating": "80",
+   "url": "https://store.steampowered.com/app/809230/"
   },
   {
    "appid": "332250",
@@ -42,6 +52,36 @@
    "url": "https://store.steampowered.com/app/600130/"
   },
   {
+   "appid": "310510",
+   "title": "Deathtrap",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/310510/capsule_616x353.jpg",
+   "final": "71 руб.",
+   "initial": "710 руб.",
+   "discount": 90,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/310510/"
+  },
+  {
+   "appid": "1145360",
+   "title": "Hades",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1145360/capsule_616x353.jpg",
+   "final": "220 руб.",
+   "initial": "880 руб.",
+   "discount": 75,
+   "rating": "98",
+   "url": "https://store.steampowered.com/app/1145360/"
+  },
+  {
+   "appid": "272470",
+   "title": "The Incredible Adventures of Van Helsing II",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/272470/capsule_616x353.jpg",
+   "final": "55 руб.",
+   "initial": "550 руб.",
+   "discount": 90,
+   "rating": "70",
+   "url": "https://store.steampowered.com/app/272470/"
+  },
+  {
    "appid": "811270",
    "title": "Impulsion",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/811270/capsule_616x353.jpg",
@@ -50,6 +90,16 @@
    "discount": 90,
    "rating": "86",
    "url": "https://store.steampowered.com/app/811270/"
+  },
+  {
+   "appid": "400170",
+   "title": "The Incredible Adventures of Van Helsing Final Cut",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/400170/capsule_616x353.jpg",
+   "final": "150 руб.",
+   "initial": "1500 руб.",
+   "discount": 90,
+   "rating": "76",
+   "url": "https://store.steampowered.com/app/400170/"
   },
   {
    "appid": "390720",
@@ -92,6 +142,16 @@
    "url": "https://store.steampowered.com/app/582270/"
   },
   {
+   "appid": "1346010",
+   "title": "RiMS Racing",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1346010/capsule_616x353.jpg",
+   "final": "49 руб.",
+   "initial": "999 руб.",
+   "discount": 95,
+   "rating": "63",
+   "url": "https://store.steampowered.com/app/1346010/"
+  },
+  {
    "appid": "1471650",
    "title": "The Knightling",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1471650/capsule_616x353.jpg",
@@ -102,14 +162,14 @@
    "url": "https://store.steampowered.com/app/1471650/"
   },
   {
-   "appid": "1346010",
-   "title": "RiMS Racing",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1346010/capsule_616x353.jpg",
-   "final": "49 руб.",
-   "initial": "999 руб.",
-   "discount": 95,
-   "rating": "63",
-   "url": "https://store.steampowered.com/app/1346010/"
+   "appid": "644830",
+   "title": "The Surge 2",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/644830/capsule_616x353.jpg",
+   "final": "169 руб.",
+   "initial": "1699 руб.",
+   "discount": 90,
+   "rating": "79",
+   "url": "https://store.steampowered.com/app/644830/"
   },
   {
    "appid": "468920",
@@ -142,6 +202,16 @@
    "url": "https://store.steampowered.com/app/1076200/"
   },
   {
+   "appid": "107100",
+   "title": "Bastion",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/107100/capsule_616x353.jpg",
+   "final": "110 руб.",
+   "initial": "550 руб.",
+   "discount": 80,
+   "rating": "96",
+   "url": "https://store.steampowered.com/app/107100/"
+  },
+  {
    "appid": "585450",
    "title": "Shadows: Awakening",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/585450/capsule_616x353.jpg",
@@ -170,76 +240,6 @@
    "discount": 90,
    "rating": "72",
    "url": "https://store.steampowered.com/app/688140/"
-  },
-  {
-   "appid": "960990",
-   "title": "Beyond: Two Souls",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/960990/capsule_616x353.jpg",
-   "final": "149 руб.",
-   "initial": "1499 руб.",
-   "discount": 90,
-   "rating": "84",
-   "url": "https://store.steampowered.com/app/960990/"
-  },
-  {
-   "appid": "620590",
-   "title": "Ancestors Legacy",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/620590/capsule_616x353.jpg",
-   "final": "264 руб.",
-   "initial": "1200 руб.",
-   "discount": 78,
-   "rating": "77",
-   "url": "https://store.steampowered.com/app/620590/"
-  },
-  {
-   "appid": "2300120",
-   "title": "Painkiller",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/2300120/capsule_616x353.jpg",
-   "final": "219 руб.",
-   "initial": "2199 руб.",
-   "discount": 90,
-   "rating": "53",
-   "url": "https://store.steampowered.com/app/2300120/"
-  },
-  {
-   "appid": "1676910",
-   "title": "Onde",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1676910/capsule_616x353.jpg",
-   "final": "21 руб.",
-   "initial": "309 руб.",
-   "discount": 93,
-   "rating": "91",
-   "url": "https://store.steampowered.com/app/1676910/"
-  },
-  {
-   "appid": "525920",
-   "title": "Pro Cycling Manager 2017",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/525920/capsule_616x353.jpg",
-   "final": "39 руб.",
-   "initial": "399 руб.",
-   "discount": 90,
-   "rating": "69",
-   "url": "https://store.steampowered.com/app/525920/"
-  },
-  {
-   "appid": "1383700",
-   "title": "Jet Kave Adventure",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1383700/capsule_616x353.jpg",
-   "final": "31 руб.",
-   "initial": "449 руб.",
-   "discount": 93,
-   "rating": "85",
-   "url": "https://store.steampowered.com/app/1383700/"
-  },
-  {
-   "appid": "251470",
-   "title": "TowerFall Ascension",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/251470/capsule_616x353.jpg",
-   "final": "127 руб.",
-   "initial": "639 руб.",
-   "discount": 80,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/251470/"
   }
  ],
  "free": [
