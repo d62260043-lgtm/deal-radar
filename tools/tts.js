@@ -9,7 +9,7 @@ async function tts(text, tmp, outWav) {
   const mp3 = path.join(tmp, 'tts_' + Date.now() + '.mp3');
   let lastErr = null;
 
-  for (let attempt = 1; attempt <= 3; attempt++) {
+    for (let attempt = 1; attempt <= 5; attempt++) {
     const r = spawnSync('edge-tts', [
       '--voice', VOICE,
       '--rate', RATE,
@@ -26,11 +26,11 @@ async function tts(text, tmp, outWav) {
     }
 
     lastErr = String(r.stderr || '').slice(-200);
-    console.warn('[WARN] edge-tts попытка ' + attempt + ' не удалась, пробую ещё...');
-    await new Promise(res => setTimeout(res, 2000));
+    console.warn('[WARN] edge-tts попытка ' + attempt + '/5 не удалась, пауза 5с...');
+    await new Promise(res => setTimeout(res, 5000));
   }
 
-  throw new Error('edge-tts не ответил после 3 попыток: ' + lastErr);
+  throw new Error('edge-tts не ответил после 5 попыток: ' + lastErr);
 }
 
 module.exports = { tts };
