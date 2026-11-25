@@ -13,11 +13,11 @@ const OWNER = (process.env.OWNER_CHAT_ID || '').trim();
 const TMP = '/tmp/v4';
 const FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
 const FONT2 = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
-const W = 1080, H = 1920, FPS = 12, OUT_W = 720, OUT_H = 1280;
-// Берем 7 игр, чтобы точно перевалить за минуту
-const PICK_COUNT = Math.max(3, Math.min(8, Number(process.env.PICK_COUNT || 7)));
-// Увеличиваем паузу между фразами до 0.4 секунды
-const PAD = 0.40;
+const W = 1080, H = 1920, FPS = 12, OUT_W = 1080, OUT_H = 1920;
+// 5 игр — оптимум для TikTok (30-50 сек)
+const PICK_COUNT = Math.max(3, Math.min(8, Number(process.env.PICK_COUNT || 5)));
+// Пауза между фразами 0.2 сек — динамика для TikTok
+const PAD = 0.20;
 
 // --- НАСТРОЙКИ ПАМЯТИ ---
 const USED_FILE = 'used_games.json'; // Файл в корне репозитория
@@ -75,7 +75,7 @@ async function download(url, dest) {
   const tries = [
     url,                                                          // capsule_616x353.jpg (как было)
     url.replace('capsule_616x353.jpg', 'header.jpg'),             // header 460x215
-    url.replace('capsule_616x353.jpg', 'library_600x900.jpg'),    // вертикальная
+    url.replace('capsule_616x353.jpg', 'library_hero.jpg'),       // library_hero 3840×1240 (широкий)
     url.replace('cdn.akamai.steamstatic.com', 'cdn.cloudflare.steamstatic.com'),
   ];
   for (const u of tries) {
@@ -192,7 +192,6 @@ async function sendVideo(file, caption) {
   used = cleanOldMemory(used); // Чистим память от старых записей
   log('В памяти игр (актуальных): ' + Object.keys(used).length);
   
-  const nowMs = Date.now();
   const norm = t => String(t || '').toLowerCase().replace(/[^a-zа-я0-9]/g, '');
   // Проверяем, есть ли игра в памяти (по ID или по названию)
   const everUsed = (id, title) => !!(used['id:' + id] || used['t:' + norm(title)]);
@@ -243,76 +242,89 @@ async function sendVideo(file, caption) {
   log('пропущено уже показанных (из памяти): ' + skippedUsed);
   log('игр в ролике: ' + picks.length + ' | ' + picks.map(p => p.title + ' −' + p.discount + '%').join(' · '));
 
-  // 2. фразы: интро, по игре, аутро — каждая отдельным аудио
-  const idxWords = ['Первая', 'Вторая', 'Третья', 'Четвёртая', 'Пятая', 'Шестая'];
-  const segs = [];
+  // 2а. скачиваем картинки с фолбэками ДО формирования segs
+const okPicks = [];
+for (const p of picks) {
+  const imgPath = TMP + '/img' + p.appid + '.jpg';
+  try {
+    await download('https://cdn.akamai.steamstatic.com/steam/apps/' + p.appid + '/capsule_616x353.jpg', imgPath);
+    if (fs.statSync(imgPath).size < 1000) throw new Error('битая картинка');
+    okPicks.push(p);
+  } catch (e) {
+    console.warn('[SKIP] ' + p.title + ' (appid=' + p.appid + '): ' + e.message);
+  }
+}
+if (okPicks.length < 3) throw new Error('после фолбэков осталось <3 игр с картинками');
+if (okPicks.length < picks.length) {
+  log('выкинуто игр из-за картинок: ' + (picks.length - okPicks.length) + ', осталось: ' + okPicks.length);
+}
+picks.length = 0; picks.push(...okPicks);
 
-  const countWords = numWords(picks.length) + ' ' + plural(picks.length, ['штука', 'штуки', 'штук']);
-  const introText = 'Эти игры стоят дешевле кофе — сейчас покажу. Минус девяносто процентов, и это не опечатка. ' + countWords + '. Поехали.';
-  segs.push({ kind: 'intro', text: introText, head: '−90%', sub: 'и это не опечатка', third: picks.length + ' игр дешевле кофе' });
+// 2б. формируем segs (только из игр с картинками) — это твой старый блок
+const idxWords = ['Первая', 'Вторая', 'Третья', 'Четвёртая', 'Пятая', 'Шестая'];
+const segs = [];
+const countWords = numWords(picks.length) + ' ' + plural(picks.length, ['штука', 'штуки', 'штук']);
+const introText = 'Скидки до девяноста процентов — это не опечатка. ' + countWords + ' игры, которые стоят дешевле кофе. Погнали.';
+segs.push({ kind: 'intro', text: introText, head: '−90%', sub: 'НЕ ОПЕЧАТКА', third: picks.length + ' игр дешевле кофе' });
+picks.forEach((p, i) => {
+  const w = idxWords[i] || ('Номер ' + (i + 1));
+  const d1 = String(p.desc || '').split(/(?<=[.!?])\s/)[0].replace(/\.$/, '');
+  const short = d1.length > 90 ? d1.slice(0, 90).replace(/\s+\S*$/, '') : d1;
+  const text = w + '. ' + (short ? short + '. ' : '') +
+    'Сейчас ' + rubles(num(p.final)) + ', а было ' + rubles(num(p.initial)) + '. Скидка ' + percent(p.discount) + '.';
+  segs.push({ kind: 'card', pick: p, text });
+});
+segs.push({ kind: 'outro', text: 'Подписывайся, чтобы не пропустить следующие скидки. Всё в профиле.', head: 'ПОДПИШИСЬ', sub: 'скидки каждый день', third: 'Радар Скидок' });
 
-  picks.forEach((p, i) => {
-    const w = idxWords[i] || ('Номер ' + (i + 1));
-    const d1 = String(p.desc || '').split(/(?<=[.!?])\s/)[0].replace(/\.$/, '');
-    const short = d1.length > 90 ? d1.slice(0, 90).replace(/\s+\S*$/, '') : d1;
-    const text = w + '. ' + (short ? short + '. ' : '') +
-      'Сейчас ' + rubles(num(p.final)) + ', а было ' + rubles(num(p.initial)) + '. Скидка ' + percent(p.discount) + '.';
-    segs.push({ kind: 'card', pick: p, text });
-  });
-
-  segs.push({ kind: 'outro', text: 'Подписывайся — ссылка в профиле. Радар Скидок: скидки каждый день и бесплатный кейс дня, три попытки.', head: 'Канал в профиле', sub: '@deal_radar1', third: 'Радар Скидок' });
-
-  // 3. озвучка по частям + пауза в конце каждой
-  for (let i = 0; i < segs.length; i++) {
-    const raw = TMP + '/v' + i + '.wav';
-    tts(segs[i].text, TMP, raw);
-    const pad = TMP + '/vp' + i + '.wav';
-    ff(['-y', '-i', raw, '-af', 'apad=pad_dur=' + PAD, '-ar', '44100', '-ac', '1', pad]);
-    segs[i].audio = pad;
-    segs[i].dur = dur(pad);
+// 2в. озвучка (это был твой старый блок "3. озвучка") — теперь идёт здесь
+for (let i = 0; i < segs.length; i++) {
+  const raw = TMP + '/v' + i + '.wav';
+  tts(segs[i].text, TMP, raw);
+  const pad = TMP + '/vp' + i + '.wav';
+  ff(['-y', '-i', raw, '-af', 'apad=pad_dur=' + PAD, '-ar', '44100', '-ac', '1', pad]);
+  segs[i].audio = pad;
+  segs[i].dur = dur(pad);
     log('фраза ' + i + ': ' + segs[i].dur.toFixed(2) + ' с');
-  }
+}
 
-  // 4. картинка под каждую фразу
-  for (const p of picks) await download('https://cdn.akamai.steamstatic.com/steam/apps/' + p.appid + '/capsule_616x353.jpg', TMP + '/img' + p.appid + '.jpg');
-
-  const videoSegs = [];
-  for (let i = 0; i < segs.length; i++) {
-    const s = segs[i];
-    const out = TMP + '/s' + i + '.mp4';
-    if (s.kind === 'card') {
-      const p = s.pick;
-      const cap = tf('c' + i + '.txt', p.title);
-      const pr = tf('p' + i + '.txt', p.final + ' · было ' + p.initial);
-      const dc = tf('d' + i + '.txt', '−' + p.discount + '%');
-      const lines = wrap(p.desc || 'скидка в Steam', 38, 2);
-      const l1 = tf('l' + i + '_1.txt', lines[0] || ''), l2 = tf('l' + i + '_2.txt', lines[1] || '');
-      ff(['-y', '-loop', '1', '-i', TMP + '/img' + p.appid + '.jpg', '-filter_complex',
-        '[0:v]scale=' + W + ':' + H + ':force_original_aspect_ratio=increase,crop=' + W + ':' + H + ',boxblur=26:7,eq=brightness=-0.32[bg];[0:v]scale=1000:-2[fg];' +
-        '[bg][fg]overlay=(W-w)/2:(H-h)/2-320:format=auto,' +
-        'zoompan=z=\'min(1.05,1+0.0006*on)\':d=1:s=' + W + 'x' + H + ',format=yuv420p,' +
-        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + cap + ':fontcolor=white:fontsize=50:box=1:boxcolor=black@0.55:boxborderw=20:x=(w-text_w)/2:y=h-780:alpha=\'min(1,t/0.3)\',' +
-        'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + l1 + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-700:alpha=\'min(1,max(0,(t-0.2)/0.3))\',' +
-        'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + l2 + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-650:alpha=\'min(1,max(0,(t-0.3)/0.3))\',' +
-        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + pr + ':fontcolor=0xf5c451:fontsize=54:x=(w-text_w)/2:y=h-540:alpha=\'min(1,max(0,(t-0.35)/0.35))\',' +
-        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + dc + ':fontcolor=#ff5c5c:fontsize=104:x=(w-text_w)/2:y=h-440:alpha=\'min(1,max(0,(t-0.45)/0.35))\'',
-        '-t', s.dur.toFixed(2), '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
-    } else {
-      const h = tf('h' + i + '.txt', s.head);
-      const sub = tf('sub' + i + '.txt', s.sub || '');
-      const th = s.third ? tf('th' + i + '.txt', s.third) : null;
-      const isIntro = s.kind === 'intro';
-      const headSize = isIntro ? 200 : (String(s.head).length > 12 ? 74 : 96);
-      const headY = isIntro ? '(h-text_h)/2-260' : '(h-text_h)/2-120';
-      const color = isIntro ? '0xff5c5c' : '0xf5c451';
-      let vf = 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + h + ':fontcolor=' + color + ':fontsize=' + headSize + ':x=(w-text_w)/2:y=' + headY + ':alpha=\'min(1,t/0.3)\',' +
-        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + sub + ':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=' + (isIntro ? '(h-text_h)/2-40' : '(h-text_h)/2+10') + ':alpha=\'min(1,max(0,(t-0.3)/0.3))\'';
-      if (th) vf += ',drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + th + ':fontcolor=0xf5c451:fontsize=52:x=(w-text_w)/2:y=(h-text_h)/2+70:alpha=\'min(1,max(0,(t-0.7)/0.3))\'';
-      ff(['-y', '-f', 'lavfi', '-i', 'color=c=0x0b0e14:s=' + W + 'x' + H + ':d=' + s.dur.toFixed(2) + ':r=30',
-        '-vf', vf, '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
-    }
-    videoSegs.push(out);
+// 3. рендер кадров под каждую фразу
+const videoSegs = [];
+for (let i = 0; i < segs.length; i++) {
+  const s = segs[i];
+  const out = TMP + '/s' + i + '.mp4';
+  if (s.kind === 'card') {
+    const p = s.pick;
+    const cap = tf('c' + i + '.txt', p.title);
+    const pr = tf('p' + i + '.txt', p.final + ' · было ' + p.initial);
+    const dc = tf('d' + i + '.txt', '−' + p.discount + '%');
+    const lines = wrap(p.desc || 'скидка в Steam', 38, 2);
+    const l1 = tf('l' + i + '_1.txt', lines[0] || ''), l2 = tf('l' + i + '_2.txt', lines[1] || '');
+    ff(['-y', '-loop', '1', '-i', TMP + '/img' + p.appid + '.jpg', '-filter_complex',
+      '[0:v]scale=' + W + ':' + H + ':force_original_aspect_ratio=increase,crop=' + W + ':' + H + ',boxblur=26:7,eq=brightness=-0.32[bg];[0:v]scale=1000:-2[fg];' +
+      '[bg][fg]overlay=(W-w)/2:(H-h)/2-320:format=auto,' +
+      'zoompan=z=\'min(1.05,1+0.0006*on)\':d=1:s=' + W + 'x' + H + ',format=yuv420p,' +
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + cap + ':fontcolor=white:fontsize=50:box=1:boxcolor=black@0.55:boxborderw=20:x=(w-text_w)/2:y=h-780:alpha=\'min(1,t/0.3)\',' +
+      'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + l1 + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-700:alpha=\'min(1,max(0,(t-0.2)/0.3))\',' +
+      'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + l2 + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-650:alpha=\'min(1,max(0,(t-0.3)/0.3))\',' +
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + pr + ':fontcolor=0xf5c451:fontsize=54:x=(w-text_w)/2:y=h-540:alpha=\'min(1,max(0,(t-0.35)/0.35))\',' +
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + dc + ':fontcolor=#ff5c5c:fontsize=104:x=(w-text_w)/2:y=h-440:alpha=\'min(1,max(0,(t-0.45)/0.35))\'',
+      '-t', s.dur.toFixed(2), '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
+  } else {
+    const h = tf('h' + i + '.txt', s.head);
+    const sub = tf('sub' + i + '.txt', s.sub || '');
+    const th = s.third ? tf('th' + i + '.txt', s.third) : null;
+    const isIntro = s.kind === 'intro';
+    const headSize = isIntro ? 200 : (String(s.head).length > 12 ? 74 : 96);
+    const headY = isIntro ? '(h-text_h)/2-260' : '(h-text_h)/2-120';
+    const color = isIntro ? '0xff5c5c' : '0xf5c451';
+    let vf = 'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + h + ':fontcolor=' + color + ':fontsize=' + headSize + ':x=(w-text_w)/2:y=' + headY + ':alpha=\'min(1,t/0.3)\',' +
+      'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + sub + ':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=' + (isIntro ? '(h-text_h)/2-40' : '(h-text_h)/2+10') + ':alpha=\'min(1,max(0,(t-0.3)/0.3))\'';
+    if (th) vf += ',drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + th + ':fontcolor=0xf5c451:fontsize=52:x=(w-text_w)/2:y=(h-text_h)/2+70:alpha=\'min(1,max(0,(t-0.7)/0.3))\'';
+    ff(['-y', '-f', 'lavfi', '-i', 'color=c=0x0b0e14:s=' + W + 'x' + H + ':d=' + s.dur.toFixed(2) + ':r=30',
+      '-vf', vf, '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
   }
+  videoSegs.push(out);
+}
 
   // 5. склейка видео и звука (одинаковый порядок и длительности)
   const vlist = TMP + '/vlist.txt';
@@ -332,8 +344,9 @@ async function sendVideo(file, caption) {
 
   ff(['-y', '-i', TMP + '/main.mp4', '-framerate', String(FPS), '-start_number', '0', '-i', TMP + '/frames/f%04d.png', '-i', TMP + '/voice.wav',
     '-filter_complex', '[0:v][1:v]overlay=W-w-30:H-h-30:format=auto,scale=' + OUT_W + ':' + OUT_H + '[v]',
-    '-map', '[v]', '-map', '2:a', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '26', '-pix_fmt', 'yuv420p',
-    '-c:a', 'aac', '-b:a', '128k', '-shortest', '-movflags', '+faststart', TMP + '/final.mp4']);
+    '-map', '[v]', '-map', '2:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '21', '-pix_fmt', 'yuv420p',
+    '-profile:v', 'high', '-level', '4.1', '-r', '30',
+    '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-shortest', '-movflags', '+faststart', TMP + '/final.mp4']);
   log('готово: ' + Math.round(fs.statSync(TMP + '/final.mp4').size / 1024) + ' КБ, ' + dur(TMP + '/final.mp4').toFixed(1) + ' с');
 
   if (!TOKEN || !OWNER) { log('без токена: файл только на раннере'); return; }
@@ -346,11 +359,13 @@ async function sendVideo(file, caption) {
   saveUsed(used);
   log('в память записано игр (всего): ' + Object.keys(used).length);
   
-  const r = await sendVideo(TMP + '/final.mp4', 'Свежее видео со скидками. Память обновлена.');
+  const today = new Date().toISOString().slice(0, 10);
+const caption = 'Скидки до −90% в Steam 🔥 ' + picks.map(p => p.title).join(' · ') + '\n#скидки #steam #игры #tiktok #радарскидок';
+const r = await sendVideo(TMP + '/final.mp4', caption);
   log('send: ' + r.code + ' ' + r.body.slice(0, 160));
   if (r.code !== 200) process.exit(1);
 })().catch(async e => {
   console.error('ERR ' + e.message);
-  // ... (обработка ошибок отправки)
+  if (e.stack) console.error(e.stack.split('\n').slice(0, 6).join('\n'));
   process.exit(1);
 });
