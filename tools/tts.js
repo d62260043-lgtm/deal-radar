@@ -1,4 +1,3 @@
-cat > tools/tts.js << 'EOF'
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
@@ -27,4 +26,3 @@ async function tts(text, tmp, outWav) {
 }
 
 module.exports = { tts };
-EOF
