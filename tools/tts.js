@@ -1,8 +1,14 @@
+const fs = require('fs');
+const path = require('path');
+const { spawnSync } = require('child_process');
+
+const VOICE = process.env.TTS_VOICE || 'ru-RU-SvetlanaNeural';
+const RATE = process.env.TTS_RATE || '+5%';
+
 async function tts(text, tmp, outWav) {
   const mp3 = path.join(tmp, 'tts_' + Date.now() + '.mp3');
   let lastErr = null;
 
-  // Пробуем 3 раза, потому что Microsoft иногда просто не отвечает
   for (let attempt = 1; attempt <= 3; attempt++) {
     const r = spawnSync('edge-tts', [
       '--voice', VOICE,
@@ -20,10 +26,11 @@ async function tts(text, tmp, outWav) {
     }
 
     lastErr = String(r.stderr || '').slice(-200);
-    console.warn('[WARN] edge-tts попытка ' + attempt + ' не удалась, пробую еще...');
-    // Ждем 2 секунды перед следующей попыткой
+    console.warn('[WARN] edge-tts попытка ' + attempt + ' не удалась, пробую ещё...');
     await new Promise(res => setTimeout(res, 2000));
   }
 
   throw new Error('edge-tts не ответил после 3 попыток: ' + lastErr);
 }
+
+module.exports = { tts };
