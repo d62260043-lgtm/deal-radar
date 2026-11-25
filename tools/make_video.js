@@ -279,7 +279,7 @@ segs.push({ kind: 'outro', text: 'Подписывайся, чтобы не пр
 // 2в. озвучка (это был твой старый блок "3. озвучка") — теперь идёт здесь
 for (let i = 0; i < segs.length; i++) {
   const raw = TMP + '/v' + i + '.wav';
-  tts(segs[i].text, TMP, raw);
+    await tts(segs[i].text, TMP, raw);
   const pad = TMP + '/vp' + i + '.wav';
   ff(['-y', '-i', raw, '-af', 'apad=pad_dur=' + PAD, '-ar', '44100', '-ac', '1', pad]);
   segs[i].audio = pad;
