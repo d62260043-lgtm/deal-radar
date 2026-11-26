@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T18:58:18.780Z",
+ "updated": "2026-11-26T18:50:06.651Z",
  "items": [
   {
    "appid": "373420",
@@ -22,6 +22,46 @@
    "url": "https://store.steampowered.com/app/809230/"
   },
   {
+   "appid": "418240",
+   "title": "Shadow Tactics: Blades of the Shogun",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/418240/capsule_616x353.jpg",
+   "final": "150 руб.",
+   "initial": "1500 руб.",
+   "discount": 90,
+   "rating": "94",
+   "url": "https://store.steampowered.com/app/418240/"
+  },
+  {
+   "appid": "241910",
+   "title": "Goodbye Deponia",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/241910/capsule_616x353.jpg",
+   "final": "71 руб.",
+   "initial": "710 руб.",
+   "discount": 90,
+   "rating": "83",
+   "url": "https://store.steampowered.com/app/241910/"
+  },
+  {
+   "appid": "220740",
+   "title": "Chaos on Deponia",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/220740/capsule_616x353.jpg",
+   "final": "79 руб.",
+   "initial": "799 руб.",
+   "discount": 90,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/220740/"
+  },
+  {
+   "appid": "234270",
+   "title": "Ken Follett's The Pillars of the Earth",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/234270/capsule_616x353.jpg",
+   "final": "79 руб.",
+   "initial": "799 руб.",
+   "discount": 90,
+   "rating": "92",
+   "url": "https://store.steampowered.com/app/234270/"
+  },
+  {
    "appid": "332250",
    "title": "The Next Penelope",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/332250/capsule_616x353.jpg",
@@ -42,6 +82,16 @@
    "url": "https://store.steampowered.com/app/231160/"
   },
   {
+   "appid": "807120",
+   "title": "Iratus Lord of the Dead",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/807120/capsule_616x353.jpg",
+   "final": "99 руб.",
+   "initial": "995 руб.",
+   "discount": 90,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/807120/"
+  },
+  {
    "appid": "600130",
    "title": "Valfaris",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/600130/capsule_616x353.jpg",
@@ -60,6 +110,76 @@
    "discount": 90,
    "rating": "84",
    "url": "https://store.steampowered.com/app/310510/"
+  },
+  {
+   "appid": "804490",
+   "title": "Creed: Rise to Glory",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/804490/capsule_616x353.jpg",
+   "final": "77 руб.",
+   "initial": "515 руб.",
+   "discount": 85,
+   "rating": "73",
+   "url": "https://store.steampowered.com/app/804490/"
+  },
+  {
+   "appid": "421050",
+   "title": "Deponia Doomsday",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/421050/capsule_616x353.jpg",
+   "final": "79 руб.",
+   "initial": "799 руб.",
+   "discount": 90,
+   "rating": "80",
+   "url": "https://store.steampowered.com/app/421050/"
+  },
+  {
+   "appid": "609320",
+   "title": "FAR: Lone Sails",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/609320/capsule_616x353.jpg",
+   "final": "82 руб.",
+   "initial": "550 руб.",
+   "discount": 85,
+   "rating": "93",
+   "url": "https://store.steampowered.com/app/609320/"
+  },
+  {
+   "appid": "214340",
+   "title": "Deponia",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/214340/capsule_616x353.jpg",
+   "final": "35 руб.",
+   "initial": "359 руб.",
+   "discount": 90,
+   "rating": "77",
+   "url": "https://store.steampowered.com/app/214340/"
+  },
+  {
+   "appid": "314830",
+   "title": "Blackguards 2",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/314830/capsule_616x353.jpg",
+   "final": "24 руб.",
+   "initial": "249 руб.",
+   "discount": 90,
+   "rating": "64",
+   "url": "https://store.steampowered.com/app/314830/"
+  },
+  {
+   "appid": "203830",
+   "title": "The Dark Eye: Chains of Satinav",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/203830/capsule_616x353.jpg",
+   "final": "79 руб.",
+   "initial": "799 руб.",
+   "discount": 90,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/203830/"
+  },
+  {
+   "appid": "219910",
+   "title": "Edna and Harvey: Harvey's New Eyes",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/219910/capsule_616x353.jpg",
+   "final": "79 руб.",
+   "initial": "799 руб.",
+   "discount": 90,
+   "rating": "84",
+   "url": "https://store.steampowered.com/app/219910/"
   },
   {
    "appid": "1145360",
@@ -102,144 +222,24 @@
    "url": "https://store.steampowered.com/app/400170/"
   },
   {
-   "appid": "390720",
-   "title": "Anarcute",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/390720/capsule_616x353.jpg",
-   "final": "44 руб.",
-   "initial": "449 руб.",
-   "discount": 90,
-   "rating": "92",
-   "url": "https://store.steampowered.com/app/390720/"
-  },
-  {
-   "appid": "446840",
-   "title": "Splasher",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/446840/capsule_616x353.jpg",
-   "final": "34 руб.",
-   "initial": "349 руб.",
-   "discount": 90,
-   "rating": "94",
-   "url": "https://store.steampowered.com/app/446840/"
-  },
-  {
-   "appid": "1222140",
-   "title": "Detroit: Become Human",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1222140/capsule_616x353.jpg",
-   "final": "299 руб.",
-   "initial": "2999 руб.",
-   "discount": 90,
-   "rating": "95",
-   "url": "https://store.steampowered.com/app/1222140/"
-  },
-  {
-   "appid": "582270",
-   "title": "Everything",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/582270/capsule_616x353.jpg",
-   "final": "69 руб.",
-   "initial": "699 руб.",
-   "discount": 90,
-   "rating": "84",
-   "url": "https://store.steampowered.com/app/582270/"
-  },
-  {
-   "appid": "1346010",
-   "title": "RiMS Racing",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1346010/capsule_616x353.jpg",
-   "final": "49 руб.",
-   "initial": "999 руб.",
+   "appid": "230820",
+   "title": "The Night of the Rabbit",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/230820/capsule_616x353.jpg",
+   "final": "99 руб.",
+   "initial": "1999 руб.",
    "discount": 95,
-   "rating": "63",
-   "url": "https://store.steampowered.com/app/1346010/"
+   "rating": "87",
+   "url": "https://store.steampowered.com/app/230820/"
   },
   {
-   "appid": "1471650",
-   "title": "The Knightling",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1471650/capsule_616x353.jpg",
-   "final": "255 руб.",
-   "initial": "1599 руб.",
-   "discount": 84,
-   "rating": "86",
-   "url": "https://store.steampowered.com/app/1471650/"
-  },
-  {
-   "appid": "644830",
-   "title": "The Surge 2",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/644830/capsule_616x353.jpg",
-   "final": "169 руб.",
-   "initial": "1699 руб.",
+   "appid": "327220",
+   "title": "Anna's Quest",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/327220/capsule_616x353.jpg",
+   "final": "79 руб.",
+   "initial": "799 руб.",
    "discount": 90,
-   "rating": "79",
-   "url": "https://store.steampowered.com/app/644830/"
-  },
-  {
-   "appid": "468920",
-   "title": "Ultimate Fishing Simulator",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/468920/capsule_616x353.jpg",
-   "final": "42 руб.",
-   "initial": "710 руб.",
-   "discount": 94,
    "rating": "88",
-   "url": "https://store.steampowered.com/app/468920/"
-  },
-  {
-   "appid": "673880",
-   "title": "Warhammer 40,000: Mechanicus",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/673880/capsule_616x353.jpg",
-   "final": "110 руб.",
-   "initial": "1100 руб.",
-   "discount": 90,
-   "rating": "92",
-   "url": "https://store.steampowered.com/app/673880/"
-  },
-  {
-   "appid": "1076200",
-   "title": "Roguebook",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1076200/capsule_616x353.jpg",
-   "final": "34 руб.",
-   "initial": "499 руб.",
-   "discount": 93,
-   "rating": "84",
-   "url": "https://store.steampowered.com/app/1076200/"
-  },
-  {
-   "appid": "107100",
-   "title": "Bastion",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/107100/capsule_616x353.jpg",
-   "final": "110 руб.",
-   "initial": "550 руб.",
-   "discount": 80,
-   "rating": "96",
-   "url": "https://store.steampowered.com/app/107100/"
-  },
-  {
-   "appid": "585450",
-   "title": "Shadows: Awakening",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/585450/capsule_616x353.jpg",
-   "final": "169 руб.",
-   "initial": "1699 руб.",
-   "discount": 90,
-   "rating": "75",
-   "url": "https://store.steampowered.com/app/585450/"
-  },
-  {
-   "appid": "1796220",
-   "title": "Laika: Aged Through Blood",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1796220/capsule_616x353.jpg",
-   "final": "106 руб.",
-   "initial": "710 руб.",
-   "discount": 85,
-   "rating": "92",
-   "url": "https://store.steampowered.com/app/1796220/"
-  },
-  {
-   "appid": "688140",
-   "title": "TEMPEST 4000",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/688140/capsule_616x353.jpg",
-   "final": "43 руб.",
-   "initial": "435 руб.",
-   "discount": 90,
-   "rating": "72",
-   "url": "https://store.steampowered.com/app/688140/"
+   "url": "https://store.steampowered.com/app/327220/"
   }
  ],
  "free": [
