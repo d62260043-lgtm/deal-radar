@@ -1,5 +1,4 @@
 // Ролик со скидками: каждый кадр живёт ровно столько, сколько звучит его фраза (без рассинхрона).
-// С ДОБАВЛЕННОЙ ПАМЯТЬЮ ИЗ used_games.json
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
@@ -14,30 +13,23 @@ const TMP = '/tmp/v4';
 const FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf';
 const FONT2 = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
 const W = 1080, H = 1920, FPS = 12, OUT_W = 1080, OUT_H = 1920;
-// 5 игр — оптимум для TikTok (30-50 сек)
-const PICK_COUNT = Math.max(3, Math.min(8, Number(process.env.PICK_COUNT || 5)));
-// Пауза между фразами 0.2 сек — динамика для TikTok
-const PAD = 0.20;
 
-// --- НАСТРОЙКИ ПАМЯТИ ---
-const USED_FILE = 'used_games.json'; // Файл в корне репозитория
+// Берем 5 игр
+const PICK_COUNT = Math.max(3, Math.min(8, Number(process.env.PICK_COUNT || 5)));
+// Ускоряем темп! Пауза 0.08 сек (почти без пауз)
+const PAD = 0.08;
+
+const USED_FILE = 'used_games.json';
 const MEMORY_DAYS = 14;
-function loadUsed() { 
-    try { return JSON.parse(fs.readFileSync(USED_FILE, 'utf8')); } 
-    catch (e) { return {}; } 
-}
-function saveUsed(map) { 
-    fs.writeFileSync(USED_FILE, JSON.stringify(map, null, 1)); 
-}
+function loadUsed() { try { return JSON.parse(fs.readFileSync(USED_FILE, 'utf8')); } catch (e) { return {}; } }
+function saveUsed(map) { fs.writeFileSync(USED_FILE, JSON.stringify(map, null, 1)); }
 function cleanOldMemory(memory) {
     const now = new Date();
     const cleaned = {};
     for (const [id, dateStr] of Object.entries(memory)) {
         const date = new Date(dateStr);
         const diffDays = (now - date) / (1000 * 60 * 60 * 24);
-        if (diffDays < MEMORY_DAYS) {
-            cleaned[id] = dateStr;
-        }
+        if (diffDays < MEMORY_DAYS) cleaned[id] = dateStr;
     }
     return cleaned;
 }
@@ -70,12 +62,11 @@ const downloadOnce = (url, dest) => new Promise((resolve, reject) => {
   }).on('error', reject).on('timeout', function () { this.destroy(new Error('timeout')); });
 });
 
-// качаем капсулу с несколькими фолбэками по разным CDN и размерам
 async function download(url, dest) {
   const tries = [
-    url,                                                          // capsule_616x353.jpg (как было)
-    url.replace('capsule_616x353.jpg', 'header.jpg'),             // header 460x215
-    url.replace('capsule_616x353.jpg', 'library_hero.jpg'),       // library_hero 3840×1240 (широкий)
+    url,
+    url.replace('capsule_616x353.jpg', 'header.jpg'),
+    url.replace('capsule_616x353.jpg', 'library_hero.jpg'),
     url.replace('cdn.akamai.steamstatic.com', 'cdn.cloudflare.steamstatic.com'),
   ];
   for (const u of tries) {
@@ -100,7 +91,6 @@ function wrap(text, width, maxLines) {
   return lines.map(l => (l.length > width ? l.slice(0, width - 1) + '…' : l));
 }
 
-/* маскот */
 function mascotSvg(open, bob, blink) {
   const m = Math.round(open * 100), mouthH = 5 + m * 0.40, eyeH = blink ? 6 : 52;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="460" height="460" viewBox="0 0 460 460">
@@ -189,10 +179,189 @@ async function sendVideo(file, caption) {
   // 1. скидки
   const feed = await getJson('https://www.cheapshark.com/api/1.0/deals?storeID=1&onSale=1&sortBy=Deal%20Rating&pageSize=150');
   let used = loadUsed();
-  used = cleanOldMemory(used); // Чистим память от старых записей
+  used = cleanOldMemory(used);
   log('В памяти игр (актуальных): ' + Object.keys(used).length);
   
   const norm = t => String(t || '').toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+  const everUsed = (id, title) => !!(used['id:' + id] || used['t:' + norm(title)]);
+  
+  let skippedUsed = 0;
+  feed.sort((a, b) => Number(b.lastChange || 0) - Number(a.lastChange || 0));
+  const picks = [];
+  
+  for (const d of feed) {
+    if (picks.length >= PICK_COUNT) break;
+    const appid = d.steamAppID;
+    if (!appid || Number(d.savings) < 45) continue;
+    if (everUsed(appid, d.title)) { skippedUsed++; continue; }
+    
+    try {
+      const j = await getJson('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=ru&l=russian');
+      const dd = j[String(appid)], data = dd && dd.success && dd.data, p = data && data.price_overview;
+      if (!p || !p.final || !p.discount_percent) continue;
+      picks.push({
+        title: d.title, appid,
+        final: rub(p.final_formatted, p.final), initial: rub(p.initial_formatted, p.initial),
+        discount: p.discount_percent, desc: clean(data.short_description).slice(0, 160),
+      });
+    } catch (e) {}
+  }
+  
+  if (picks.length < 3) {
+    log('свежих мало (' + picks.length + '), добираю из старых');
+    for (const d of feed) {
+      if (picks.length >= PICK_COUNT) break;
+      const appid = d.steamAppID;
+      if (!appid || Number(d.savings) < 40) continue;
+      if (picks.some(x => String(x.appid) === String(appid))) continue;
+      if (everUsed(appid, d.title)) continue;
+      try {
+        const j = await getJson('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=ru&l=russian');
+        const dd = j[String(appid)], data = dd && dd.success && dd.data, pr = data && data.price_overview;
+        if (!pr || !pr.final || !pr.discount_percent) continue;
+        picks.push({ title: d.title, appid, final: rub(pr.final_formatted, pr.final), initial: rub(pr.initial_formatted, pr.initial), discount: pr.discount_percent, desc: clean(data.short_description).slice(0, 160) });
+      } catch (e) {}
+    }
+  }
+  
+  if (picks.length < 3) throw new Error('мало скидок для видео');
+  log('пропущено уже показанных (из памяти): ' + skippedUsed);
+  log('игр в ролике: ' + picks.length + ' | ' + picks.map(p => p.title + ' −' + p.discount + '%').join(' · '));
+
+  // 2а. скачиваем картинки
+  const okPicks = [];
+  for (const p of picks) {
+    const imgPath = TMP + '/img' + p.appid + '.jpg';
+    try {
+      await download('https://cdn.akamai.steamstatic.com/steam/apps/' + p.appid + '/capsule_616x353.jpg', imgPath);
+      if (fs.statSync(imgPath).size < 1000) throw new Error('битая картинка');
+      okPicks.push(p);
+    } catch (e) {
+      console.warn('[SKIP] ' + p.title + ' (appid=' + p.appid + '): ' + e.message);
+    }
+  }
+  if (okPicks.length < 3) throw new Error('после фолбэков осталось <3 игр с картинками');
+  if (okPicks.length < picks.length) log('выкинуто игр из-за картинок: ' + (picks.length - okPicks.length) + ', осталось: ' + okPicks.length);
+  picks.length = 0; picks.push(...okPicks);
+
+  // 2б. формируем segs
+  const idxWords = ['Первая', 'Вторая', 'Третья', 'Четвёртая', 'Пятая', 'Шестая'];
+  const segs = [];
+  const countWords = numWords(picks.length) + ' ' + plural(picks.length, ['штука', 'штуки', 'штук']);
+  
+  // НОВЫЙ ХУК: Говорим быстрее и четче
+  const introText = 'Скидки до девяноста процентов. ' + countWords + ' игры дешевле кофе. Смотри.';
+  segs.push({ kind: 'intro', text: introText, head: '−90%', sub: 'НЕ ОПЕЧАТКА', third: picks.length + ' игр дешевле кофе' });
+  
+  picks.forEach((p, i) => {
+    const w = idxWords[i] || ('Номер ' + (i + 1));
+    const d1 = String(p.desc || '').split(/(?<=[.!?])\s/)[0].replace(/\.$/, '');
+    const short = d1.length > 90 ? d1.slice(0, 90).replace(/\s+\S*$/, '') : d1;
+    const text = w + '. ' + (short ? short + '. ' : '') +
+      'Сейчас ' + rubles(num(p.final)) + ', а было ' + rubles(num(p.initial)) + '. Скидка ' + percent(p.discount) + '.';
+    segs.push({ kind: 'card', pick: p, text });
+  });
+  
+  // Короткое аутро
+  segs.push({ kind: 'outro', text: 'Подписывайся. Ссылка в профиле.', head: 'ПОДПИШИСЬ', sub: 'скидки каждый день', third: 'Радар Скидок' });
+
+  // 2в. озвучка
+  for (let i = 0; i < segs.length; i++) {
+    const raw = TMP + '/v' + i + '.wav';
+    await tts(segs[i].text, TMP, raw);
+    const pad = TMP + '/vp' + i + '.wav';
+    ff(['-y', '-i', raw, '-af', 'apad=pad_dur=' + PAD, '-ar', '44100', '-ac', '1', pad]);
+    segs[i].audio = pad;
+    segs[i].dur = dur(pad);
+    log('фраза ' + i + ': ' + segs[i].dur.toFixed(2) + ' с');
+  }
+
+  // 3. рендер кадров
+  const videoSegs = [];
+  for (let i = 0; i < segs.length; i++) {
+    const s = segs[i];
+    const out = TMP + '/s' + i + '.mp4';
+    
+    if (s.kind === 'card') {
+      const p = s.pick;
+      const cap = tf('c' + i + '.txt', p.title);
+      const pr = tf('p' + i + '.txt', p.final + ' · было ' + p.initial);
+      const dc = tf('d' + i + '.txt', '−' + p.discount + '%');
+      const lines = wrap(p.desc || 'скидка в Steam', 38, 2);
+      const l1 = tf('l' + i + '_1.txt', lines[0] || ''), l2 = tf('l' + i + '_2.txt', lines[1] || '');
+      
+      // НОВЫЙ ДИЗАЙН: Добавляем плавный зум для обложки (чтобы не было статики)
+      ff(['-y', '-loop', '1', '-i', TMP + '/img' + p.appid + '.jpg', '-filter_complex',
+        '[0:v]scale=' + W + ':' + H + ':force_original_aspect_ratio=increase,crop=' + W + ':' + H + ',boxblur=26:7,eq=brightness=-0.32[bg];[0:v]scale=1000:-2[fg];' +
+        '[bg][fg]overlay=(W-w)/2:(H-h)/2-320:format=auto,' +
+        'zoompan=z=\'min(1.08,1+0.001*on)\':d=1:s=' + W + 'x' + H + ',format=yuv420p,' +
+        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + cap + ':fontcolor=white:fontsize=50:box=1:boxcolor=black@0.55:boxborderw=20:x=(w-text_w)/2:y=h-780:alpha=\'min(1,t/0.2)\',' +
+        'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + l1 + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-700:alpha=\'min(1,max(0,(t-0.1)/0.2))\',' +
+        'drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + l2 + ':fontcolor=#c8d0e0:fontsize=34:x=(w-text_w)/2:y=h-650:alpha=\'min(1,max(0,(t-0.2)/0.2))\',' +
+        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + pr + ':fontcolor=0xf5c451:fontsize=54:x=(w-text_w)/2:y=h-540:alpha=\'min(1,max(0,(t-0.2)/0.2))\',' +
+        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + dc + ':fontcolor=#ff5c5c:fontsize=104:x=(w-text_w)/2:y=h-440:alpha=\'min(1,max(0,(t-0.3)/0.2))\'',
+        '-t', s.dur.toFixed(2), '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
+    } else {
+      // НОВЫЙ ДИЗАЙН ИНТРО И АУТРО: Фон - размытая обложка первой игры, а не черный экран!
+      const bgImg = TMP + '/img' + picks[0].appid + '.jpg';
+      const h = tf('h' + i + '.txt', s.head);
+      const sub = tf('sub' + i + '.txt', s.sub || '');
+      const th = s.third ? tf('th' + i + '.txt', s.third) : null;
+      const isIntro = s.kind === 'intro';
+      const headSize = isIntro ? 200 : 96;
+      const headY = isIntro ? '(h-text_h)/2-260' : '(h-text_h)/2-120';
+      const color = isIntro ? '0xff5c5c' : '0xf5c451';
+      
+      let vf = '[0:v]scale=' + W + ':' + H + ':force_original_aspect_ratio=increase,crop=' + W + ':' + H + ',boxblur=30:10,eq=brightness=-0.5[bg];' +
+        '[bg]zoompan=z=\'min(1.1,1+0.001*on)\':d=1:s=' + W + 'x' + H + ',format=yuv420p,' +
+        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + h + ':fontcolor=' + color + ':fontsize=' + headSize + ':x=(w-text_w)/2:y=' + headY + ':alpha=\'min(1,t/0.2)\',' +
+        'drawtext=expansion=none:fontfile=' + FONT + ':textfile=' + sub + ':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=' + (isIntro ? '(h-text_h)/2-40' : '(h-text_h)/2+10') + ':alpha=\'min(1,max(0,(t-0.2)/0.2))\'';
+      if (th) vf += ',drawtext=expansion=none:fontfile=' + FONT2 + ':textfile=' + th + ':fontcolor=0xf5c451:fontsize=52:x=(w-text_w)/2:y=(h-text_h)/2+70:alpha=\'min(1,max(0,(t-0.4)/0.2))\'';
+      
+      ff(['-y', '-loop', '1', '-i', bgImg, '-vf', vf, '-t', s.dur.toFixed(2), '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', out]);
+    }
+    videoSegs.push(out);
+  }
+
+  // 5. склейка
+  const vlist = TMP + '/vlist.txt';
+  fs.writeFileSync(vlist, videoSegs.map(s => "file '" + s + "'").join('\n') + '\n');
+  ff(['-y', '-f', 'concat', '-safe', '0', '-i', vlist, '-c', 'copy', TMP + '/main.mp4']);
+
+  const alist = TMP + '/alist.txt';
+  fs.writeFileSync(alist, segs.map(s => "file '" + s.audio + "'").join('\n') + '\n');
+  ff(['-y', '-f', 'concat', '-safe', '0', '-i', alist, '-c:a', 'pcm_s16le', TMP + '/voice.wav']);
+
+  const mainDur = dur(TMP + '/main.mp4'), voiceDur = dur(TMP + '/voice.wav');
+  log('видео ' + mainDur.toFixed(1) + ' с / голос ' + voiceDur.toFixed(1) + ' с');
+
+  // 6. маскот
+  const env = envelope(TMP + '/voice.wav', 1 / FPS, mainDur);
+  log('кадров маскота: ' + renderFrames(env.length, env, TMP + '/frames'));
+
+  ff(['-y', '-i', TMP + '/main.mp4', '-framerate', String(FPS), '-start_number', '0', '-i', TMP + '/frames/f%04d.png', '-i', TMP + '/voice.wav',
+    '-filter_complex', '[0:v][1:v]overlay=W-w-30:H-h-30:format=auto,scale=' + OUT_W + ':' + OUT_H + '[v]',
+    '-map', '[v]', '-map', '2:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '21', '-pix_fmt', 'yuv420p',
+    '-profile:v', 'high', '-level', '4.1', '-r', '30',
+    '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-shortest', '-movflags', '+faststart', TMP + '/final.mp4']);
+  log('готово: ' + Math.round(fs.statSync(TMP + '/final.mp4').size / 1024) + ' КБ, ' + dur(TMP + '/final.mp4').toFixed(1) + ' с');
+
+  if (!TOKEN || !OWNER) { log('без токена: файл только на раннере'); return; }
+  
+  // 7. память
+  for (const p of picks) { used['id:' + String(p.appid)] = Date.now(); used['t:' + norm(p.title)] = Date.now(); }
+  saveUsed(used);
+  log('в память записано игр (всего): ' + Object.keys(used).length);
+  
+  const caption = 'Скидки до −90% в Steam 🔥 ' + picks.map(p => p.title).join(' · ') + '\n#скидки #steam #игры #tiktok #радарскидок';
+  const r = await sendVideo(TMP + '/final.mp4', caption);
+  log('send: ' + r.code + ' ' + r.body.slice(0, 160));
+  if (r.code !== 200) process.exit(1);
+})().catch(async e => {
+  console.error('ERR ' + e.message);
+  if (e.stack) console.error(e.stack.split('\n').slice(0, 6).join('\n'));
+  process.exit(1);
+});lace(/[^a-zа-я0-9]/g, '');
   // Проверяем, есть ли игра в памяти (по ID или по названию)
   const everUsed = (id, title) => !!(used['id:' + id] || used['t:' + norm(title)]);
   
