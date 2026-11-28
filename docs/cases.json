@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-27T18:41:32.117Z",
+ "updated": "2026-11-28T17:22:18.517Z",
  "items": [
   {
    "appid": "1388770",
@@ -20,6 +20,16 @@
    "discount": 90,
    "rating": "86",
    "url": "https://store.steampowered.com/app/373420/"
+  },
+  {
+   "appid": "632470",
+   "title": "Disco Elysium - The Final Cut",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/632470/capsule_616x353.jpg",
+   "final": "387 руб.",
+   "initial": "1550 руб.",
+   "discount": 75,
+   "rating": "92",
+   "url": "https://store.steampowered.com/app/632470/"
   },
   {
    "appid": "809230",
@@ -82,6 +92,16 @@
    "url": "https://store.steampowered.com/app/238460/"
   },
   {
+   "appid": "774291",
+   "title": "Last Man Sitting",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/774291/capsule_616x353.jpg",
+   "final": "96 руб.",
+   "initial": "385 руб.",
+   "discount": 75,
+   "rating": "79",
+   "url": "https://store.steampowered.com/app/774291/"
+  },
+  {
    "appid": "235540",
    "title": "Warhammer: End Times - Vermintide",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/235540/capsule_616x353.jpg",
@@ -90,6 +110,16 @@
    "discount": 90,
    "rating": "83",
    "url": "https://store.steampowered.com/app/235540/"
+  },
+  {
+   "appid": "296550",
+   "title": "Niko: Through the Dream",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/296550/capsule_616x353.jpg",
+   "final": "49 руб.",
+   "initial": "499 руб.",
+   "discount": 90,
+   "rating": "69",
+   "url": "https://store.steampowered.com/app/296550/"
   },
   {
    "appid": "241910",
@@ -122,6 +152,16 @@
    "url": "https://store.steampowered.com/app/248610/"
   },
   {
+   "appid": "1301950",
+   "title": "Time Loader",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/1301950/capsule_616x353.jpg",
+   "final": "33 руб.",
+   "initial": "220 руб.",
+   "discount": 85,
+   "rating": "82",
+   "url": "https://store.steampowered.com/app/1301950/"
+  },
+  {
    "appid": "17710",
    "title": "Nuclear Dawn",
    "photo": "https://cdn.akamai.steamstatic.com/steam/apps/17710/capsule_616x353.jpg",
@@ -130,6 +170,16 @@
    "discount": 90,
    "rating": "78",
    "url": "https://store.steampowered.com/app/17710/"
+  },
+  {
+   "appid": "597700",
+   "title": "OVIVO",
+   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/597700/capsule_616x353.jpg",
+   "final": "38 руб.",
+   "initial": "385 руб.",
+   "discount": 90,
+   "rating": "89",
+   "url": "https://store.steampowered.com/app/597700/"
   },
   {
    "appid": "220740",
@@ -190,56 +240,6 @@
    "discount": 90,
    "rating": "71",
    "url": "https://store.steampowered.com/app/297130/"
-  },
-  {
-   "appid": "807120",
-   "title": "Iratus Lord of the Dead",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/807120/capsule_616x353.jpg",
-   "final": "99 руб.",
-   "initial": "995 руб.",
-   "discount": 90,
-   "rating": "84",
-   "url": "https://store.steampowered.com/app/807120/"
-  },
-  {
-   "appid": "600130",
-   "title": "Valfaris",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/600130/capsule_616x353.jpg",
-   "final": "46 руб.",
-   "initial": "465 руб.",
-   "discount": 90,
-   "rating": "85",
-   "url": "https://store.steampowered.com/app/600130/"
-  },
-  {
-   "appid": "310510",
-   "title": "Deathtrap",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/310510/capsule_616x353.jpg",
-   "final": "71 руб.",
-   "initial": "710 руб.",
-   "discount": 90,
-   "rating": "84",
-   "url": "https://store.steampowered.com/app/310510/"
-  },
-  {
-   "appid": "473690",
-   "title": "Absolver",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/473690/capsule_616x353.jpg",
-   "final": "110 руб.",
-   "initial": "1100 руб.",
-   "discount": 90,
-   "rating": "74",
-   "url": "https://store.steampowered.com/app/473690/"
-  },
-  {
-   "appid": "804490",
-   "title": "Creed: Rise to Glory",
-   "photo": "https://cdn.akamai.steamstatic.com/steam/apps/804490/capsule_616x353.jpg",
-   "final": "77 руб.",
-   "initial": "515 руб.",
-   "discount": 85,
-   "rating": "73",
-   "url": "https://store.steampowered.com/app/804490/"
   }
  ],
  "free": [
